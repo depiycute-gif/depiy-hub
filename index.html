@@ -313,6 +313,22 @@ input,textarea{font:inherit;color:inherit}
   .player-bg{animation:none}
 }
 
+/* ---------- 탭 & 프로필 아바타 & 핸들 스타일 v3 ---------- */
+.login-tabs{display:flex;width:100%;gap:6px;background:rgba(255,255,255,.06);padding:4px;border-radius:12px;margin-bottom:6px}
+.login-tab{flex:1;padding:8px 10px;border:0;background:transparent;color:var(--text-dim);font-weight:700;font-size:13px;border-radius:8px;cursor:pointer;transition:all .15s}
+.login-tab.active{background:rgba(255,255,255,.14);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.login-tab:hover:not(.active){color:#f0f0f0}
+.post-handle{font-size:12px;color:var(--text-dim);font-weight:500;margin-left:4px}
+.avatar-edit-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px}
+.avatar-preview-box{width:80px;height:80px;border-radius:50%;overflow:hidden;border:2px solid var(--depiy-orange);box-shadow:0 4px 16px var(--orange-glow);background:#1a1a20;display:grid;place-items:center}
+.avatar-preview-img{width:100%;height:100%;object-fit:cover}
+.avatar-upload-btn{font-size:12.5px;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);cursor:pointer;transition:background .15s;font-weight:600}
+.avatar-upload-btn:hover{background:rgba(255,255,255,.16)}
+.field-status{font-size:11.5px;margin-top:4px;display:block;line-height:1.4}
+.field-status.err{color:#ff6b6b}
+.field-status.ok{color:#51cf66}
+.field-status.warn{color:#fcc419}
+
 /* ---------- 로그인 게이트 ---------- */
 .login-gate{
   position:fixed;inset:0;z-index:99999;
@@ -468,38 +484,98 @@ body.logged-out{overflow:hidden}
 <div class="scrim" data-act="scrim"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- 로그인 게이트 (Supabase Auth · 이메일) -->
+<!-- 로그인 게이트 (Supabase Auth · 이메일/비번/매직링크) -->
 <div id="loginGate" class="login-gate" style="display:flex">
   <div class="login-card">
     <div class="login-brand">D</div>
     <h2 class="login-title">De_piy Hub</h2>
-    <p class="login-desc">드피 허브 커뮤니티에 오신 것을 환영합니다.<br>이메일을 적으면 입장 링크를 보내드려요. 비밀번호는 필요 없어요.</p>
-    <form id="emailForm" class="gate-form" data-form="email" novalidate>
-      <label class="field"><span>이메일</span><input id="gateEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"></label>
-      <button class="btn gate-btn" type="submit" id="btnSendCode">인증 메일 받기</button>
+    <p class="login-desc" id="gateDesc">드피 허브 커뮤니티에 오신 것을 환영합니다.</p>
+    
+    <div class="login-tabs" id="gateTabs">
+      <button type="button" class="login-tab active" data-tab="login">로그인</button>
+      <button type="button" class="login-tab" data-tab="signup">회원가입</button>
+      <button type="button" class="login-tab" data-tab="magic">매직 링크</button>
+    </div>
+
+    <!-- 로그인 폼 (이메일 + 비밀번호) -->
+    <form id="loginForm" class="gate-form" data-form="login" novalidate>
+      <label class="field"><span>이메일</span><input id="loginEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label class="field"><span>비밀번호</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="비밀번호" required></label>
+      <button class="btn gate-btn" type="submit" id="btnLogin">로그인</button>
+      <div class="gate-links">
+        <button type="button" class="link-btn" data-act="switchTab" data-to="signup">계정이 없으신가요? 회원가입</button>
+        <button type="button" class="link-btn" data-act="switchTab" data-to="magic">비밀번호 없이 매직 링크로 받기</button>
+      </div>
     </form>
+
+    <!-- 회원가입 폼 (이메일 + 비밀번호 + 닉네임 + 아이디) -->
+    <form id="signupForm" class="gate-form" data-form="signup" hidden novalidate>
+      <label class="field"><span>이메일</span><input id="signupEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label class="field"><span>비밀번호</span><input id="signupPassword" type="password" autocomplete="new-password" placeholder="6자리 이상 비밀번호" minlength="6" required></label>
+      <label class="field">
+        <span>닉네임 (2~12자)</span>
+        <input id="signupNickname" type="text" autocomplete="off" placeholder="한글, 영문, 숫자, _.- 허용" maxlength="12" required>
+        <span class="field-status" id="signupNickStatus"></span>
+      </label>
+      <label class="field">
+        <span>사용자 ID (핸들 @)</span>
+        <input id="signupHandle" type="text" autocomplete="off" placeholder="예: depiy_hub (영문소문자/숫자/_ 3~15자)" maxlength="15" required>
+        <span class="field-status" id="signupHandleStatus"></span>
+      </label>
+      <button class="btn gate-btn" type="submit" id="btnSignup">가입하고 입장</button>
+      <div class="gate-links">
+        <button type="button" class="link-btn" data-act="switchTab" data-to="login">이미 계정이 있으신가요? 로그인</button>
+      </div>
+    </form>
+
+    <!-- 매직 링크 폼 (비밀번호 없는 로그인) -->
+    <form id="magicForm" class="gate-form" data-form="magic" hidden novalidate>
+      <label class="field"><span>이메일</span><input id="gateEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <button class="btn gate-btn" type="submit" id="btnSendCode">인증 메일 받기</button>
+      <div class="gate-links">
+        <button type="button" class="link-btn" data-act="switchTab" data-to="login">비밀번호로 로그인하기</button>
+      </div>
+    </form>
+
+    <!-- 코드/링크 인증 대기 폼 -->
     <form id="codeForm" class="gate-form" data-form="code" hidden novalidate>
       <p class="gate-sent" id="gateSent"></p>
-      <label class="field"><span>인증 코드 (선택)</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="메일에 코드가 함께 왔을 때만 입력"></label>
+      <label class="field"><span>인증 코드 (숫자 6자리)</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="메일의 6자리 인증 코드 입력"></label>
       <button class="btn gate-btn" type="submit" id="btnVerify">코드로 입장</button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="resendCode" id="btnResend">메일 다시 받기</button>
-        <button type="button" class="link-btn" data-act="changeEmail">다른 이메일 사용</button>
+        <button type="button" class="link-btn" data-act="switchTab" data-to="login">로그인 화면으로 돌아가기</button>
       </div>
     </form>
+
     <p id="gateMsg" class="gate-msg" hidden></p>
-    <div class="login-footer">이메일은 로그인에만 쓰이고 다른 사용자에게 보이지 않아요.<br>처음 들어오면 임시 이름이 생기고, 프로필에서 바꿀 수 있어요.</div>
+    <div class="login-footer">이메일은 로그인에만 쓰이고 다른 사용자에게 보이지 않아요.<br>프로필 사진과 닉네임은 언제든 내 프로필에서 변경할 수 있어요.</div>
   </div>
 </div>
 
-<!-- 프로필 모달 -->
+<!-- 프로필 모달 (아바타 변경, 닉네임 검사, 7일 변경 제한, 핸들 분리) -->
 <div id="profileModal" class="acct-modal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
   <div class="acct-box">
-    <h3 id="profileTitle">내 프로필</h3>
-    <label class="field"><span>표시 이름</span><input id="profileName" maxlength="24" autocomplete="off"></label>
+    <h3 id="profileTitle">내 프로필 설정</h3>
+    <div class="avatar-edit-wrap">
+      <div id="profileAvatarPreview" class="avatar-preview-box"></div>
+      <button type="button" class="avatar-upload-btn" id="btnChangeAvatar" data-act="triggerAvatar">📷 사진 변경</button>
+      <input type="file" id="profileAvatarInput" accept="image/*" style="display:none">
+    </div>
+    <label class="field">
+      <span>닉네임 (2~12자)</span>
+      <input id="profileName" maxlength="12" autocomplete="off" placeholder="한글, 영문, 숫자, _.-">
+      <span class="field-status" id="profileNickStatus"></span>
+    </label>
+    <label class="field">
+      <span>사용자 ID (고유 핸들)</span>
+      <input id="profileHandle" maxlength="15" autocomplete="off" placeholder="예: depiy_hub (3~15자 영문소문자/숫자/_)">
+      <span class="field-status" id="profileHandleStatus"></span>
+    </label>
     <p class="field-hint" id="profileEmail"></p>
+    <p class="field-hint" id="profileCooldownHint" style="color:var(--text-dim);margin-top:2px"></p>
     <div class="modal-row">
-      <button type="button" class="btn" data-act="saveProfile">저장</button>
+      <button type="button" class="btn" id="btnSaveProfile" data-act="saveProfile">저장</button>
       <button type="button" class="btn ghost" data-act="closeProfile">닫기</button>
     </div>
   </div>
@@ -623,7 +699,7 @@ function toPost(r) {
   const echo = !!r.echo_of;
   return {
     id: r.id, key: r.channel_id || 'plaza', ownerId: r.author_id,
-    name: echo ? (r.orig_name || '알 수 없음') : (r.author_name || '알 수 없음'),
+    name: echo ? (r.orig_name || '알 수 없음') : (r.author_name || '알 수 없음'), handle: echo ? (r.orig_handle || '') : (r.author_handle || ''),
     picture: echo ? r.orig_avatar : r.author_avatar,
     text: r.body || '', created: r.created_at, media: Array.isArray(r.media) ? r.media : [],
     sparks: Number(r.spark_count) || 0, sparked: !!r.sparked_by_me,
@@ -761,7 +837,7 @@ function postHTML(p) {
   const canDel = state.me && (p.ownerId === state.me.id || isStaff());
   return `<article class="${cls}" data-post="${p.id}">
     ${p.echo ? `<div class="echo-src">${SVG.echo}<span><b>${esc(p.echo.by)}</b> 님이 에코${p.echo.from ? ` · 출처 <b>${esc(p.echo.from)}</b>` : ''}</span></div>` : ''}
-    <header class="post-head"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><div class="grow"><b>${esc(p.name)}</b><small>${timeAgo(p.created)}</small></div>
+    <header class="post-head"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><div class="grow"><b>${esc(p.name)}</b>${p.handle ? `<span class="post-handle">@${esc(p.handle)}</span>` : ""}<small>${timeAgo(p.created)}</small></div>
       <div class="post-tools"><button type="button" class="post-tool" data-act="report" data-id="${p.id}">신고</button>${canDel ? `<button type="button" class="post-tool danger" data-act="delPost" data-id="${p.id}">삭제</button>` : ''}</div></header>
     ${p.text ? `<p class="post-body">${esc(p.text)}</p>` : ''}
     ${renderPostMediaHTML(p.media)}
@@ -1118,22 +1194,204 @@ function handleBNav(act) {
   else if (act === 'menu') document.body.classList.toggle('drawer-open');
 }
 
+/* ================= 닉네임 / 핸들 유효성 & 금칙어 규칙 ================= */
+const PROHIBITED_WORDS = [
+  'admin', 'administrator', 'root', 'system', '운영자', '관리자', '매니저',
+  '어드민', '시스탬', '드피허브', 'depiyhub', 'official', '공식',
+  '시발', '씨발', '개새끼', '병신', '지랄', '존나', '썅', '미친',
+  '섹스', '보지', '자지', '창녀', '노무현', '일베', '페미'
+];
+
+function sanitizeUnicode(str) {
+  return String(str || '').normalize('NFKC').trim();
+}
+
+function validateNickname(raw) {
+  const name = sanitizeUnicode(raw);
+  if (!name) return { ok: false, msg: '닉네임을 입력해 주세요' };
+  if (/\s/.test(name)) return { ok: false, msg: '닉네임에 공백은 넣을 수 없어요' };
+  if (name.length < 2 || name.length > 12) return { ok: false, msg: '닉네임은 2자 이상 12자 이하여야 해요' };
+  if (/^[-_.]/.test(name)) return { ok: false, msg: '첫 글자는 특수문자(_ . -)로 시작할 수 없어요' };
+  if (!/^[가-힣a-zA-Z0-9\p{L}][가-힣a-zA-Z0-9\p{L}\d_.-]{1,11}$/u.test(name)) {
+    return { ok: false, msg: '한글, 영문, 숫자, 특수문자(_ . -)만 사용할 수 있어요' };
+  }
+  const lower = name.toLowerCase();
+  for (const w of PROHIBITED_WORDS) {
+    if (lower.includes(w.toLowerCase())) {
+      return { ok: false, msg: '부적절하거나 사용할 수 없는 단어가 포함되어 있어요' };
+    }
+  }
+  return { ok: true, name };
+}
+
+function validateHandle(raw) {
+  let h = sanitizeUnicode(raw).toLowerCase();
+  if (h.startsWith('@')) h = h.slice(1);
+  if (!h) return { ok: false, msg: '사용자 ID(핸들)를 입력해 주세요' };
+  if (!/^[a-z0-9_]{3,15}$/.test(h)) return { ok: false, msg: '아이디는 3~15자의 영문 소문자, 숫자, _ 만 사용 가능해요' };
+  for (const w of ['admin', 'administrator', 'system', 'root', 'official', 'support']) {
+    if (h === w) return { ok: false, msg: '사용할 수 없는 예약된 아이디예요' };
+  }
+  return { ok: true, handle: h };
+}
+
 /* ================= 프로필 ================= */
+let stagedAvatarUrl = null, stagedAvatarBlob = null;
+
+function renderProfileAvatarPreview(url, name) {
+  const box = $('#profileAvatarPreview'); if (!box) return;
+  if (url) {
+    box.innerHTML = `<img src="${esc(url)}" alt="프로필 사진" class="avatar-preview-img">`;
+  } else {
+    box.innerHTML = avatarHTML(null, name || '나');
+  }
+}
+
 function openProfile() {
   if (!state.me) return; closeDrawer();
-  $('#profileName').value = state.me.name; $('#profileEmail').textContent = state.me.email ? `로그인 계정: ${state.me.email} (본인에게만 보여요)` : '';
-  $('#profileModal').classList.add('show'); $('#profileName').focus();
+  stagedAvatarUrl = state.me.avatar || null; stagedAvatarBlob = null;
+  $('#profileName').value = state.me.name;
+  $('#profileHandle').value = state.me.handle || '';
+  renderProfileAvatarPreview(stagedAvatarUrl, state.me.name);
+  $('#profileEmail').textContent = state.me.email ? `로그인 계정: ${state.me.email} (비공개)` : '';
+  $('#profileNickStatus').textContent = ''; $('#profileNickStatus').className = 'field-status';
+  $('#profileHandleStatus').textContent = ''; $('#profileHandleStatus').className = 'field-status';
+
+  // 7일 변경 제한 점검
+  const hint = $('#profileCooldownHint');
+  const nameInp = $('#profileName');
+  if (state.me.lastNickChange) {
+    const elapsed = Date.now() - new Date(state.me.lastNickChange).getTime();
+    const sevenDays = 7 * 864e5;
+    if (elapsed < sevenDays && state.me.lastNickChange !== state.me.createdAt) {
+      const daysLeft = Math.ceil((sevenDays - elapsed) / 864e5);
+      hint.textContent = `⏳ 닉네임은 7일에 1회 변경할 수 있어요 (다음 변경 가능: ${daysLeft}일 후)`;
+      nameInp.disabled = true;
+    } else {
+      hint.textContent = '닉네임은 변경 후 7일 동안 다시 변경할 수 없어요.';
+      nameInp.disabled = false;
+    }
+  } else {
+    hint.textContent = '닉네임은 변경 후 7일 동안 유지돼요.';
+    nameInp.disabled = false;
+  }
+
+  $('#profileModal').classList.add('show');
+  if (!nameInp.disabled) nameInp.focus(); else $('#profileHandle').focus();
 }
-function closeProfile() { $('#profileModal').classList.remove('show'); }
+
+function closeProfile() {
+  $('#profileModal').classList.remove('show');
+  stagedAvatarUrl = null; stagedAvatarBlob = null;
+}
+
+// 캔버스 아바타 압축 리사이징 (256x256 max)
+function compressAvatar(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = e => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        const sz = Math.min(img.width, img.height);
+        const sx = (img.width - sz) / 2, sy = (img.height - sz) / 2;
+        const cvs = document.createElement('canvas');
+        cvs.width = 256; cvs.height = 256;
+        const ctx = cvs.getContext('2d');
+        ctx.drawImage(img, sx, sy, sz, sz, 0, 0, 256, 256);
+        cvs.toBlob(blob => {
+          if (!blob) return reject(new Error('이미지 변환 실패'));
+          resolve(blob);
+        }, 'image/jpeg', 0.85);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleAvatarSelected(file) {
+  if (!file || !file.type.startsWith('image/')) { toast('이미지 파일만 선택할 수 있어요'); return; }
+  try {
+    toast('사진을 최적화하는 중…');
+    const blob = await compressAvatar(file);
+    stagedAvatarBlob = blob;
+    stagedAvatarUrl = URL.createObjectURL(blob);
+    renderProfileAvatarPreview(stagedAvatarUrl, state.me ? state.me.name : '');
+    toast('📷 사진을 선택했어요. [저장]을 누르면 프로필에 반영돼요.');
+  } catch (err) {
+    toast('사진을 처리하지 못했어요: ' + (err.message || ''));
+  }
+}
+
 async function saveProfile() {
-  const name = $('#profileName').value.trim().slice(0, 24);
-  if (!name) { toast('이름을 입력해 주세요'); return; }
-  const { error } = await sb.from('profiles').update({ display_name: name }).eq('id', state.me.id);
-  if (error) { toast(friendlyError(error, '저장하지 못했어요')); return; }
-  state.me.name = name; closeProfile(); renderNav(); renderSpaces(); renderWidget(); trackPresence();
-  allPosts().forEach(p => { if (p.ownerId === state.me.id && !p.echo) p.name = name; });
-  if (feedKey()) refreshList(feedKey());
-  toast('✅ 프로필을 저장했어요');
+  const rawName = $('#profileName').value;
+  const rawHandle = $('#profileHandle').value;
+  const vNick = validateNickname(rawName);
+  if (!vNick.ok) { toast(vNick.msg); return; }
+  const vHandle = validateHandle(rawHandle);
+  if (!vHandle.ok) { toast(vHandle.msg); return; }
+
+  const btn = $('#btnSaveProfile'); if (btn) btn.disabled = true;
+  try {
+    const updates = {};
+
+    // 닉네임 변경 검사
+    if (vNick.name !== state.me.name) {
+      if ($('#profileName').disabled) {
+        toast('닉네임은 7일에 1회만 변경할 수 있어요.');
+        if (btn) btn.disabled = false;
+        return;
+      }
+      // 중복 검사
+      const { data: dup } = await sb.from('profiles').select('id').ilike('display_name', vNick.name).neq('id', state.me.id).maybeSingle();
+      if (dup) { toast('이미 사용 중인 닉네임이에요.'); if (btn) btn.disabled = false; return; }
+      updates.display_name = vNick.name;
+      updates.last_nickname_changed_at = new Date().toISOString();
+    }
+
+    // 핸들 변경 검사
+    if (vHandle.handle !== state.me.handle) {
+      const { data: hdup } = await sb.from('profiles').select('id').ilike('handle', vHandle.handle).neq('id', state.me.id).maybeSingle();
+      if (hdup) { toast('이미 사용 중인 사용자 ID예요.'); if (btn) btn.disabled = false; return; }
+      updates.handle = vHandle.handle;
+    }
+
+    // 아바타 업로드
+    if (stagedAvatarBlob) {
+      const path = `avatars/${state.me.id}_${Date.now()}.jpg`;
+      const { error: upErr } = await sb.storage.from('media').upload(path, stagedAvatarBlob, { upsert: true, contentType: 'image/jpeg' });
+      if (upErr) throw upErr;
+      const { data: pubData } = sb.storage.from('media').getPublicUrl(path);
+      updates.avatar_url = pubData.publicUrl;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      const { error } = await sb.from('profiles').update(updates).eq('id', state.me.id);
+      if (error) throw error;
+      if (updates.display_name) state.me.name = updates.display_name;
+      if (updates.handle) state.me.handle = updates.handle;
+      if (updates.avatar_url) state.me.avatar = updates.avatar_url;
+      if (updates.last_nickname_changed_at) state.me.lastNickChange = updates.last_nickname_changed_at;
+    }
+
+    closeProfile();
+    renderNav(); renderSpaces(); renderWidget(); trackPresence();
+    allPosts().forEach(p => {
+      if (p.ownerId === state.me.id && !p.echo) {
+        p.name = state.me.name;
+        p.handle = state.me.handle;
+        if (state.me.avatar) p.picture = state.me.avatar;
+      }
+    });
+    if (feedKey()) refreshList(feedKey());
+    toast('✅ 프로필을 성공적으로 저장했어요');
+  } catch (err) {
+    toast(friendlyError(err, '프로필 저장에 실패했어요'));
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 /* ================= 실시간 (Realtime · Presence) ================= */
@@ -1154,10 +1412,10 @@ function scheduleStats(id) {
 }
 const profileCache = new Map();
 async function profileOf(id) {
-  if (state.me && id === state.me.id) return { display_name: state.me.name, avatar_url: state.me.avatar };
+  if (state.me && id === state.me.id) return { display_name: state.me.name, handle: state.me.handle, avatar_url: state.me.avatar };
   if (profileCache.has(id)) return profileCache.get(id);
-  const { data } = await sb.from('profiles').select('display_name,avatar_url').eq('id', id).maybeSingle();
-  const v = data || { display_name: '알 수 없음', avatar_url: null }; profileCache.set(id, v); return v;
+  const { data } = await sb.from('profiles').select('display_name,handle,avatar_url').eq('id', id).maybeSingle();
+  const v = data || { display_name: '알 수 없음', handle: '', avatar_url: null }; profileCache.set(id, v); return v;
 }
 
 function subscribeRealtime() {
@@ -1199,7 +1457,7 @@ function unsubscribeRealtime() {
   state.online = [];
 }
 
-/* ================= 인증 (Supabase Auth · 이메일) ================= */
+/* ================= 인증 (Supabase Auth · 비밀번호 / 이메일) ================= */
 function setGate(show) {
   const g = $('#loginGate'); if (g) g.style.display = show ? 'flex' : 'none';
   document.body.classList.toggle('logged-out', show);
@@ -1212,12 +1470,97 @@ function gateMsg(text, isError = true) {
 let gateEmailValue = '', resendUntil = 0, resendTimer = null;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function emailError(e) {
-  const m = (e && e.message) || '';
-  if ((e && e.status === 429) || /rate limit|too many|seconds/i.test(m)) return '메일 요청이 너무 잦아요. 잠시 후 다시 시도해 주세요.';
-  if (/invalid.*email|email.*invalid/i.test(m)) return '이메일 주소를 확인해 주세요.';
-  return '처리하지 못했어요: ' + m;
+function friendlyAuthError(e) {
+  const m = (e && (e.message || e.error_description)) || '';
+  if (/invalid login credentials|invalid credentials/i.test(m)) return '이메일 또는 비밀번호가 맞지 않아요.';
+  if (/user already registered/i.test(m)) return '이미 가입된 이메일이에요. 로그인 탭에서 로그인해 주세요.';
+  if (/password should be at least/i.test(m)) return '비밀번호는 최소 6자리 이상이어야 해요.';
+  if (/rate limit|too many/i.test(m)) return '요청이 너무 많아요. 잠시 후 다시 시도해 주세요.';
+  return m || '인증 처리에 실패했어요.';
 }
+
+function switchGateTab(tab) {
+  $$('.login-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const lf = $('#loginForm'), sf = $('#signupForm'), mf = $('#magicForm'), cf = $('#codeForm');
+  const tabs = $('#gateTabs'); if (tabs) tabs.hidden = false;
+  if (lf) lf.hidden = tab !== 'login';
+  if (sf) sf.hidden = tab !== 'signup';
+  if (mf) mf.hidden = tab !== 'magic';
+  if (cf) cf.hidden = tab !== 'code';
+  gateMsg('');
+  if (tab === 'login') $('#loginEmail').focus();
+  else if (tab === 'signup') $('#signupEmail').focus();
+  else if (tab === 'magic') $('#gateEmail').focus();
+}
+
+function showGateStep(step) {
+  const tabs = $('#gateTabs');
+  if (step === 'code') {
+    if (tabs) tabs.hidden = true;
+    const lf = $('#loginForm'), sf = $('#signupForm'), mf = $('#magicForm'), cf = $('#codeForm');
+    if (lf) lf.hidden = true; if (sf) sf.hidden = true; if (mf) mf.hidden = true; if (cf) cf.hidden = false;
+    gateMsg('');
+    $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일의 6자리 인증 코드를 입력하거나 링크를 누르면 바로 입장돼요.`;
+    $('#gateCode').value = ''; $('#gateCode').focus();
+  } else {
+    if (tabs) tabs.hidden = false;
+    switchGateTab(step);
+  }
+}
+
+async function loginWithPassword(email, password) {
+  if (!sb) { gateMsg('Supabase 설정이 필요해요.'); return; }
+  const em = String(email || '').trim().toLowerCase();
+  if (!EMAIL_RE.test(em)) { gateMsg('올바른 이메일 주소를 입력해 주세요.'); return; }
+  if (!password) { gateMsg('비밀번호를 입력해 주세요.'); return; }
+
+  const btn = $('#btnLogin'); if (btn) btn.disabled = true; gateMsg('');
+  const { data, error } = await sb.auth.signInWithPassword({ email: em, password });
+  if (btn) btn.disabled = false;
+  if (error) { gateMsg(friendlyAuthError(error)); return; }
+}
+
+async function signupWithPassword(email, password, rawNick, rawHandle) {
+  if (!sb) { gateMsg('Supabase 설정이 필요해요.'); return; }
+  const em = String(email || '').trim().toLowerCase();
+  if (!EMAIL_RE.test(em)) { gateMsg('올바른 이메일 주소를 입력해 주세요.'); return; }
+  if (!password || password.length < 6) { gateMsg('비밀번호는 최소 6자리 이상이어야 해요.'); return; }
+
+  const vNick = validateNickname(rawNick);
+  if (!vNick.ok) { gateMsg(vNick.msg); return; }
+  const vHandle = validateHandle(rawHandle);
+  if (!vHandle.ok) { gateMsg(vHandle.msg); return; }
+
+  const btn = $('#btnSignup'); if (btn) btn.disabled = true; gateMsg('');
+  try {
+    const { data: dupNick } = await sb.from('profiles').select('id').ilike('display_name', vNick.name).maybeSingle();
+    if (dupNick) { gateMsg('이미 사용 중인 닉네임이에요.'); if (btn) btn.disabled = false; return; }
+
+    const { data: dupHandle } = await sb.from('profiles').select('id').ilike('handle', vHandle.handle).maybeSingle();
+    if (dupHandle) { gateMsg('이미 사용 중인 사용자 ID예요.'); if (btn) btn.disabled = false; return; }
+
+    const { data, error } = await sb.auth.signUp({
+      email: em,
+      password,
+      options: {
+        data: { display_name: vNick.name, handle: vHandle.handle, full_name: vNick.name },
+        emailRedirectTo: location.origin + location.pathname
+      }
+    });
+    if (error) { gateMsg(friendlyAuthError(error)); if (btn) btn.disabled = false; return; }
+
+    if (!data.session) {
+      gateEmailValue = em;
+      showGateStep('code');
+      gateMsg('인증 메일을 발송했어요. 메일의 링크를 누르거나 6자리 코드를 입력해 주세요.', false);
+    }
+  } catch (err) {
+    gateMsg(err.message || '가입에 실패했어요.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 function updateResendBtn() {
   const b = $('#btnResend'); if (!b) return;
   const left = Math.ceil((resendUntil - Date.now()) / 1000);
@@ -1228,34 +1571,24 @@ function startResendCooldown(sec = 60) {
   resendUntil = Date.now() + sec * 1000; clearInterval(resendTimer);
   resendTimer = setInterval(updateResendBtn, 500); updateResendBtn();
 }
-function showGateStep(step) {
-  const ef = $('#emailForm'), cf = $('#codeForm'); if (!ef || !cf) return;
-  ef.hidden = step !== 'email'; cf.hidden = step !== 'code'; gateMsg('');
-  if (step === 'code') {
-    $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일함에서 'Sign in' 링크를 누르면 바로 입장돼요. (스팸함도 확인해 보세요. 코드 칸은 메일에 숫자 코드가 함께 왔을 때만 쓰면 돼요)`;
-    $('#gateCode').value = ''; $('#gateCode').focus();
-  } else { $('#gateEmail').focus(); }
-}
 async function sendCode(email, resend = false) {
-  if (!sb) { gateMsg(CONFIGURED ? 'Supabase 라이브러리를 불러오지 못했어요. 네트워크를 확인해 주세요.' : '서버 설정이 필요해요. 파일 상단의 SUPABASE_URL / SUPABASE_ANON_KEY 를 입력해 주세요.'); return; }
-  if (location.protocol === 'file:') { gateMsg('파일을 직접 열면 로그인할 수 없어요. 호스팅한 주소(https://…)나 localhost 에서 열어 주세요.'); return; }
+  if (!sb) { gateMsg('서버 설정이 필요해요.'); return; }
   const em = String(email || '').trim().toLowerCase();
   if (!EMAIL_RE.test(em)) { gateMsg('이메일 주소를 확인해 주세요.'); return; }
   const btn = $('#btnSendCode'); if (btn) btn.disabled = true; gateMsg('');
   const { error } = await sb.auth.signInWithOtp({ email: em, options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true } });
   if (btn) btn.disabled = false;
-  if (error) { gateMsg(emailError(error)); return; }
+  if (error) { gateMsg(friendlyAuthError(error)); return; }
   gateEmailValue = em; showGateStep('code'); startResendCooldown();
   if (resend) gateMsg('인증 메일을 다시 보냈어요.', false);
 }
 async function verifyCode(raw) {
   const token = String(raw || '').replace(/\s/g, '');
-  if (!/^\d{6,10}$/.test(token)) { gateMsg('메일에 숫자 코드가 함께 왔다면 그 코드를 입력해 주세요. 보통은 메일의 \'Sign in\' 링크로 바로 입장돼요.'); return; }
+  if (!/^\d{6,10}$/.test(token)) { gateMsg('메일에 적힌 6자리 숫자 코드를 입력해 주세요.'); return; }
   const btn = $('#btnVerify'); if (btn) btn.disabled = true; gateMsg('');
   const { error } = await sb.auth.verifyOtp({ email: gateEmailValue, token, type: 'email' });
   if (btn) btn.disabled = false;
-  if (error) gateMsg('코드가 맞지 않거나 만료됐어요. 메일의 링크를 다시 눌러 보거나, 메일을 다시 받아 주세요.');
-  // 성공하면 onAuthStateChange(SIGNED_IN) 이 입장을 처리해요
+  if (error) gateMsg('코드가 맞지 않거나 만료됐어요. 메일의 링크를 눌러보거나 다시 받아 주세요.');
 }
 async function logout() {
   if (!confirm('로그아웃할까요?')) return;
@@ -1268,44 +1601,68 @@ async function onSignedIn(user) {
   signingIn = true;
   try {
     let prof = null;
-    for (let i = 0; i < 4 && !prof; i++) {      // 가입 직후 트리거가 프로필을 만들 때까지 잠깐 재시도
+    for (let i = 0; i < 4 && !prof; i++) {
       const { data } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
       prof = data; if (!prof) await new Promise(r => setTimeout(r, 400));
     }
-    if (!prof) throw new Error('프로필을 만들지 못했어요');
+    if (!prof) throw new Error('프로필을 불러오지 못했어요');
     if (prof.banned) { await sb.auth.signOut(); gateMsg('이용이 제한된 계정이에요.'); return; }
-    state.me = { id: user.id, name: prof.display_name, avatar: prof.avatar_url, role: prof.role, email: user.email || '' };
+
+    const metaNick = user.user_metadata && (user.user_metadata.display_name || user.user_metadata.full_name);
+    const metaHandle = user.user_metadata && user.user_metadata.handle;
+    const patch = {};
+    if (metaNick && (!prof.display_name || prof.display_name.startsWith('멤버'))) patch.display_name = metaNick;
+    if (metaHandle && !prof.handle) patch.handle = metaHandle;
+    if (Object.keys(patch).length > 0) {
+      await sb.from('profiles').update(patch).eq('id', user.id).catch(() => {});
+      Object.assign(prof, patch);
+    }
+
+    state.me = {
+      id: user.id,
+      name: prof.display_name || '드피',
+      handle: prof.handle || '',
+      avatar: prof.avatar_url,
+      role: prof.role,
+      email: user.email || '',
+      lastNickChange: prof.last_nickname_changed_at || null,
+      createdAt: prof.created_at
+    };
+
     await loadSpaces();
     state.view = 'plaza'; state.channelId = null;
     gateMsg(''); setGate(false);
-    history.replaceState(null, '', location.pathname);   // OAuth 해시/코드 제거
+    history.replaceState(null, '', location.pathname);
     renderSpaces(); renderNav(); renderMain(); renderWidget(); icons();
     subscribeRealtime(); loadTrending();
   } catch (e) {
     console.warn(e); await sb.auth.signOut().catch(() => {});
-    gateMsg('입장하지 못했어요: ' + (e.message || '알 수 없는 오류') + ' (SQL 스키마를 실행했는지 확인해 주세요)');
+    gateMsg('입장하지 못했어요: ' + (e.message || '알 수 없는 오류'));
   } finally { signingIn = false; }
 }
+
 function onSignedOut() {
   unsubscribeRealtime(); clearStagedMedia();
   state.me = null; state.feeds = {}; state.threads = {}; state.openThreads.clear(); state.trending = [];
   closeProfile(); closeLightbox(); closeEchoMenu(); closeDrawer();
   renderSpaces(); renderNav(); renderMain(); renderWidget(); setGate(true);
-  showGateStep('email');
+  showGateStep('login');
 }
 
 /* ================= 이벤트 위임 ================= */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-act], [data-lightbox], .bnav-item, #btnCloseLightbox, #composerClearMedia');
+  const t = e.target.closest('[data-act], [data-lightbox], [data-tab], .bnav-item, #btnCloseLightbox, #composerClearMedia');
   if (!t) { closeEchoMenu(); if (e.target === $('#profileModal')) closeProfile(); if (e.target === $('#lightbox')) closeLightbox(); return; }
   if (t.id === 'btnCloseLightbox') return closeLightbox();
   if (t.id === 'composerClearMedia') return clearStagedMedia();
   if (t.dataset.lightbox) return openLightbox(t.dataset.lightbox);
   if (t.classList.contains('bnav-item')) return handleBNav(t.dataset.bnavAct);
+  if (t.dataset.tab) return switchGateTab(t.dataset.tab);
+
   const id = t.dataset.id;
   switch (t.dataset.act) {
+    case 'switchTab': switchGateTab(t.dataset.to); break;
     case 'resendCode': sendCode(gateEmailValue, true); break;
-    case 'changeEmail': showGateStep('email'); break;
     case 'logout': logout(); break;
     case 'drawer': document.body.classList.toggle('drawer-open'); break;
     case 'scrim': closeDrawer(); break;
@@ -1321,31 +1678,70 @@ document.addEventListener('click', e => {
     case 'retry': { const k = feedKey(); if (k) { getFeed(k).loaded = false; loadFeed(k); } break; }
     case 'rmStaged': removeStagedMedia(Number(t.dataset.idx)); break;
     case 'profile': openProfile(); break;
+    case 'triggerAvatar': { const f = $('#profileAvatarInput'); if (f) f.click(); } break;
     case 'saveProfile': saveProfile(); break;
     case 'closeProfile': closeProfile(); break;
   }
 });
+
 document.addEventListener('submit', e => {
   const f = e.target.closest('[data-form]'); if (!f) return;
   e.preventDefault();
   if (f.dataset.form === 'post') submitPost(f);
   else if (f.dataset.form === 'send') sendThread(f);
-  else if (f.dataset.form === 'email') sendCode($('#gateEmail').value);
+  else if (f.dataset.form === 'login') loginWithPassword($('#loginEmail').value, $('#loginPassword').value);
+  else if (f.dataset.form === 'signup') signupWithPassword($('#signupEmail').value, $('#signupPassword').value, $('#signupNickname').value, $('#signupHandle').value);
+  else if (f.dataset.form === 'magic') sendCode($('#gateEmail').value);
   else if (f.dataset.form === 'code') verifyCode($('#gateCode').value);
 });
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeEchoMenu(); closeDrawer(); closeLightbox(); closeProfile(); }
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.target.matches('.composer textarea')) { e.preventDefault(); const f = e.target.closest('form'); if (f) submitPost(f); }
-  if (e.key === 'Enter' && e.target.id === 'profileName') { e.preventDefault(); saveProfile(); }
+  if (e.key === 'Enter' && (e.target.id === 'profileName' || e.target.id === 'profileHandle')) { e.preventDefault(); saveProfile(); }
 });
+
 document.addEventListener('change', e => {
   if (e.target.id === 'mediaUploadInput') { handleMediaFiles(Array.from(e.target.files || [])); e.target.value = ''; }
+  else if (e.target.id === 'profileAvatarInput') { const fl = e.target.files; if (fl && fl[0]) handleAvatarSelected(fl[0]); e.target.value = ''; }
+});
+
+// 실시간 유효성 디바운스 검사
+let debounceTimer = null;
+document.addEventListener('input', e => {
+  const id = e.target.id;
+  if (id === 'signupNickname' || id === 'profileName') {
+    clearTimeout(debounceTimer);
+    const targetStatus = id === 'signupNickname' ? $('#signupNickStatus') : $('#profileNickStatus');
+    debounceTimer = setTimeout(async () => {
+      const v = validateNickname(e.target.value);
+      if (!v.ok) { targetStatus.textContent = v.msg; targetStatus.className = 'field-status err'; return; }
+      targetStatus.textContent = '중복 검사 중…'; targetStatus.className = 'field-status warn';
+      const q = sb.from('profiles').select('id').ilike('display_name', v.name);
+      if (id === 'profileName' && state.me) q.neq('id', state.me.id);
+      const { data } = await q.maybeSingle();
+      if (data) { targetStatus.textContent = '이미 사용 중인 닉네임이에요'; targetStatus.className = 'field-status err'; }
+      else { targetStatus.textContent = '사용 가능한 닉네임이에요'; targetStatus.className = 'field-status ok'; }
+    }, 350);
+  } else if (id === 'signupHandle' || id === 'profileHandle') {
+    clearTimeout(debounceTimer);
+    const targetStatus = id === 'signupHandle' ? $('#signupHandleStatus') : $('#profileHandleStatus');
+    debounceTimer = setTimeout(async () => {
+      const v = validateHandle(e.target.value);
+      if (!v.ok) { targetStatus.textContent = v.msg; targetStatus.className = 'field-status err'; return; }
+      targetStatus.textContent = '중복 검사 중…'; targetStatus.className = 'field-status warn';
+      const q = sb.from('profiles').select('id').ilike('handle', v.handle);
+      if (id === 'profileHandle' && state.me) q.neq('id', state.me.id);
+      const { data } = await q.maybeSingle();
+      if (data) { targetStatus.textContent = '이미 사용 중인 아이디예요'; targetStatus.className = 'field-status err'; }
+      else { targetStatus.textContent = '사용 가능한 아이디예요 (@' + v.handle + ')'; targetStatus.className = 'field-status ok'; }
+    }, 350);
+  }
 });
 
 // 시간 표시("3분 전") 주기적 갱신 + 트렌딩 갱신
 setInterval(() => { $$('.post[data-post]').forEach(a => { const p = findPost(a.dataset.post), s = $('.post-head small', a); if (p && s) s.textContent = timeAgo(p.created); }); }, 60000);
 setInterval(() => { if (state.me && !document.hidden) loadTrending(); }, 120000);
-
 /* ================= 시작 ================= */
 function boot() {
   renderSpaces(); renderNav(); renderMain(); renderWidget();
