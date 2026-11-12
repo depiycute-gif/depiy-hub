@@ -473,17 +473,17 @@ body.logged-out{overflow:hidden}
   <div class="login-card">
     <div class="login-brand">D</div>
     <h2 class="login-title">De_piy Hub</h2>
-    <p class="login-desc">드피 허브 커뮤니티에 오신 것을 환영합니다.<br>이메일로 인증하고 입장하세요. 비밀번호는 필요 없어요.</p>
+    <p class="login-desc">드피 허브 커뮤니티에 오신 것을 환영합니다.<br>이메일을 적으면 입장 링크를 보내드려요. 비밀번호는 필요 없어요.</p>
     <form id="emailForm" class="gate-form" data-form="email" novalidate>
       <label class="field"><span>이메일</span><input id="gateEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"></label>
       <button class="btn gate-btn" type="submit" id="btnSendCode">인증 메일 받기</button>
     </form>
     <form id="codeForm" class="gate-form" data-form="code" hidden novalidate>
       <p class="gate-sent" id="gateSent"></p>
-      <label class="field"><span>인증 코드</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="메일에 적힌 숫자 코드"></label>
-      <button class="btn gate-btn" type="submit" id="btnVerify">입장하기</button>
+      <label class="field"><span>인증 코드 (선택)</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="메일에 코드가 함께 왔을 때만 입력"></label>
+      <button class="btn gate-btn" type="submit" id="btnVerify">코드로 입장</button>
       <div class="gate-links">
-        <button type="button" class="link-btn" data-act="resendCode" id="btnResend">코드 다시 받기</button>
+        <button type="button" class="link-btn" data-act="resendCode" id="btnResend">메일 다시 받기</button>
         <button type="button" class="link-btn" data-act="changeEmail">다른 이메일 사용</button>
       </div>
     </form>
@@ -1221,8 +1221,8 @@ function emailError(e) {
 function updateResendBtn() {
   const b = $('#btnResend'); if (!b) return;
   const left = Math.ceil((resendUntil - Date.now()) / 1000);
-  if (left > 0) { b.disabled = true; b.textContent = `코드 다시 받기 (${left})`; }
-  else { b.disabled = false; b.textContent = '코드 다시 받기'; clearInterval(resendTimer); resendTimer = null; }
+  if (left > 0) { b.disabled = true; b.textContent = `메일 다시 받기 (${left})`; }
+  else { b.disabled = false; b.textContent = '메일 다시 받기'; clearInterval(resendTimer); resendTimer = null; }
 }
 function startResendCooldown(sec = 60) {
   resendUntil = Date.now() + sec * 1000; clearInterval(resendTimer);
@@ -1232,7 +1232,7 @@ function showGateStep(step) {
   const ef = $('#emailForm'), cf = $('#codeForm'); if (!ef || !cf) return;
   ef.hidden = step !== 'email'; cf.hidden = step !== 'code'; gateMsg('');
   if (step === 'code') {
-    $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일의 링크를 누르거나, 적힌 코드를 아래에 입력하세요. (스팸함도 확인해 보세요)`;
+    $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일함에서 'Sign in' 링크를 누르면 바로 입장돼요. (스팸함도 확인해 보세요. 코드 칸은 메일에 숫자 코드가 함께 왔을 때만 쓰면 돼요)`;
     $('#gateCode').value = ''; $('#gateCode').focus();
   } else { $('#gateEmail').focus(); }
 }
@@ -1250,11 +1250,11 @@ async function sendCode(email, resend = false) {
 }
 async function verifyCode(raw) {
   const token = String(raw || '').replace(/\s/g, '');
-  if (!/^\d{6,10}$/.test(token)) { gateMsg('메일에 적힌 숫자 코드를 입력해 주세요.'); return; }
+  if (!/^\d{6,10}$/.test(token)) { gateMsg('메일에 숫자 코드가 함께 왔다면 그 코드를 입력해 주세요. 보통은 메일의 \'Sign in\' 링크로 바로 입장돼요.'); return; }
   const btn = $('#btnVerify'); if (btn) btn.disabled = true; gateMsg('');
   const { error } = await sb.auth.verifyOtp({ email: gateEmailValue, token, type: 'email' });
   if (btn) btn.disabled = false;
-  if (error) gateMsg('코드가 맞지 않거나 만료됐어요. 코드를 다시 받아 주세요.');
+  if (error) gateMsg('코드가 맞지 않거나 만료됐어요. 메일의 링크를 다시 눌러 보거나, 메일을 다시 받아 주세요.');
   // 성공하면 onAuthStateChange(SIGNED_IN) 이 입장을 처리해요
 }
 async function logout() {
