@@ -540,7 +540,7 @@ body.logged-out{overflow:hidden}
     <!-- 코드/링크 인증 대기 폼 -->
     <form id="codeForm" class="gate-form" data-form="code" hidden novalidate>
       <p class="gate-sent" id="gateSent"></p>
-      <label class="field"><span>인증 코드 (숫자 6자리)</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="메일의 6자리 인증 코드 입력"></label>
+      <label class="field"><span>인증 코드 (숫자 입력)</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="12" placeholder="메일로 받은 숫자 인증 코드 입력"></label>
       <button class="btn gate-btn" type="submit" id="btnVerify">코드로 입장</button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="resendCode" id="btnResend">메일 다시 받기</button>
@@ -1257,13 +1257,16 @@ function openProfile() {
   $('#profileNickStatus').textContent = ''; $('#profileNickStatus').className = 'field-status';
   $('#profileHandleStatus').textContent = ''; $('#profileHandleStatus').className = 'field-status';
 
-  // 7일 변경 제한 점검
+  // 7일 변경 제한 점검: '멤버'로 시작하는 기본 임시 닉네임이거나 변경 이력이 없는 경우 최초 설정으로 간주해 쿨다운 해제
   const hint = $('#profileCooldownHint');
   const nameInp = $('#profileName');
-  if (state.me.lastNickChange) {
+  const isTemporary = !state.me.name || state.me.name.startsWith('멤버');
+  const isInitial = !state.me.lastNickChange || isTemporary;
+
+  if (!isInitial && state.me.lastNickChange) {
     const elapsed = Date.now() - new Date(state.me.lastNickChange).getTime();
     const sevenDays = 7 * 864e5;
-    if (elapsed < sevenDays && state.me.lastNickChange !== state.me.createdAt) {
+    if (elapsed < sevenDays) {
       const daysLeft = Math.ceil((sevenDays - elapsed) / 864e5);
       hint.textContent = `⏳ 닉네임은 7일에 1회 변경할 수 있어요 (다음 변경 가능: ${daysLeft}일 후)`;
       nameInp.disabled = true;
@@ -1272,7 +1275,8 @@ function openProfile() {
       nameInp.disabled = false;
     }
   } else {
-    hint.textContent = '닉네임은 변경 후 7일 동안 유지돼요.';
+    hint.textContent = '💡 최초 닉네임 설정이에요. 원하는 닉네임과 사용자 ID를 자유롭게 설정하세요!';
+    hint.style.color = 'var(--brand)';
     nameInp.disabled = false;
   }
 
@@ -1338,8 +1342,11 @@ async function saveProfile() {
     const updates = {};
 
     // 닉네임 변경 검사
+    const isTemporary = !state.me.name || state.me.name.startsWith('멤버');
+    const isInitial = !state.me.lastNickChange || isTemporary;
+
     if (vNick.name !== state.me.name) {
-      if ($('#profileName').disabled) {
+      if ($('#profileName').disabled && !isInitial) {
         toast('닉네임은 7일에 1회만 변경할 수 있어요.');
         if (btn) btn.disabled = false;
         return;
@@ -1500,7 +1507,7 @@ function showGateStep(step) {
     const lf = $('#loginForm'), sf = $('#signupForm'), mf = $('#magicForm'), cf = $('#codeForm');
     if (lf) lf.hidden = true; if (sf) sf.hidden = true; if (mf) mf.hidden = true; if (cf) cf.hidden = false;
     gateMsg('');
-    $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일의 6자리 인증 코드를 입력하거나 링크를 누르면 바로 입장돼요.`;
+    $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일의 인증 코드를 입력하거나 링크를 누르면 바로 입장돼요.`;
     $('#gateCode').value = ''; $('#gateCode').focus();
   } else {
     if (tabs) tabs.hidden = false;
@@ -1552,7 +1559,7 @@ async function signupWithPassword(email, password, rawNick, rawHandle) {
     if (!data.session) {
       gateEmailValue = em;
       showGateStep('code');
-      gateMsg('인증 메일을 발송했어요. 메일의 링크를 누르거나 6자리 코드를 입력해 주세요.', false);
+      gateMsg('인증 메일을 발송했어요. 메일의 링크를 누르거나 인증 코드를 입력해 주세요.', false);
     }
   } catch (err) {
     gateMsg(err.message || '가입에 실패했어요.');
@@ -1584,7 +1591,7 @@ async function sendCode(email, resend = false) {
 }
 async function verifyCode(raw) {
   const token = String(raw || '').replace(/\s/g, '');
-  if (!/^\d{6,10}$/.test(token)) { gateMsg('메일에 적힌 6자리 숫자 코드를 입력해 주세요.'); return; }
+  if (!/^\d{6,12}$/.test(token)) { gateMsg('메일에 적힌 숫자 인증 코드를 입력해 주세요.'); return; }
   const btn = $('#btnVerify'); if (btn) btn.disabled = true; gateMsg('');
   const { error } = await sb.auth.verifyOtp({ email: gateEmailValue, token, type: 'email' });
   if (btn) btn.disabled = false;
@@ -1635,6 +1642,14 @@ async function onSignedIn(user) {
     history.replaceState(null, '', location.pathname);
     renderSpaces(); renderNav(); renderMain(); renderWidget(); icons();
     subscribeRealtime(); loadTrending();
+
+    // 임시 닉네임(멤버XXXX)이거나 핸들이 없는 최초 입장 사용자는 바로 프로필 설정 모달 띄우기
+    if (state.me.name.startsWith('멤버') || !state.me.handle) {
+      setTimeout(() => {
+        openProfile();
+        toast('🎉 환영해요! 커뮤니티에서 사용할 닉네임과 사용자 ID를 설정해 주세요.');
+      }, 400);
+    }
   } catch (e) {
     console.warn(e); await sb.auth.signOut().catch(() => {});
     gateMsg('입장하지 못했어요: ' + (e.message || '알 수 없는 오류'));
