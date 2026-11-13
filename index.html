@@ -10,6 +10,7 @@
 <style>
 :root{
   --depiy-orange:#F8935F;
+  --brand:var(--depiy-orange);
   --orange-soft:color-mix(in srgb,var(--depiy-orange) 16%,transparent);
   --orange-line:color-mix(in srgb,var(--depiy-orange) 55%,transparent);
   --orange-glow:color-mix(in srgb,var(--depiy-orange) 40%,transparent);
@@ -1195,12 +1196,12 @@ function handleBNav(act) {
 }
 
 /* ================= 닉네임 / 핸들 유효성 & 금칙어 규칙 ================= */
-const PROHIBITED_WORDS = [
+const RESERVED_WORDS = [
   'admin', 'administrator', 'root', 'system', '운영자', '관리자', '매니저',
-  '어드민', '시스탬', '드피허브', 'depiyhub', 'official', '공식',
-  '시발', '씨발', '개새끼', '병신', '지랄', '존나', '썅', '미친',
-  '섹스', '보지', '자지', '창녀', '노무현', '일베', '페미'
+  '어드민', '시스템', '드피', '드피허브', 'depiy', 'depiyhub', 'official', '공식',
+  'staff', 'mod', 'support'
 ];
+const PROFANITY_RE = /(?:시[0-9_\s]*[발벌]|씨[0-9_\s]*[발벌]|개[0-9_\s]*새|병[0-9_\s]*신|지[0-9_\s]*랄|존[0-9_\s]*나|썅|창[0-9_\s]*녀)/i;
 
 function sanitizeUnicode(str) {
   return String(str || '').normalize('NFKC').trim();
@@ -1216,10 +1217,13 @@ function validateNickname(raw) {
     return { ok: false, msg: '한글, 영문, 숫자, 특수문자(_ . -)만 사용할 수 있어요' };
   }
   const lower = name.toLowerCase();
-  for (const w of PROHIBITED_WORDS) {
-    if (lower.includes(w.toLowerCase())) {
-      return { ok: false, msg: '부적절하거나 사용할 수 없는 단어가 포함되어 있어요' };
+  for (const w of RESERVED_WORDS) {
+    if (lower === w.toLowerCase()) {
+      return { ok: false, msg: '시스템에서 예약된 닉네임이에요' };
     }
+  }
+  if (PROFANITY_RE.test(lower)) {
+    return { ok: false, msg: '부적절한 단어가 포함되어 있어요' };
   }
   return { ok: true, name };
 }
@@ -1229,10 +1233,34 @@ function validateHandle(raw) {
   if (h.startsWith('@')) h = h.slice(1);
   if (!h) return { ok: false, msg: '사용자 ID(핸들)를 입력해 주세요' };
   if (!/^[a-z0-9_]{3,15}$/.test(h)) return { ok: false, msg: '아이디는 3~15자의 영문 소문자, 숫자, _ 만 사용 가능해요' };
-  for (const w of ['admin', 'administrator', 'system', 'root', 'official', 'support']) {
+  for (const w of RESERVED_WORDS) {
     if (h === w) return { ok: false, msg: '사용할 수 없는 예약된 아이디예요' };
   }
   return { ok: true, handle: h };
+}
+
+async function isNicknameAvailable(name, myId) {
+  if (!sb) return true;
+  try {
+    const { data, error } = await sb.rpc('check_nickname_available', { p_name: name, p_id: myId || null });
+    if (!error && typeof data === 'boolean') return data;
+  } catch (_) {}
+  try {
+    const { data } = await sb.from('profiles').select('id').eq('display_name', name).maybeSingle();
+    return !data || (myId && data.id === myId);
+  } catch (_) { return true; }
+}
+
+async function isHandleAvailable(handle, myId) {
+  if (!sb) return true;
+  try {
+    const { data, error } = await sb.rpc('check_handle_available', { p_handle: handle, p_id: myId || null });
+    if (!error && typeof data === 'boolean') return data;
+  } catch (_) {}
+  try {
+    const { data } = await sb.from('profiles').select('id').eq('handle', handle).maybeSingle();
+    return !data || (myId && data.id === myId);
+  } catch (_) { return true; }
 }
 
 /* ================= 프로필 ================= */
@@ -1257,11 +1285,11 @@ function openProfile() {
   $('#profileNickStatus').textContent = ''; $('#profileNickStatus').className = 'field-status';
   $('#profileHandleStatus').textContent = ''; $('#profileHandleStatus').className = 'field-status';
 
-  // 7일 변경 제한 점검: '멤버'로 시작하는 기본 임시 닉네임이거나 변경 이력이 없는 경우 최초 설정으로 간주해 쿨다운 해제
+  // 7일 변경 제한 점검: 초기화 미완료거나 임시 닉네임인 경우 최초 설정으로 쿨다운 해제
   const hint = $('#profileCooldownHint');
   const nameInp = $('#profileName');
   const isTemporary = !state.me.name || state.me.name.startsWith('멤버');
-  const isInitial = !state.me.lastNickChange || isTemporary;
+  const isInitial = !state.me.nicknameInitialized || !state.me.lastNickChange || isTemporary;
 
   if (!isInitial && state.me.lastNickChange) {
     const elapsed = Date.now() - new Date(state.me.lastNickChange).getTime();
@@ -1343,7 +1371,7 @@ async function saveProfile() {
 
     // 닉네임 변경 검사
     const isTemporary = !state.me.name || state.me.name.startsWith('멤버');
-    const isInitial = !state.me.lastNickChange || isTemporary;
+    const isInitial = !state.me.nicknameInitialized || !state.me.lastNickChange || isTemporary;
 
     if (vNick.name !== state.me.name) {
       if ($('#profileName').disabled && !isInitial) {
@@ -1351,23 +1379,23 @@ async function saveProfile() {
         if (btn) btn.disabled = false;
         return;
       }
-      // 중복 검사
-      const { data: dup } = await sb.from('profiles').select('id').ilike('display_name', vNick.name).neq('id', state.me.id).maybeSingle();
-      if (dup) { toast('이미 사용 중인 닉네임이에요.'); if (btn) btn.disabled = false; return; }
+      const avail = await isNicknameAvailable(vNick.name, state.me.id);
+      if (!avail) { toast('이미 사용 중인 닉네임이에요.'); if (btn) btn.disabled = false; return; }
       updates.display_name = vNick.name;
       updates.last_nickname_changed_at = new Date().toISOString();
+      updates.nickname_initialized = true;
     }
 
     // 핸들 변경 검사
     if (vHandle.handle !== state.me.handle) {
-      const { data: hdup } = await sb.from('profiles').select('id').ilike('handle', vHandle.handle).neq('id', state.me.id).maybeSingle();
-      if (hdup) { toast('이미 사용 중인 사용자 ID예요.'); if (btn) btn.disabled = false; return; }
+      const availH = await isHandleAvailable(vHandle.handle, state.me.id);
+      if (!availH) { toast('이미 사용 중인 사용자 ID예요.'); if (btn) btn.disabled = false; return; }
       updates.handle = vHandle.handle;
     }
 
-    // 아바타 업로드
+    // 아바타 업로드 ({user_id}/avatar_{timestamp}.jpg)
     if (stagedAvatarBlob) {
-      const path = `avatars/${state.me.id}_${Date.now()}.jpg`;
+      const path = `${state.me.id}/avatar_${Date.now()}.jpg`;
       const { error: upErr } = await sb.storage.from('media').upload(path, stagedAvatarBlob, { upsert: true, contentType: 'image/jpeg' });
       if (upErr) throw upErr;
       const { data: pubData } = sb.storage.from('media').getPublicUrl(path);
@@ -1381,6 +1409,7 @@ async function saveProfile() {
       if (updates.handle) state.me.handle = updates.handle;
       if (updates.avatar_url) state.me.avatar = updates.avatar_url;
       if (updates.last_nickname_changed_at) state.me.lastNickChange = updates.last_nickname_changed_at;
+      if (updates.nickname_initialized) state.me.nicknameInitialized = true;
     }
 
     closeProfile();
@@ -1540,11 +1569,11 @@ async function signupWithPassword(email, password, rawNick, rawHandle) {
 
   const btn = $('#btnSignup'); if (btn) btn.disabled = true; gateMsg('');
   try {
-    const { data: dupNick } = await sb.from('profiles').select('id').ilike('display_name', vNick.name).maybeSingle();
-    if (dupNick) { gateMsg('이미 사용 중인 닉네임이에요.'); if (btn) btn.disabled = false; return; }
+    const availNick = await isNicknameAvailable(vNick.name);
+    if (!availNick) { gateMsg('이미 사용 중인 닉네임이에요.'); if (btn) btn.disabled = false; return; }
 
-    const { data: dupHandle } = await sb.from('profiles').select('id').ilike('handle', vHandle.handle).maybeSingle();
-    if (dupHandle) { gateMsg('이미 사용 중인 사용자 ID예요.'); if (btn) btn.disabled = false; return; }
+    const availHandle = await isHandleAvailable(vHandle.handle);
+    if (!availHandle) { gateMsg('이미 사용 중인 사용자 ID예요.'); if (btn) btn.disabled = false; return; }
 
     const { data, error } = await sb.auth.signUp({
       email: em,
@@ -1593,9 +1622,12 @@ async function verifyCode(raw) {
   const token = String(raw || '').replace(/\s/g, '');
   if (!/^\d{6,12}$/.test(token)) { gateMsg('메일에 적힌 숫자 인증 코드를 입력해 주세요.'); return; }
   const btn = $('#btnVerify'); if (btn) btn.disabled = true; gateMsg('');
-  const { error } = await sb.auth.verifyOtp({ email: gateEmailValue, token, type: 'email' });
+  let res = await sb.auth.verifyOtp({ email: gateEmailValue, token, type: 'email' });
+  if (res.error) {
+    res = await sb.auth.verifyOtp({ email: gateEmailValue, token, type: 'signup' });
+  }
   if (btn) btn.disabled = false;
-  if (error) gateMsg('코드가 맞지 않거나 만료됐어요. 메일의 링크를 눌러보거나 다시 받아 주세요.');
+  if (res.error) gateMsg('코드가 맞지 않거나 만료됐어요. 메일의 링크를 눌러보거나 다시 받아 주세요.');
 }
 async function logout() {
   if (!confirm('로그아웃할까요?')) return;
@@ -1618,11 +1650,16 @@ async function onSignedIn(user) {
     const metaNick = user.user_metadata && (user.user_metadata.display_name || user.user_metadata.full_name);
     const metaHandle = user.user_metadata && user.user_metadata.handle;
     const patch = {};
-    if (metaNick && (!prof.display_name || prof.display_name.startsWith('멤버'))) patch.display_name = metaNick;
+    if (metaNick && (!prof.display_name || prof.display_name.startsWith('멤버'))) {
+      patch.display_name = metaNick;
+      patch.nickname_initialized = true;
+    }
     if (metaHandle && !prof.handle) patch.handle = metaHandle;
     if (Object.keys(patch).length > 0) {
-      await sb.from('profiles').update(patch).eq('id', user.id).catch(() => {});
-      Object.assign(prof, patch);
+      try {
+        const { error: patchErr } = await sb.from('profiles').update(patch).eq('id', user.id);
+        if (!patchErr) Object.assign(prof, patch);
+      } catch (_) {}
     }
 
     state.me = {
@@ -1633,6 +1670,7 @@ async function onSignedIn(user) {
       role: prof.role,
       email: user.email || '',
       lastNickChange: prof.last_nickname_changed_at || null,
+      nicknameInitialized: !!prof.nickname_initialized,
       createdAt: prof.created_at
     };
 
@@ -1644,14 +1682,14 @@ async function onSignedIn(user) {
     subscribeRealtime(); loadTrending();
 
     // 임시 닉네임(멤버XXXX)이거나 핸들이 없는 최초 입장 사용자는 바로 프로필 설정 모달 띄우기
-    if (state.me.name.startsWith('멤버') || !state.me.handle) {
+    if (!state.me.nicknameInitialized || state.me.name.startsWith('멤버') || !state.me.handle) {
       setTimeout(() => {
         openProfile();
         toast('🎉 환영해요! 커뮤니티에서 사용할 닉네임과 사용자 ID를 설정해 주세요.');
       }, 400);
     }
   } catch (e) {
-    console.warn(e); await sb.auth.signOut().catch(() => {});
+    console.warn(e);
     gateMsg('입장하지 못했어요: ' + (e.message || '알 수 없는 오류'));
   } finally { signingIn = false; }
 }
@@ -1732,10 +1770,9 @@ document.addEventListener('input', e => {
       const v = validateNickname(e.target.value);
       if (!v.ok) { targetStatus.textContent = v.msg; targetStatus.className = 'field-status err'; return; }
       targetStatus.textContent = '중복 검사 중…'; targetStatus.className = 'field-status warn';
-      const q = sb.from('profiles').select('id').ilike('display_name', v.name);
-      if (id === 'profileName' && state.me) q.neq('id', state.me.id);
-      const { data } = await q.maybeSingle();
-      if (data) { targetStatus.textContent = '이미 사용 중인 닉네임이에요'; targetStatus.className = 'field-status err'; }
+      const myId = (id === 'profileName' && state.me) ? state.me.id : null;
+      const avail = await isNicknameAvailable(v.name, myId);
+      if (!avail) { targetStatus.textContent = '이미 사용 중인 닉네임이에요'; targetStatus.className = 'field-status err'; }
       else { targetStatus.textContent = '사용 가능한 닉네임이에요'; targetStatus.className = 'field-status ok'; }
     }, 350);
   } else if (id === 'signupHandle' || id === 'profileHandle') {
@@ -1745,10 +1782,9 @@ document.addEventListener('input', e => {
       const v = validateHandle(e.target.value);
       if (!v.ok) { targetStatus.textContent = v.msg; targetStatus.className = 'field-status err'; return; }
       targetStatus.textContent = '중복 검사 중…'; targetStatus.className = 'field-status warn';
-      const q = sb.from('profiles').select('id').ilike('handle', v.handle);
-      if (id === 'profileHandle' && state.me) q.neq('id', state.me.id);
-      const { data } = await q.maybeSingle();
-      if (data) { targetStatus.textContent = '이미 사용 중인 아이디예요'; targetStatus.className = 'field-status err'; }
+      const myId = (id === 'profileHandle' && state.me) ? state.me.id : null;
+      const avail = await isHandleAvailable(v.handle, myId);
+      if (!avail) { targetStatus.textContent = '이미 사용 중인 아이디예요'; targetStatus.className = 'field-status err'; }
       else { targetStatus.textContent = '사용 가능한 아이디예요 (@' + v.handle + ')'; targetStatus.className = 'field-status ok'; }
     }, 350);
   }
