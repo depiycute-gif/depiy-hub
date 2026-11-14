@@ -472,6 +472,56 @@ input,textarea{font:inherit;color:inherit}
 body.logged-out #app,body.logged-out .bottom-nav{visibility:hidden}
 body.logged-out{overflow:hidden}
 .av-img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+
+/* ===== v6: 관리자 패널 · 약관 · 계정 ===== */
+.badge-mod{background:linear-gradient(135deg,rgba(94,160,255,.2),rgba(120,190,255,.3));color:#8ec5ff;border-color:rgba(94,160,255,.5);box-shadow:0 0 8px rgba(94,160,255,.2)}
+.badge-ban{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,90,90,.15);color:#ff8f8f;border:1px solid rgba(255,90,90,.4)}
+.nav-badge{display:inline-block;min-width:18px;padding:1px 6px;border-radius:999px;background:#ff5d5d;color:#fff;font-size:10px;font-weight:800;font-style:normal;text-align:center;margin-left:6px;line-height:1.5}
+.nav-legal{display:flex;flex-wrap:wrap;gap:4px 12px;margin:18px 6px 4px;padding-top:12px;border-top:1px solid var(--line)}
+.nav-legal .link-btn{font-size:11px;color:var(--text-mute);padding:2px 0}
+.btn.danger{background:#c92a2a;color:#fff}
+.btn.danger:hover:not(:disabled){background:#e03131}
+.btn:disabled{opacity:.55;cursor:default}
+.acct-box{max-height:92vh;overflow-y:auto}
+.acct-box.wide{max-width:620px}
+.acct-section{margin:14px 0 4px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.03)}
+.acct-section summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--text-dim);list-style:none}
+.acct-section summary::-webkit-details-marker{display:none}
+.acct-section[open] summary{margin-bottom:10px;color:var(--text)}
+.acct-section.danger summary{color:#ff8f8f}
+.acct-links{display:flex;flex-wrap:wrap;gap:4px 10px;margin:14px 0 4px;font-size:12px;color:var(--text-mute);align-items:center}
+.acct-links a{color:var(--text-dim);text-decoration:underline;text-underline-offset:3px}
+.consent-row{display:flex;align-items:flex-start;gap:8px;text-align:left;font-size:12.5px;line-height:1.55;color:var(--text-dim)}
+.consent-row input{margin-top:3px;width:16px;height:16px;flex:none;accent-color:var(--depiy-orange)}
+.consent-row .link-btn{font-size:12.5px;color:var(--depiy-orange)}
+.legal-body{max-height:62vh;overflow-y:auto;padding-right:6px;font-size:13px;line-height:1.7;color:var(--text-dim);text-align:left}
+.legal-body h4{margin:18px 0 6px;font-size:13.5px;color:var(--text)}
+.legal-body p,.legal-body li{margin:0 0 6px}
+.legal-body ol,.legal-body ul{margin:0 0 6px;padding-left:20px}
+.legal-body .meta{font-size:11.5px;color:var(--text-mute)}
+.admin-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.admin-tab{padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;background:var(--glass);border:1px solid var(--line);color:var(--text-dim);cursor:pointer}
+.admin-tab.active{background:var(--orange-soft);border-color:var(--orange-line);color:var(--text)}
+.admin-card{padding:14px;margin-bottom:10px;border-radius:14px;background:var(--glass);border:1px solid var(--line)}
+.admin-card-head{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+.admin-card-head small{color:var(--text-mute);font-size:11.5px}
+.admin-quote{padding:10px 12px;border-radius:10px;background:rgba(0,0,0,.25);border-left:3px solid var(--orange-line);margin-bottom:10px;font-size:13px}
+.admin-quote .who{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.admin-quote p{margin:0;white-space:pre-wrap;word-break:break-word}
+.admin-actions{display:flex;flex-wrap:wrap;gap:6px}
+.admin-done{font-size:12.5px;color:#51cf66}
+.admin-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.admin-search{display:flex;gap:8px;margin-bottom:12px}
+.admin-search input{flex:1;min-width:0;padding:10px 14px;border-radius:12px;background:var(--glass);border:1px solid var(--line);color:var(--text);font-size:14px;outline:none}
+.admin-search input:focus-visible{border-color:var(--orange-line)}
+.admin-user{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.admin-user .grow{min-width:140px}
+.admin-user .av{width:38px;height:38px;border-radius:50%;background:var(--glass-hi);display:grid;place-items:center;overflow:hidden;flex:none;font-weight:700}
+.admin-list{list-style:none;margin:10px 0 0;padding:0}
+.admin-list li{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.admin-list small{color:var(--text-mute);margin-left:6px}
+.admin-log{font-size:12.5px;line-height:1.6;padding:8px 0;border-bottom:1px solid var(--line);color:var(--text-dim)}
+.admin-log b{color:var(--text)}
 </style>
 </head>
 <body class="logged-out">
@@ -507,13 +557,14 @@ body.logged-out{overflow:hidden}
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="signup">계정이 없으신가요? 회원가입</button>
         <button type="button" class="link-btn" data-act="switchTab" data-to="magic">비밀번호 없이 매직 링크로 받기</button>
+        <button type="button" class="link-btn" data-act="switchTab" data-to="reset">비밀번호를 잊으셨나요?</button>
       </div>
     </form>
 
     <!-- 회원가입 폼 (이메일 + 비밀번호 + 닉네임 + 아이디) -->
     <form id="signupForm" class="gate-form" data-form="signup" hidden novalidate>
       <label class="field"><span>이메일</span><input id="signupEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
-      <label class="field"><span>비밀번호</span><input id="signupPassword" type="password" autocomplete="new-password" placeholder="6자리 이상 비밀번호" minlength="6" required></label>
+      <label class="field"><span>비밀번호</span><input id="signupPassword" type="password" autocomplete="new-password" placeholder="8자 이상 비밀번호" minlength="8" maxlength="72" required></label>
       <label class="field">
         <span>닉네임 (2~12자)</span>
         <input id="signupNickname" type="text" autocomplete="off" placeholder="한글(완성형)·영문·숫자·_.- 허용" maxlength="12" required>
@@ -524,6 +575,10 @@ body.logged-out{overflow:hidden}
         <input id="signupHandle" type="text" autocomplete="off" placeholder="예: cute_fox (영문소문자/숫자/_ 3~15자)" maxlength="15" required>
         <span class="field-status" id="signupHandleStatus"></span>
       </label>
+      <div class="consent-row">
+        <input type="checkbox" id="signupConsent">
+        <span><label for="signupConsent">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="signupConsent">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="signupConsent">에 동의합니다.</label></span>
+      </div>
       <button class="btn gate-btn" type="submit" id="btnSignup">가입하고 입장</button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="login">이미 계정이 있으신가요? 로그인</button>
@@ -533,10 +588,31 @@ body.logged-out{overflow:hidden}
     <!-- 매직 링크 폼 (비밀번호 없는 로그인) -->
     <form id="magicForm" class="gate-form" data-form="magic" hidden novalidate>
       <label class="field"><span>이메일</span><input id="gateEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <div class="consent-row">
+        <input type="checkbox" id="magicConsent">
+        <span><label for="magicConsent">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="magicConsent">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="magicConsent">에 동의합니다.</label></span>
+      </div>
       <button class="btn gate-btn" type="submit" id="btnSendCode">인증 메일 받기</button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="login">비밀번호로 로그인하기</button>
       </div>
+    </form>
+
+    <!-- 비밀번호 재설정 메일 받기 -->
+    <form id="resetForm" class="gate-form" data-form="reset" hidden novalidate>
+      <p class="gate-sent">가입한 이메일을 입력하면 비밀번호 재설정 링크를 보내드려요.</p>
+      <label class="field"><span>이메일</span><input id="resetEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <button class="btn gate-btn" type="submit" id="btnReset">재설정 메일 받기</button>
+      <div class="gate-links">
+        <button type="button" class="link-btn" data-act="switchTab" data-to="login">← 로그인으로 돌아가기</button>
+      </div>
+    </form>
+
+    <!-- 재설정 링크로 들어왔을 때: 새 비밀번호 입력 -->
+    <form id="recoveryForm" class="gate-form" data-form="recovery" hidden novalidate>
+      <label class="field"><span>새 비밀번호 (8자 이상)</span><input id="recoveryPassword" type="password" autocomplete="new-password" maxlength="72" placeholder="새 비밀번호"></label>
+      <label class="field"><span>새 비밀번호 확인</span><input id="recoveryPassword2" type="password" autocomplete="new-password" maxlength="72" placeholder="한 번 더 입력"></label>
+      <button class="btn gate-btn" type="submit" id="btnRecovery">비밀번호 저장하고 입장</button>
     </form>
 
     <!-- 코드/링크 인증 대기 폼 -->
@@ -551,7 +627,7 @@ body.logged-out{overflow:hidden}
     </form>
 
     <p id="gateMsg" class="gate-msg" hidden></p>
-    <div class="login-footer">이메일은 로그인에만 쓰이고 다른 사용자에게 보이지 않아요.<br>프로필 사진과 닉네임은 언제든 내 프로필에서 변경할 수 있어요.</div>
+    <div class="login-footer">이메일은 로그인에만 쓰이고 다른 사용자에게 보이지 않아요.<br><button type="button" class="link-btn" data-act="showTerms">이용약관</button> · <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button> · <a href="mailto:depiy.hub@gmail.com" style="text-decoration:underline;text-underline-offset:3px;color:inherit">문의</a></div>
   </div>
 </div>
 
@@ -580,6 +656,48 @@ body.logged-out{overflow:hidden}
       <button type="button" class="btn" id="btnSaveProfile" data-act="saveProfile">저장</button>
       <button type="button" class="btn ghost" data-act="closeProfile">닫기</button>
     </div>
+
+    <details class="acct-section">
+      <summary>🔑 비밀번호 설정·변경</summary>
+      <label class="field"><span>새 비밀번호 (8자 이상)</span><input id="newPassword" type="password" autocomplete="new-password" maxlength="72" placeholder="새 비밀번호"></label>
+      <button type="button" class="btn sm" data-act="changePassword">비밀번호 저장</button>
+    </details>
+    <div class="acct-links">
+      <button type="button" class="link-btn" data-act="showTerms">이용약관</button> ·
+      <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button> ·
+      <a href="mailto:depiy.hub@gmail.com">문의: depiy.hub@gmail.com</a>
+    </div>
+    <details class="acct-section danger">
+      <summary>⚠️ 계정 삭제</summary>
+      <p class="field-hint">계정, 프로필, 올린 글과 사진이 모두 삭제되고 되돌릴 수 없어요.</p>
+      <label class="field"><span>확인을 위해 "삭제"라고 입력하세요</span><input id="deleteConfirmInput" autocomplete="off" placeholder="삭제"></label>
+      <button type="button" class="btn sm danger" id="btnDeleteAccount" data-act="deleteAccount">계정 영구 삭제</button>
+    </details>
+  </div>
+</div>
+
+<!-- 약관 동의 모달 (동의 전에는 닫을 수 없어요) -->
+<div id="consentModal" class="acct-modal" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+  <div class="acct-box">
+    <h3 id="consentTitle">약관 동의가 필요해요</h3>
+    <p class="field-hint" style="color:var(--text-dim)">De_piy Hub (드피 허브)를 계속 이용하려면 아래 내용에 동의해 주세요.</p>
+    <div class="consent-row" style="margin:14px 0">
+      <input type="checkbox" id="consentCheck">
+      <span><label for="consentCheck">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="consentCheck">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="consentCheck">에 동의합니다.</label></span>
+    </div>
+    <div class="modal-row">
+      <button type="button" class="btn ghost" data-act="declineTerms">동의하지 않고 로그아웃</button>
+      <button type="button" class="btn" id="btnAcceptTerms" data-act="acceptTerms" disabled>동의하고 계속하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 약관 / 개인정보처리방침 보기 -->
+<div id="legalModal" class="acct-modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+  <div class="acct-box wide">
+    <h3 id="legalTitle">이용약관</h3>
+    <div class="legal-body" id="legalBody"></div>
+    <div class="modal-row" style="margin-top:14px"><button type="button" class="btn" data-act="closeLegal">닫기</button></div>
   </div>
 </div>
 
@@ -662,6 +780,138 @@ function avatarHTML(url, name) {
 }
 
 /* ================= 상태 ================= */
+/* ================= 서비스 정보 · 약관 ================= */
+const SERVICE_NAME = 'De_piy Hub (드피 허브)';
+const CONTACT_EMAIL = 'depiy.hub@gmail.com';
+const TERMS_VERSION = '2026-11-14';        // 약관을 바꾸면 이 날짜를 바꾸세요 → 모든 이용자가 다시 동의해요
+const PW_MIN = 8;
+const roleCache = new Map();                // 접속자 목록용 (id → role). 접속 정보(presence)의 role 은 믿지 않아요.
+function roleBadge(role) {
+  if (role === 'admin') return '<span class="badge-admin">👑 관리자</span>';
+  if (role === 'mod') return '<span class="badge-admin badge-mod">🛡️ 운영진</span>';
+  return '';
+}
+
+const LEGAL = {
+  terms: `
+<p class="meta">시행일: ${TERMS_VERSION} · 버전 ${TERMS_VERSION}</p>
+<h4>제1조 (목적)</h4>
+<p>이 약관은 ${SERVICE_NAME}(이하 "서비스")가 제공하는 커뮤니티 서비스의 이용과 관련하여 서비스와 이용자 사이의 권리, 의무 및 책임사항을 정하는 것을 목적으로 합니다.</p>
+<h4>제2조 (약관의 효력 및 변경)</h4>
+<ol>
+<li>이 약관은 서비스 화면에 게시하고, 이용자가 가입 또는 계속 이용에 동의함으로써 효력이 발생합니다.</li>
+<li>서비스는 필요한 경우 약관을 변경할 수 있으며, 변경 시 시행일과 변경 내용을 서비스 화면에 미리 알립니다. 변경된 약관에 동의하지 않는 이용자는 언제든지 계정을 삭제할 수 있습니다.</li>
+</ol>
+<h4>제3조 (이용 계약의 성립과 가입 자격)</h4>
+<ol>
+<li>이용 계약은 이용자가 약관과 개인정보처리방침에 동의하고 가입을 완료한 때 성립합니다.</li>
+<li><b>만 14세 미만은 가입할 수 없습니다.</b> 가입 시 만 14세 이상임을 확인합니다.</li>
+<li>타인의 이메일을 사용하거나 허위 정보로 가입한 경우 서비스 이용이 제한될 수 있습니다.</li>
+</ol>
+<h4>제4조 (계정 관리)</h4>
+<ol>
+<li>이용자는 자신의 계정과 비밀번호를 직접 관리해야 하며, 이를 제3자에게 알려주거나 빌려주어서는 안 됩니다.</li>
+<li>닉네임과 사용자 ID는 다른 이용자의 닉네임·사용자 ID와 중복될 수 없고, 운영진·서비스를 사칭하거나 오인하게 하는 이름은 사용할 수 없습니다. 닉네임은 7일에 1회, 사용자 ID는 30일에 1회 변경할 수 있습니다.</li>
+</ol>
+<h4>제5조 (게시물의 권리와 책임)</h4>
+<ol>
+<li>게시물(글, 사진, 영상, 댓글 등)의 저작권은 작성한 이용자에게 있으며, 게시물에 대한 책임도 이용자 본인에게 있습니다.</li>
+<li>이용자는 서비스가 게시물을 서비스 운영(저장, 표시, 에코·공유 기능 제공, 화면 크기에 맞춘 변환 등)에 필요한 범위에서 사용하는 것을 허락합니다. 이 허락은 게시물 또는 계정을 삭제하면 종료됩니다. 다만 다른 이용자가 이미 에코(공유)한 게시물은 원본 삭제 시 함께 삭제됩니다.</li>
+<li>타인의 저작권을 침해하는 게시물을 올려서는 안 됩니다.</li>
+</ol>
+<h4>제6조 (금지 행위)</h4>
+<p>이용자는 다음 행위를 해서는 안 됩니다.</p>
+<ul>
+<li>법령 또는 공공질서를 위반하는 행위, 불법 정보의 게시</li>
+<li>타인에 대한 욕설, 협박, 괴롭힘, 혐오 표현, 차별적 표현</li>
+<li>타인의 개인정보를 동의 없이 게시하거나 수집하는 행위</li>
+<li>음란물, 청소년에게 유해한 정보, 폭력적이거나 잔혹한 정보의 게시</li>
+<li>스팸, 광고, 도배, 사칭, 허위 사실 유포</li>
+<li>해킹, 악성 코드 배포, 서비스의 정상 운영을 방해하는 행위, 자동화된 수단으로 계정을 만들거나 글을 올리는 행위</li>
+<li>기타 위와 유사하여 서비스 운영이나 다른 이용자에게 피해를 주는 행위</li>
+</ul>
+<h4>제7조 (신고와 운영자의 조치)</h4>
+<ol>
+<li>이용자는 부적절한 게시물을 "신고" 기능으로 알릴 수 있습니다.</li>
+<li>운영진은 신고 내용과 약관 위반 여부를 확인하여 게시물 삭제, 이용 제한(차단) 등의 조치를 할 수 있습니다. 운영진의 조치 내역은 서비스 운영 기록으로 보관됩니다.</li>
+<li>이용 제한에 대한 이의는 아래 문의 이메일로 알릴 수 있습니다.</li>
+</ol>
+<h4>제8조 (서비스의 변경 및 중단)</h4>
+<p>서비스는 운영상 또는 기술상 필요에 따라 서비스의 일부 또는 전부를 변경하거나 중단할 수 있으며, 가능한 경우 미리 알립니다. 무료로 제공되는 서비스의 변경·중단에 대해서는 법령에 특별한 규정이 없는 한 별도의 보상을 하지 않습니다.</p>
+<h4>제9조 (계정 삭제)</h4>
+<p>이용자는 언제든지 프로필 설정의 "계정 삭제"로 이용 계약을 해지할 수 있으며, 삭제 시 계정, 프로필, 게시물, 첨부 파일이 삭제됩니다. 삭제된 데이터는 복구할 수 없습니다.</p>
+<h4>제10조 (책임의 제한)</h4>
+<ol>
+<li>서비스는 이용자 사이 또는 이용자와 제3자 사이에서 게시물을 매개로 발생한 분쟁에 개입할 의무가 없으며, 이로 인한 손해에 책임을 지지 않습니다. 다만 서비스의 고의 또는 중대한 과실이 있는 경우는 그렇지 않습니다.</li>
+<li>천재지변, 외부 서비스(호스팅·데이터베이스·이메일 발송 업체 등)의 장애 등 서비스가 통제할 수 없는 사유로 인한 서비스 중단에 대해서는 책임을 지지 않습니다.</li>
+</ol>
+<h4>제11조 (문의)</h4>
+<p>서비스 이용, 신고, 이용 제한 이의 등 모든 문의는 <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a> 로 보내 주세요.</p>
+<p class="meta">부칙: 이 약관은 ${TERMS_VERSION}부터 시행합니다.</p>`,
+
+  privacy: `
+<p class="meta">시행일: ${TERMS_VERSION}</p>
+<p>${SERVICE_NAME}(이하 "서비스")는 이용자의 개인정보를 소중히 여기며, 「개인정보 보호법」 등 관련 법령을 지키기 위해 아래와 같이 개인정보를 처리합니다.</p>
+<h4>1. 수집하는 개인정보 항목</h4>
+<ul>
+<li><b>가입 시(필수)</b>: 이메일 주소, 닉네임, 사용자 ID, 약관 동의 기록(버전·일시). 비밀번호로 가입하는 경우 비밀번호(암호화되어 저장되며 운영자는 볼 수 없습니다)</li>
+<li><b>선택</b>: 프로필 사진</li>
+<li><b>서비스 이용 중 이용자가 만드는 정보</b>: 게시물, 첨부한 사진·영상, 스파크·에코·스레드 메시지, 신고 내용</li>
+<li><b>자동으로 생성·수집되는 정보</b>: 접속 일시, IP 주소, 기기·브라우저 정보 등 접속 기록(호스팅·인증 서비스 제공업체의 로그)</li>
+</ul>
+<h4>2. 개인정보의 이용 목적</h4>
+<ul>
+<li>회원 가입, 본인 확인(이메일 인증), 로그인 및 계정 관리</li>
+<li>커뮤니티 서비스 제공(게시물 표시, 닉네임·프로필 사진 표시)</li>
+<li>신고 처리, 약관 위반 행위 및 부정 이용 방지, 분쟁 대응</li>
+<li>서비스 안정성 확보, 장애 대응, 문의 응대</li>
+</ul>
+<p>이메일 주소는 로그인과 인증 메일 발송, 문의 응대에만 사용하며 다른 이용자에게 공개하지 않습니다. 닉네임, 사용자 ID, 프로필 사진, 게시물은 서비스 안에서 다른 이용자에게 공개됩니다.</p>
+<h4>3. 보유 및 이용 기간</h4>
+<ul>
+<li>이용자가 계정을 삭제하면 계정, 프로필, 게시물, 첨부 파일을 지체 없이 삭제합니다.</li>
+<li>법령에서 보존 의무를 정한 정보(예: 통신사실확인자료 등 접속 기록)는 해당 기간 동안 보관 후 삭제합니다.</li>
+<li>신고·이용 제한 처리 기록은 분쟁 및 부정 이용 방지를 위해 이용자를 식별할 수 있는 정보를 제거한 형태로 보관할 수 있습니다.</li>
+</ul>
+<h4>4. 개인정보 처리의 위탁 및 국외 이전</h4>
+<p>서비스는 안정적인 운영을 위해 아래 업체의 서비스를 이용하며, 이 과정에서 개인정보가 해외 서버에 저장·처리될 수 있습니다. 이전 시점과 방법은 서비스 이용 중 네트워크를 통한 전송이며, 보유 기간은 위 3항과 같습니다.</p>
+<ul>
+<li><b>Supabase, Inc.</b> — 데이터베이스, 로그인(인증), 파일 저장 (이메일, 닉네임, 사용자 ID, 게시물, 첨부 파일 등). 데이터는 서비스가 선택한 Supabase 프로젝트 리전의 서버에 저장됩니다.</li>
+<li><b>GitHub, Inc.</b> — 웹사이트 호스팅(GitHub Pages) (접속 정보)</li>
+<li><b>Google LLC</b> — 인증 메일 발송(Gmail SMTP) (이메일 주소, 메일 내용)</li>
+</ul>
+<p>위 업체 외의 제3자에게는 이용자의 동의가 있거나 법령에 근거가 있는 경우를 제외하고 개인정보를 제공하지 않습니다.</p>
+<h4>5. 이용자의 권리</h4>
+<ul>
+<li>이용자는 언제든지 자신의 개인정보를 열람하고, 프로필 설정에서 닉네임·사용자 ID·프로필 사진을 수정할 수 있습니다.</li>
+<li>프로필 설정의 "계정 삭제"로 개인정보 삭제를 요청할 수 있으며, 삭제는 즉시 처리됩니다.</li>
+<li>그 밖의 열람, 정정, 삭제, 처리 정지 요구는 아래 문의 이메일로 알려 주세요.</li>
+</ul>
+<h4>6. 로컬 저장소(쿠키 유사 기술)</h4>
+<p>서비스는 로그인 상태를 유지하기 위해 이용자의 브라우저 저장소(로컬 스토리지)에 인증 토큰을 저장합니다. 광고·추적 목적의 쿠키는 사용하지 않습니다. 브라우저 설정으로 삭제할 수 있으나 삭제하면 로그아웃됩니다.</p>
+<h4>7. 만 14세 미만 아동의 개인정보</h4>
+<p>서비스는 만 14세 미만 아동의 가입을 받지 않으며, 만 14세 미만임을 알게 되면 해당 계정과 개인정보를 지체 없이 삭제합니다.</p>
+<h4>8. 안전성 확보 조치</h4>
+<ul>
+<li>모든 통신은 HTTPS로 암호화됩니다.</li>
+<li>비밀번호는 일방향 암호화하여 저장합니다.</li>
+<li>데이터베이스 접근 권한을 행 단위 보안(RLS)으로 제한하며, 운영진의 조치는 운영 기록으로 남깁니다.</li>
+</ul>
+<h4>9. 개인정보 보호책임자 및 문의</h4>
+<p>개인정보 보호책임자: ${SERVICE_NAME} 운영자<br>문의: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></p>
+<h4>10. 방침의 변경</h4>
+<p>이 방침이 바뀌면 시행일과 변경 내용을 서비스 화면에 미리 알립니다.</p>
+<p class="meta">이 방침은 ${TERMS_VERSION}부터 시행합니다.</p>`
+};
+
+function openLegal(kind) {
+  const m = $('#legalModal'); if (!m || !LEGAL[kind]) return;
+  $('#legalTitle').textContent = kind === 'terms' ? '이용약관' : '개인정보처리방침';
+  const b = $('#legalBody'); b.innerHTML = LEGAL[kind]; b.scrollTop = 0;
+  m.classList.add('show');
+}
+function closeLegal() { const m = $('#legalModal'); if (m) m.classList.remove('show'); }
+
 const state = {
   me: null,                         // { id, name, avatar, role, email }
   spaces: [], channels: {},         // channels[id] = { id, name, topic, space_id }
@@ -669,7 +919,8 @@ const state = {
   feeds: {},                        // key('plaza'|channelId) -> { items, loaded, loading, done }
   threads: {},                      // postId -> { msgs, ids:Set, loaded }
   openThreads: new Set(),
-  online: [], trending: []
+  online: [], trending: [],
+  admin: { tab: 'reports', showResolved: false, q: '' }, reportCount: 0
 };
 const curSpace = () => state.spaces.find(s => s.id === state.spaceId) || state.spaces[0] || null;
 const feedKey = () => state.view === 'plaza' ? 'plaza' : state.view === 'channel' ? state.channelId : null;
@@ -696,7 +947,14 @@ const SERVER_MSGS = {
   handle_format: '아이디는 3~15자의 영문 소문자, 숫자, _ 만 사용 가능해요',
   handle_reserved: '사용할 수 없는 예약된 아이디예요',
   handle_taken: '이미 사용 중인 아이디예요',
-  handle_cooldown: '아이디는 30일에 1회만 변경할 수 있어요'
+  handle_cooldown: '아이디는 30일에 1회만 변경할 수 있어요',
+  not_staff: '운영진만 할 수 있어요',
+  target_protected: '이 계정에는 이 조치를 할 수 없어요',
+  self_action: '자기 자신에게는 할 수 없어요',
+  not_found: '대상을 찾을 수 없어요 (이미 삭제됐을 수 있어요)',
+  invalid_role: '지정할 수 없는 권한이에요',
+  last_admin: '마지막 관리자는 삭제할 수 없어요. 먼저 다른 관리자를 지정해 주세요',
+  not_authenticated: '로그인이 필요해요'
 };
 function friendlyError(e, fallback) {
   const m = (e && (e.message || e.error_description)) || '';
@@ -802,10 +1060,13 @@ function renderNav() {
         const ch = state.channels[c], on = v === 'channel' && state.channelId === c;
         return `<button class="nav-item${on ? ' active' : ''}" data-act="go" data-view="channel" data-id="${esc(c)}"${cur(on)}><span class="ni">#</span><span class="grow ell">${esc(ch.name)}</span></button>`;
       }).join('') : ''}
+      ${isStaff() ? `<h3>관리</h3>
+      <button class="nav-item${v === 'admin' ? ' active' : ''}" data-act="go" data-view="admin"${cur(v === 'admin')}><span class="ni">🛡️</span><span class="grow ell">관리자 패널</span>${state.reportCount ? `<em class="nav-badge">${state.reportCount}</em>` : ''}</button>` : ''}
+      <div class="nav-legal"><button type="button" class="link-btn" data-act="showTerms">이용약관</button><button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button></div>
     </div>
     <div class="nav-foot">
       <span class="av" aria-hidden="true">${state.me ? avatarHTML(state.me.avatar, state.me.name) : ''}</span>
-      <button type="button" class="grow ell nav-me" data-act="profile" title="프로필 편집"><b>${esc(state.me ? state.me.name : '')}</b>${state.me && state.me.role === 'admin' ? '<span class="badge-admin">👑 관리자</span>' : ''}<small>프로필 편집</small></button>
+      <button type="button" class="grow ell nav-me" data-act="profile" title="프로필 편집"><b>${esc(state.me ? state.me.name : '')}</b>${state.me ? roleBadge(state.me.role) : ''}<small>프로필 편집</small></button>
       <button type="button" class="logout-btn" data-act="logout" title="로그아웃">로그아웃</button>
     </div>`;
 }
@@ -826,7 +1087,7 @@ function actionsHTML(p) {
 
 function msgHTML(m) {
   const mine = state.me && m.userId === state.me.id;
-  return `<div class="msg${mine ? ' mine' : ''}"><span class="av" aria-hidden="true">${avatarHTML(m.picture, m.name)}</span><div class="bub"><div class="meta"><b>${esc(m.name)}</b>${m.role === 'admin' ? '<span class="badge-admin">👑 관리자</span>' : ''}<time>${hhmm(m.created)}</time></div><p>${esc(m.text)}</p></div></div>`;
+  return `<div class="msg${mine ? ' mine' : ''}"><span class="av" aria-hidden="true">${avatarHTML(m.picture, m.name)}</span><div class="bub"><div class="meta"><b>${esc(m.name)}</b>${roleBadge(m.role)}<time>${hhmm(m.created)}</time></div><p>${esc(m.text)}</p></div></div>`;
 }
 
 function panelHTML(id) {
@@ -855,10 +1116,9 @@ function renderPostMediaHTML(media) {
 function postHTML(p) {
   const cls = 'post' + (p.fresh ? ' fresh' : ''); p.fresh = false;
   const canDel = state.me && (p.ownerId === state.me.id || isStaff());
-  const adminBadge = '<span class="badge-admin">👑 관리자</span>';
-  return `<article class="${cls}" data-post="${p.id}">
-    ${p.echo ? `<div class="echo-src">${SVG.echo}<span><b>${esc(p.echo.by)}</b>${p.echoRole === 'admin' ? adminBadge : ''} 님이 에코${p.echo.from ? ` · 출처 <b>${esc(p.echo.from)}</b>` : ''}</span></div>` : ''}
-    <header class="post-head"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><div class="grow"><b>${esc(p.name)}</b>${p.role === 'admin' ? adminBadge : ''}${p.handle ? `<span class="post-handle">@${esc(p.handle)}</span>` : ""}<small>${timeAgo(p.created)}</small></div>
+    return `<article class="${cls}" data-post="${p.id}">
+    ${p.echo ? `<div class="echo-src">${SVG.echo}<span><b>${esc(p.echo.by)}</b>${roleBadge(p.echoRole)} 님이 에코${p.echo.from ? ` · 출처 <b>${esc(p.echo.from)}</b>` : ''}</span></div>` : ''}
+    <header class="post-head"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><div class="grow"><b>${esc(p.name)}</b>${roleBadge(p.role)}${p.handle ? `<span class="post-handle">@${esc(p.handle)}</span>` : ""}<small>${timeAgo(p.created)}</small></div>
       <div class="post-tools"><button type="button" class="post-tool" data-act="report" data-id="${p.id}">신고</button>${canDel ? `<button type="button" class="post-tool danger" data-act="delPost" data-id="${p.id}">삭제</button>` : ''}</div></header>
     ${p.text ? `<p class="post-body">${esc(p.text)}</p>` : ''}
     ${renderPostMediaHTML(p.media)}
@@ -917,6 +1177,7 @@ function feedView(key) {
 function renderMain() {
   const m = $('#main');
   if (!state.me) { m.innerHTML = ''; return; }
+  if (state.view === 'admin') { renderAdmin(); return; }
   if (!curSpace()) { m.innerHTML = headHTML('De_piy Hub', '') + `<div class="empty" style="padding:80px 20px">아직 스페이스가 없어요.<br>Supabase SQL 스키마를 실행했는지 확인해 주세요.</div>`; return; }
   const key = feedKey();
   if (!key) { state.view = 'plaza'; renderMain(); return; }
@@ -935,7 +1196,7 @@ function renderWidget() {
   const shown = list.slice(0, 30);
   w.innerHTML = `
     <section><h3>접속자 <em>${list.length}명</em></h3><ul class="wlist">
-      ${shown.map(u => `<li class="wuser"><span class="mini-av" aria-hidden="true">${avatarHTML(u.avatar, u.name)}</span><div class="grow"><b class="ell">${esc(u.name)}${u.role === 'admin' ? ' <span class="badge-admin">👑 관리자</span>' : ''}${u.me ? ' (나)' : ''}</b></div><span class="pdot"></span></li>`).join('')}
+      ${shown.map(u => `<li class="wuser"><span class="mini-av" aria-hidden="true">${avatarHTML(u.avatar, u.name)}</span><div class="grow"><b class="ell">${esc(u.name)}${(() => { const b = roleBadge(u.me ? state.me.role : roleCache.get(u.id)); return b ? ' ' + b : ''; })()}${u.me ? ' (나)' : ''}</b></div><span class="pdot"></span></li>`).join('')}
       ${list.length > shown.length ? `<li class="empty" style="padding:6px">외 ${list.length - shown.length}명</li>` : ''}
     </ul></section>
     <section><h3>트렌딩 Echo</h3><ul class="wlist">
@@ -1120,7 +1381,8 @@ async function delPost(id) {
   const dest = p ? p.key : null;
   const wasMyEcho = isEchoPost && (p.ownerId === state.me?.id);
 
-  const { error } = await sb.from('posts').delete().eq('id', id);
+  const viaStaff = !!(p && state.me && p.ownerId !== state.me.id && isStaff());   // 남의 글을 지울 땐 운영 기록이 남도록 RPC 사용
+  const { error } = viaStaff ? await sb.rpc('mod_delete_post', { p_post: id, p_note: '피드에서 삭제' }) : await sb.from('posts').delete().eq('id', id);
   if (error) {
     toast(friendlyError(error, '삭제하지 못했어요'));
   } else {
@@ -1140,7 +1402,7 @@ async function reportPost(id) {
   const reason = prompt('신고 사유를 간단히 적어 주세요 (스팸, 욕설, 불법 콘텐츠 등)');
   if (!reason || !reason.trim()) return;
   const { error } = await sb.from('reports').insert({ post_id: id, reason: reason.trim().slice(0, 300) });
-  toast(error ? friendlyError(error, '신고하지 못했어요') : '🙏 신고가 접수됐어요. 확인 후 조치할게요');
+  toast(error ? (error.code === '23505' ? '이미 신고한 글이에요' : friendlyError(error, '신고하지 못했어요')) : '🙏 신고가 접수됐어요. 확인 후 조치할게요');
 }
 
 /* ================= 라이브 스레드 ================= */
@@ -1274,6 +1536,7 @@ function closeLightbox() { const lb = $('#lightbox'); if (lb) { lb.classList.rem
 function closeDrawer() { document.body.classList.remove('drawer-open'); }
 function go(view, id) {
   closeEchoMenu(); closeDrawer();
+  if (view === 'admin' && !isStaff()) view = 'plaza';
   state.view = view;
   if (view === 'channel') { state.channelId = id; const ch = state.channels[id]; if (ch) state.spaceId = ch.space_id; }
   $$('.bnav-item').forEach(b => b.classList.toggle('active', b.dataset.bnav === view));
@@ -1572,6 +1835,7 @@ function subscribeRealtime() {
       const st = presenceChannel.presenceState();
       state.online = Object.values(st).map(a => a && a[0]).filter(Boolean).map(u => ({ id: String(u.id || ''), name: String(u.name || '').slice(0, 24), avatar: httpsOnly(u.avatar) }));
       renderWidget();
+      ensureRoles(state.online.map(u => u.id));
     })
     .subscribe(s => { if (s === 'SUBSCRIBED') trackPresence(); });
 }
@@ -1599,39 +1863,65 @@ function friendlyAuthError(e) {
   const m = (e && (e.message || e.error_description)) || '';
   if (/invalid login credentials|invalid credentials/i.test(m)) return '이메일 또는 비밀번호가 맞지 않아요.';
   if (/user already registered/i.test(m)) return '이미 가입된 이메일이에요. 로그인 탭에서 로그인해 주세요.';
-  if (/password should be at least/i.test(m)) return '비밀번호는 최소 6자리 이상이어야 해요.';
+  if (/different from the old password/i.test(m)) return '이전과 다른 비밀번호를 입력해 주세요.';
+  if (/password should be at least|weak_password|password is too weak/i.test(m)) return `비밀번호는 최소 ${PW_MIN}자리 이상이어야 해요. 너무 흔한 비밀번호도 쓸 수 없어요.`;
+  if (/reauthenticat/i.test(m)) return '보안을 위해 다시 로그인한 뒤 시도해 주세요.';
+  if (/auth session missing|not authenticated/i.test(m)) return '로그인이 만료됐어요. 다시 로그인해 주세요.';
   if (/rate limit|too many/i.test(m)) return '요청이 너무 많아요. 잠시 후 다시 시도해 주세요.';
   if (/database error saving new user/i.test(m)) return '가입 처리 중 서버 오류가 났어요. 잠시 후 다시 시도해 주세요.';
   return m || '인증 처리에 실패했어요.';
 }
 
+const GATE_FORMS = { login: 'loginForm', signup: 'signupForm', magic: 'magicForm', code: 'codeForm', reset: 'resetForm', recovery: 'recoveryForm' };
 function switchGateTab(tab) {
+  Object.keys(GATE_FORMS).forEach(k => { const f = document.getElementById(GATE_FORMS[k]); if (f) f.hidden = k !== tab; });
   $$('.login-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  const lf = $('#loginForm'), sf = $('#signupForm'), mf = $('#magicForm'), cf = $('#codeForm');
-  const tabs = $('#gateTabs'); if (tabs) tabs.hidden = false;
-  if (lf) lf.hidden = tab !== 'login';
-  if (sf) sf.hidden = tab !== 'signup';
-  if (mf) mf.hidden = tab !== 'magic';
-  if (cf) cf.hidden = tab !== 'code';
+  const tabs = $('#gateTabs'); if (tabs) tabs.hidden = (tab === 'code' || tab === 'reset' || tab === 'recovery');
   gateMsg('');
-  if (tab === 'login') $('#loginEmail').focus();
-  else if (tab === 'signup') $('#signupEmail').focus();
-  else if (tab === 'magic') $('#gateEmail').focus();
+  const focusId = { login: 'loginEmail', signup: 'signupEmail', magic: 'gateEmail', reset: 'resetEmail', recovery: 'recoveryPassword' }[tab];
+  const el = focusId && document.getElementById(focusId); if (el) el.focus();
 }
 
 function showGateStep(step) {
-  const tabs = $('#gateTabs');
   if (step === 'code') {
-    if (tabs) tabs.hidden = true;
-    const lf = $('#loginForm'), sf = $('#signupForm'), mf = $('#magicForm'), cf = $('#codeForm');
-    if (lf) lf.hidden = true; if (sf) sf.hidden = true; if (mf) mf.hidden = true; if (cf) cf.hidden = false;
-    gateMsg('');
+    switchGateTab('code');
     $('#gateSent').textContent = `${gateEmailValue} 로 인증 메일을 보냈어요. 메일의 인증 코드를 입력하거나 링크를 누르면 바로 입장돼요.`;
     $('#gateCode').value = ''; $('#gateCode').focus();
   } else {
-    if (tabs) tabs.hidden = false;
     switchGateTab(step);
   }
+}
+
+// 비밀번호 재설정 메일 (가입 여부를 알려주지 않도록 항상 같은 안내를 해요)
+let resetCooldownUntil = 0;
+async function sendResetMail(email) {
+  if (!sb) { gateMsg('서버 설정이 필요해요.'); return; }
+  const em = String(email || '').trim().toLowerCase();
+  if (!EMAIL_RE.test(em)) { gateMsg('올바른 이메일 주소를 입력해 주세요.'); return; }
+  if (Date.now() < resetCooldownUntil) { gateMsg('잠시 후 다시 시도해 주세요. (메일은 1분에 1번만 보낼 수 있어요)'); return; }
+  const btn = $('#btnReset'); if (btn) btn.disabled = true; gateMsg('');
+  const { error } = await sb.auth.resetPasswordForEmail(em, { redirectTo: location.origin + location.pathname });
+  if (btn) btn.disabled = false;
+  if (error && /rate limit|too many/i.test(error.message || '')) { gateMsg(friendlyAuthError(error)); return; }
+  resetCooldownUntil = Date.now() + 60000;
+  gateMsg('가입된 이메일이라면 재설정 메일을 보냈어요. 메일의 링크를 눌러 새 비밀번호를 정해 주세요. (스팸함도 확인해 보세요)', false);
+}
+
+// 재설정 링크로 들어왔을 때: 새 비밀번호 입력
+let recoveryMode = false;
+function showRecovery() { setGate(true); switchGateTab('recovery'); gateMsg('새 비밀번호를 입력해 주세요.', false); }
+async function submitRecovery() {
+  const p1 = $('#recoveryPassword').value, p2 = $('#recoveryPassword2').value;
+  if (p1.length < PW_MIN) { gateMsg(`비밀번호는 최소 ${PW_MIN}자리 이상이어야 해요.`); return; }
+  if (p1 !== p2) { gateMsg('두 비밀번호가 서로 달라요.'); return; }
+  const btn = $('#btnRecovery'); if (btn) btn.disabled = true; gateMsg('');
+  const { error } = await sb.auth.updateUser({ password: p1 });
+  if (btn) btn.disabled = false;
+  if (error) { gateMsg(friendlyAuthError(error)); return; }
+  recoveryMode = false; $('#recoveryPassword').value = ''; $('#recoveryPassword2').value = '';
+  toast('🔑 새 비밀번호를 저장했어요');
+  const { data } = await sb.auth.getSession();
+  if (data && data.session) onSignedIn(data.session.user); else switchGateTab('login');
 }
 
 async function loginWithPassword(email, password) {
@@ -1650,7 +1940,8 @@ async function signupWithPassword(email, password, rawNick, rawHandle) {
   if (!sb) { gateMsg('Supabase 설정이 필요해요.'); return; }
   const em = String(email || '').trim().toLowerCase();
   if (!EMAIL_RE.test(em)) { gateMsg('올바른 이메일 주소를 입력해 주세요.'); return; }
-  if (!password || password.length < 6) { gateMsg('비밀번호는 최소 6자리 이상이어야 해요.'); return; }
+  if (!password || password.length < PW_MIN) { gateMsg(`비밀번호는 최소 ${PW_MIN}자리 이상이어야 해요.`); return; }
+  if (!$('#signupConsent').checked) { gateMsg('이용약관과 개인정보처리방침에 동의해 주세요.'); return; }
 
   const vNick = validateNickname(rawNick);
   if (!vNick.ok) { gateMsg(vNick.msg); return; }
@@ -1669,7 +1960,7 @@ async function signupWithPassword(email, password, rawNick, rawHandle) {
       email: em,
       password,
       options: {
-        data: { display_name: vNick.name, handle: vHandle.handle, full_name: vNick.name },
+        data: { display_name: vNick.name, handle: vHandle.handle, full_name: vNick.name, terms_version: TERMS_VERSION },
         emailRedirectTo: location.origin + location.pathname
       }
     });
@@ -1702,7 +1993,7 @@ async function sendCode(email, resend = false) {
   const em = String(email || '').trim().toLowerCase();
   if (!EMAIL_RE.test(em)) { gateMsg('이메일 주소를 확인해 주세요.'); return; }
   const btn = $('#btnSendCode'); if (btn) btn.disabled = true; gateMsg('');
-  const { error } = await sb.auth.signInWithOtp({ email: em, options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true } });
+  const { error } = await sb.auth.signInWithOtp({ email: em, options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true, data: { terms_version: TERMS_VERSION } } });
   if (btn) btn.disabled = false;
   if (error) { gateMsg(friendlyAuthError(error)); return; }
   gateEmailValue = em; showGateStep('code'); startResendCooldown();
@@ -1725,6 +2016,87 @@ async function logout() {
 }
 
 let signingIn = false;
+/* ================= 약관 동의 · 비밀번호 변경 · 계정 삭제 ================= */
+const needsConsent = () => !!(state.me && state.me.termsVersion !== TERMS_VERSION);
+function showConsent() {
+  const cb = $('#consentCheck'); if (cb) cb.checked = false;
+  const b = $('#btnAcceptTerms'); if (b) b.disabled = true;
+  $('#consentModal').classList.add('show');
+}
+function postSignInPrompts() {
+  if (!state.me) return;
+  if (needsConsent()) { showConsent(); return; }   // 약관에 동의하기 전에는 다른 안내를 띄우지 않아요
+  if (!state.me.nicknameInitialized || !state.me.handle) {
+    setTimeout(() => { openProfile(); toast('🎉 환영해요! 커뮤니티에서 사용할 닉네임과 사용자 ID를 설정해 주세요.'); }, 300);
+  }
+}
+async function acceptTerms() {
+  const cb = $('#consentCheck'); if (!cb || !cb.checked) return;
+  const btn = $('#btnAcceptTerms'); if (btn) btn.disabled = true;
+  const { error } = await sb.rpc('accept_terms', { p_version: TERMS_VERSION });
+  if (error) { if (btn) btn.disabled = false; toast(friendlyError(error, '동의를 저장하지 못했어요')); return; }
+  state.me.termsVersion = TERMS_VERSION;
+  $('#consentModal').classList.remove('show');
+  postSignInPrompts();
+}
+async function declineTerms() {
+  $('#consentModal').classList.remove('show');
+  try { await sb.auth.signOut(); } catch (_) {}
+}
+
+async function changePassword() {
+  const inp = $('#newPassword'); const pw = inp.value;
+  if (pw.length < PW_MIN) { toast(`비밀번호는 최소 ${PW_MIN}자리 이상이어야 해요`); return; }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  if (error) { toast(friendlyAuthError(error)); return; }
+  inp.value = ''; toast('🔑 비밀번호를 저장했어요');
+}
+
+async function removeMyFiles() {
+  const uid = state.me.id;
+  for (let guard = 0; guard < 50; guard++) {          // 100개씩, 최대 5,000개
+    const { data, error } = await sb.storage.from(BUCKET).list(uid, { limit: 100 });
+    if (error || !data || !data.length) break;
+    const paths = data.filter(o => o && o.name).map(o => `${uid}/${o.name}`);
+    if (!paths.length) break;
+    const { error: rmErr } = await sb.storage.from(BUCKET).remove(paths);
+    if (rmErr) break;
+  }
+}
+let deleting = false;
+async function deleteMyAccount() {
+  if (deleting) return;
+  if ($('#deleteConfirmInput').value.trim() !== '삭제') { toast('확인란에 "삭제"라고 입력해 주세요'); return; }
+  if (!confirm('정말 계정을 영구 삭제할까요?\n글, 사진, 프로필이 모두 사라지고 되돌릴 수 없어요.')) return;
+  deleting = true;
+  const btn = $('#btnDeleteAccount'); if (btn) btn.disabled = true;
+  try {
+    await removeMyFiles();                                    // 첨부·아바타 파일 먼저 삭제
+    const { error } = await sb.rpc('delete_my_account');      // 계정 + 프로필 + 글 + 댓글 삭제
+    if (error) throw error;
+    try { await sb.auth.signOut({ scope: 'local' }); } catch (_) {}
+    toast('계정을 삭제했어요. 그동안 이용해 주셔서 감사해요 🙏');
+  } catch (e) {
+    toast(friendlyError(e, '계정을 삭제하지 못했어요'));
+  } finally {
+    deleting = false; if (btn) btn.disabled = false;
+  }
+}
+
+/* ================= 접속자 역할(👑) — profiles 에서 조회 ================= */
+async function ensureRoles(ids) {
+  if (!sb || !state.me) return;
+  const need = [...new Set(ids)].filter(id => id && !roleCache.has(id)).slice(0, 100);
+  if (!need.length) return;
+  try {
+    const { data, error } = await sb.from('profiles').select('id,role').in('id', need);
+    if (error) throw error;
+    (data || []).forEach(r => roleCache.set(r.id, r.role || 'member'));
+    need.forEach(id => { if (!roleCache.has(id)) roleCache.set(id, 'member'); });
+    renderWidget();
+  } catch (e) { console.warn('역할 조회 실패', e); }
+}
+
 let pendingGateMsg = '';   // 로그아웃으로 게이트가 다시 그려져도 사라지지 않게 보관하는 안내 메시지
 async function failSignIn(msg) {
   state.me = null; pendingGateMsg = msg; gateMsg(msg);
@@ -1753,7 +2125,8 @@ async function onSignedIn(user) {
       lastNickChange: prof.last_nickname_changed_at || null,
       lastHandleChange: prof.last_handle_changed_at || null,
       nicknameInitialized: !!prof.nickname_initialized,
-      createdAt: prof.created_at
+      createdAt: prof.created_at,
+      termsVersion: prof.terms_version || ''
     };
 
     await loadSpaces();
@@ -1763,13 +2136,8 @@ async function onSignedIn(user) {
     renderSpaces(); renderNav(); renderMain(); renderWidget(); icons();
     subscribeRealtime(); loadTrending();
 
-    // 닉네임/아이디를 아직 정하지 않은 사용자는 바로 프로필 설정 창을 띄워요
-    if (!state.me.nicknameInitialized || !state.me.handle) {
-      setTimeout(() => {
-        openProfile();
-        toast('🎉 환영해요! 커뮤니티에서 사용할 닉네임과 사용자 ID를 설정해 주세요.');
-      }, 400);
-    }
+    if (isStaff()) refreshReportCount();
+    postSignInPrompts();   // 약관 동의 → 닉네임·ID 설정 순서로 안내
   } catch (e) {
     console.warn(e);
     await failSignIn('입장하지 못했어요: ' + (e.message || '알 수 없는 오류'));
@@ -1779,7 +2147,9 @@ async function onSignedIn(user) {
 function onSignedOut() {
   unsubscribeRealtime(); clearStagedMedia();
   state.me = null; state.feeds = {}; state.threads = {}; state.openThreads.clear(); state.trending = [];
-  closeProfile(); closeLightbox(); closeEchoMenu(); closeDrawer();
+  state.admin = { tab: 'reports', showResolved: false, q: '' }; state.reportCount = 0; state.view = 'plaza'; roleCache.clear();
+  const cm = $('#consentModal'); if (cm) cm.classList.remove('show');
+  closeProfile(); closeLegal(); closeLightbox(); closeEchoMenu(); closeDrawer();
   renderSpaces(); renderNav(); renderMain(); renderWidget(); setGate(true);
   showGateStep('login');
   if (pendingGateMsg) { gateMsg(pendingGateMsg); pendingGateMsg = ''; }
@@ -1788,7 +2158,7 @@ function onSignedOut() {
 /* ================= 이벤트 위임 ================= */
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act], [data-lightbox], [data-tab], .bnav-item, #btnCloseLightbox, #composerClearMedia');
-  if (!t) { closeEchoMenu(); if (e.target === $('#profileModal')) closeProfile(); if (e.target === $('#lightbox')) closeLightbox(); return; }
+  if (!t) { closeEchoMenu(); if (e.target === $('#profileModal')) closeProfile(); if (e.target === $('#legalModal')) closeLegal(); if (e.target === $('#lightbox')) closeLightbox(); return; }
   if (t.id === 'btnCloseLightbox') return closeLightbox();
   if (t.id === 'composerClearMedia') return clearStagedMedia();
   if (t.dataset.lightbox) return openLightbox(t.dataset.lightbox);
@@ -1817,6 +2187,13 @@ document.addEventListener('click', e => {
     case 'triggerAvatar': { const f = $('#profileAvatarInput'); if (f) f.click(); } break;
     case 'saveProfile': saveProfile(); break;
     case 'closeProfile': closeProfile(); break;
+    case 'showTerms': openLegal('terms'); break;
+    case 'showPrivacy': openLegal('privacy'); break;
+    case 'closeLegal': closeLegal(); break;
+    case 'acceptTerms': acceptTerms(); break;
+    case 'declineTerms': declineTerms(); break;
+    case 'changePassword': changePassword(); break;
+    case 'deleteAccount': deleteMyAccount(); break;
   }
 });
 
@@ -1827,17 +2204,20 @@ document.addEventListener('submit', e => {
   else if (f.dataset.form === 'send') sendThread(f);
   else if (f.dataset.form === 'login') loginWithPassword($('#loginEmail').value, $('#loginPassword').value);
   else if (f.dataset.form === 'signup') signupWithPassword($('#signupEmail').value, $('#signupPassword').value, $('#signupNickname').value, $('#signupHandle').value);
-  else if (f.dataset.form === 'magic') sendCode($('#gateEmail').value);
+  else if (f.dataset.form === 'magic') { if (!$('#magicConsent').checked) { gateMsg('이용약관과 개인정보처리방침에 동의해 주세요.'); return; } sendCode($('#gateEmail').value); }
+  else if (f.dataset.form === 'reset') sendResetMail($('#resetEmail').value);
+  else if (f.dataset.form === 'recovery') submitRecovery();
   else if (f.dataset.form === 'code') verifyCode($('#gateCode').value);
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeEchoMenu(); closeDrawer(); closeLightbox(); closeProfile(); }
+  if (e.key === 'Escape') { closeEchoMenu(); closeDrawer(); closeLightbox(); if ($('#legalModal').classList.contains('show')) closeLegal(); else closeProfile(); }
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.target.matches('.composer textarea')) { e.preventDefault(); const f = e.target.closest('form'); if (f) submitPost(f); }
   if (e.key === 'Enter' && (e.target.id === 'profileName' || e.target.id === 'profileHandle')) { e.preventDefault(); saveProfile(); }
 });
 
 document.addEventListener('change', e => {
+  if (e.target.id === 'consentCheck') { const b = $('#btnAcceptTerms'); if (b) b.disabled = !e.target.checked; return; }
   if (e.target.id === 'mediaGalleryInput' || e.target.id === 'mediaFileInput' || e.target.id === 'mediaUploadInput') { handleMediaFiles(Array.from(e.target.files || [])); e.target.value = ''; }
   else if (e.target.id === 'profileAvatarInput') { const fl = e.target.files; if (fl && fl[0]) handleAvatarSelected(fl[0]); e.target.value = ''; }
 });
@@ -1870,20 +2250,313 @@ document.addEventListener('input', e => {
 
 // 시간 표시("3분 전") 주기적 갱신 + 트렌딩 갱신
 setInterval(() => { $$('.post[data-post]').forEach(a => { const p = findPost(a.dataset.post), s = $('.post-head small', a); if (p && s) s.textContent = timeAgo(p.created); }); }, 60000);
-setInterval(() => { if (state.me && !document.hidden) loadTrending(); }, 120000);
+setInterval(() => { if (state.me && !document.hidden) { loadTrending(); if (isStaff()) refreshReportCount(); } }, 120000);
+/* ================= 관리자 패널 ================= */
+const LOG_LABELS = { delete_post: '글 삭제', report_resolved: '신고 처리 완료', report_dismissed: '신고 기각(문제 없음)', ban: '이용자 차단', unban: '차단 해제', purge_posts: '글 일괄 삭제', set_role: '권한 변경' };
+const ROLE_LABELS = { member: '일반', mod: '운영진' };
+const chName = key => (state.channels[key] ? state.channels[key].name : key);
+const ID_RE = /^[a-z0-9_-]{2,24}$/;
+
+function userLine(u) {
+  if (!u) return '<span class="meta">(탈퇴했거나 알 수 없음)</span>';
+  return `<b>${esc(u.display_name)}</b>${u.handle ? ` <span class="post-handle">@${esc(u.handle)}</span>` : ''}${roleBadge(u.role)}${u.banned ? ' <span class="badge-ban">차단됨</span>' : ''}`;
+}
+async function profilesByIds(ids) {
+  const list = [...new Set((ids || []).filter(Boolean))], map = new Map();
+  if (!list.length) return map;
+  const { data, error } = await sb.from('profiles').select('id,display_name,handle,avatar_url,role,banned').in('id', list);
+  if (error) throw error;
+  (data || []).forEach(p => map.set(p.id, p));
+  return map;
+}
+async function refreshReportCount() {
+  if (!sb || !isStaff()) return;
+  try {
+    const { count, error } = await sb.from('reports').select('id', { count: 'exact', head: true }).eq('resolved', false);
+    if (error) throw error;
+    state.reportCount = count || 0; renderNav();
+  } catch (e) { console.warn('신고 수 조회 실패', e); }
+}
+
+function renderAdmin() {
+  const m = $('#main');
+  if (!isStaff()) { go('plaza'); return; }
+  const tab = state.admin.tab;
+  const tabs = [['reports', '🚩 신고'], ['users', '👥 이용자'], ...(isAdminMe() ? [['channels', '# 채널']] : []), ['logs', '📜 기록']];
+  if (!tabs.some(t => t[0] === tab)) state.admin.tab = 'reports';
+  m.innerHTML = headHTML('🛡️ 관리자 패널', isAdminMe() ? '신고 처리 · 이용자 관리 · 채널 관리' : '신고 처리 · 이용자 관리') +
+    `<div class="dp-scroll"><div class="col">
+      <div class="admin-tabs">${tabs.map(([k, l]) => `<button type="button" class="admin-tab${state.admin.tab === k ? ' active' : ''}" data-adm="tab" data-adm-tab="${k}">${l}${k === 'reports' && state.reportCount ? `<em class="nav-badge">${state.reportCount}</em>` : ''}</button>`).join('')}</div>
+      <div id="adminBody"><div class="empty">불러오는 중…</div></div>
+    </div></div>`;
+  loadAdminTab();
+}
+
+async function loadAdminTab() {
+  const tab = state.admin.tab;
+  try {
+    if (tab === 'reports') await loadAdminReports();
+    else if (tab === 'users') await loadAdminUsers();
+    else if (tab === 'channels') loadAdminChannels();
+    else if (tab === 'logs') await loadAdminLogs();
+  } catch (e) {
+    const b = $('#adminBody');
+    if (b && state.view === 'admin' && state.admin.tab === tab) b.innerHTML = `<div class="empty">불러오지 못했어요.<br><small>${esc(friendlyError(e, '권한이나 SQL 패치(v6) 적용 여부를 확인해 주세요'))}</small></div>`;
+  }
+}
+const adminBodyFor = tab => (state.view === 'admin' && state.admin.tab === tab) ? $('#adminBody') : null;
+
+/* ---- 신고 ---- */
+async function loadAdminReports() {
+  const showResolved = state.admin.showResolved;
+  const { data, error } = await sb.from('reports').select('*').eq('resolved', showResolved).order('created_at', { ascending: false }).limit(50);
+  if (error) throw error;
+  const rows = data || [];
+  const pm = await profilesByIds(rows.flatMap(r => [r.reporter_id, r.post_author, r.resolved_by]));
+  if (!showResolved) { state.reportCount = rows.length; renderNav(); }
+  const body = adminBodyFor('reports'); if (!body) return;
+  const resLabel = { post_deleted: '글 삭제', resolved: '조치 완료', dismissed: '문제 없음' };
+  body.innerHTML = `<div class="admin-bar">
+      <button type="button" class="btn sm ghost" data-adm="toggleResolved">${showResolved ? '← 처리 대기 신고 보기' : '처리된 신고 보기'}</button>
+      <button type="button" class="btn sm ghost" data-adm="reload">🔄 새로고침</button>
+    </div>` +
+    (rows.length ? rows.map(r => {
+      const au = pm.get(r.post_author), rp = pm.get(r.reporter_id), gone = !r.post_id;
+      const media = Array.isArray(r.post_media) ? r.post_media.length : 0;
+      return `<article class="admin-card">
+        <div class="admin-card-head"><b>🚩 ${esc(r.reason)}</b><small>${timeAgo(r.created_at)} · 신고자 ${userLine(rp)}</small></div>
+        <div class="admin-quote">
+          <div class="who">${userLine(au)} · ${r.post_channel ? '# ' + esc(chName(r.post_channel)) : '광장'}${gone ? ' · <em>삭제된 글</em>' : ''}</div>
+          <p>${esc(r.post_body || (media ? '(사진/영상만 있는 글)' : '(본문 정보 없음)'))}</p>${media ? `<small>첨부 ${media}개</small>` : ''}
+        </div>
+        ${r.resolved
+          ? `<div class="admin-done">✅ ${esc(resLabel[r.resolution] || '처리됨')} · ${r.resolved_at ? timeAgo(r.resolved_at) : ''} · ${userLine(pm.get(r.resolved_by))}</div>`
+          : `<div class="admin-actions">
+              ${gone ? '' : `<button type="button" class="btn sm danger" data-adm="delPost" data-post="${r.post_id}">🗑️ 글 삭제</button>`}
+              ${r.post_author && r.post_author !== state.me.id ? `<button type="button" class="btn sm ghost" data-adm="ban" data-user="${r.post_author}">🚫 작성자 차단</button>` : ''}
+              <button type="button" class="btn sm" data-adm="resolve" data-report="${r.id}" data-res="resolved">✔ 처리 완료</button>
+              <button type="button" class="btn sm ghost" data-adm="resolve" data-report="${r.id}" data-res="dismissed">문제 없음</button>
+            </div>`}
+      </article>`;
+    }).join('') : `<div class="empty">${showResolved ? '처리된 신고가 없어요' : '처리할 신고가 없어요 🎉'}</div>`);
+}
+
+/* ---- 이용자 ---- */
+async function loadAdminUsers() {
+  const raw = (state.admin.q || '').trim();
+  const safe = raw.replace(/^@/, '').replace(/[^가-힣a-zA-Z0-9_.-]/g, '').slice(0, 20);
+  let rows = [];
+  const cols = 'id,display_name,handle,avatar_url,role,banned,created_at';
+  if (safe) {
+    const pat = '%' + safe.replace(/[\\%_]/g, c => '\\' + c) + '%';
+    const [a, b] = await Promise.all([
+      sb.from('profiles').select(cols).ilike('display_name', pat).limit(20),
+      sb.from('profiles').select(cols).ilike('handle', pat).limit(20)
+    ]);
+    if (a.error) throw a.error; if (b.error) throw b.error;
+    const seen = new Set();
+    [...(a.data || []), ...(b.data || [])].forEach(u => { if (!seen.has(u.id)) { seen.add(u.id); rows.push(u); } });
+  } else {
+    const { data, error } = await sb.from('profiles').select(cols).order('created_at', { ascending: false }).limit(20);
+    if (error) throw error; rows = data || [];
+  }
+  const body = adminBodyFor('users'); if (!body) return;
+  body.innerHTML = `<form class="admin-search" data-adm-form="userSearch"><input id="admUserQ" value="${esc(raw)}" maxlength="20" placeholder="닉네임 또는 @아이디 검색" autocomplete="off"><button class="btn sm" type="submit">검색</button></form>
+    <p class="field-hint">${safe ? `"${esc(safe)}" 검색 결과` : '최근 가입한 이용자'}</p>` +
+    (rows.length ? rows.map(u => {
+      const mine = u.id === state.me.id;
+      const canTouch = !mine && u.role !== 'admin' && !(u.role === 'mod' && !isAdminMe());
+      return `<article class="admin-card"><div class="admin-user">
+          <span class="av" aria-hidden="true">${avatarHTML(u.avatar_url, u.display_name)}</span>
+          <div class="grow">${userLine(u)}${mine ? ' (나)' : ''}<br><small class="meta">가입 ${timeAgo(u.created_at)}</small></div>
+          <div class="admin-actions">
+            ${canTouch ? `<button type="button" class="btn sm ${u.banned ? '' : 'ghost'}" data-adm="${u.banned ? 'unban' : 'ban'}" data-user="${u.id}">${u.banned ? '✅ 차단 해제' : '🚫 차단'}</button>` : ''}
+            ${canTouch ? `<button type="button" class="btn sm ghost" data-adm="purge" data-user="${u.id}">🧹 글 전체 삭제</button>` : ''}
+            ${isAdminMe() && !mine && u.role !== 'admin' ? `<button type="button" class="btn sm ghost" data-adm="role" data-user="${u.id}" data-role="${u.role === 'mod' ? 'member' : 'mod'}">${u.role === 'mod' ? '🛡️ 운영진 해제' : '🛡️ 운영진 지정'}</button>` : ''}
+          </div></div></article>`;
+    }).join('') : '<div class="empty">검색 결과가 없어요</div>');
+}
+
+/* ---- 채널 (관리자) ---- */
+function loadAdminChannels() {
+  const body = adminBodyFor('channels'); if (!body) return;
+  body.innerHTML = state.spaces.map(sp => `<section class="admin-card">
+      <div class="admin-card-head"><b>${esc(sp.icon)} ${esc(sp.name)}</b><small>${esc(sp.id)}${sp.desc ? ' · ' + esc(sp.desc) : ''}</small></div>
+      <div class="admin-actions">
+        <button type="button" class="btn sm ghost" data-adm="editSpace" data-space="${esc(sp.id)}">✏️ 스페이스 수정</button>
+        <button type="button" class="btn sm" data-adm="addChannel" data-space="${esc(sp.id)}">＋ 채널 추가</button>
+      </div>
+      <ul class="admin-list">${sp.channels.length ? sp.channels.map(c => {
+        const ch = state.channels[c];
+        return `<li><span># ${esc(ch.name)}<small>${esc(c)}${ch.topic ? ' · ' + esc(ch.topic) : ''}</small></span>
+          <span class="admin-actions"><button type="button" class="btn sm ghost" data-adm="editChannel" data-ch="${esc(c)}">수정</button><button type="button" class="btn sm danger" data-adm="delChannel" data-ch="${esc(c)}">삭제</button></span></li>`;
+      }).join('') : '<li><span class="meta">채널이 없어요</span></li>'}</ul></section>`).join('') +
+    `<div class="admin-bar"><button type="button" class="btn" data-adm="addSpace">＋ 스페이스 추가</button></div>
+     <p class="field-hint">채널을 삭제하면 그 채널의 글도 모두 사라져요. 다른 접속자 화면에는 새로고침해야 반영돼요.</p>`;
+}
+async function refreshStructure() {
+  await loadSpaces();
+  renderSpaces(); renderNav();
+  if (state.view === 'admin') loadAdminChannels();
+}
+const nextSort = list => (list.reduce((mx, x) => Math.max(mx, Number(x.sort) || 0), 0) + 1);
+function askText(label, def, max, { required = true } = {}) {
+  const v = prompt(`${label} (최대 ${max}자)`, def || '');
+  if (v === null) return null;
+  const t = v.trim();
+  if (required && !t) { toast('내용을 입력해 주세요'); return null; }
+  if (t.length > max) { toast(`${max}자 이하로 입력해 주세요`); return null; }
+  return t;
+}
+async function adminAddChannel(spaceId) {
+  const id = (prompt('채널 ID (영문 소문자·숫자·_·- 2~24자, 만든 뒤엔 바꿀 수 없어요)') || '').trim().toLowerCase();
+  if (!id) return;
+  if (!ID_RE.test(id) || id === 'plaza') { toast('채널 ID 형식이 맞지 않거나 쓸 수 없는 이름이에요'); return; }
+  if (state.channels[id]) { toast('이미 있는 채널 ID예요'); return; }
+  const name = askText('채널 이름', '', 20); if (name === null) return;
+  const topic = askText('채널 주제 설명(비워도 돼요)', '', 60, { required: false }); if (topic === null) return;
+  const sort = nextSort(Object.values(state.channels).filter(c => c.space_id === spaceId));
+  const { error } = await sb.from('channels').insert({ id, space_id: spaceId, name, topic, sort });
+  if (error) throw error;
+  toast(`# ${name} 채널을 만들었어요`); await refreshStructure();
+}
+async function adminEditChannel(id) {
+  const ch = state.channels[id]; if (!ch) return;
+  const name = askText('채널 이름', ch.name, 20); if (name === null) return;
+  const topic = askText('채널 주제 설명(비워도 돼요)', ch.topic, 60, { required: false }); if (topic === null) return;
+  const { error } = await sb.from('channels').update({ name, topic }).eq('id', id);
+  if (error) throw error;
+  toast('채널을 수정했어요'); await refreshStructure();
+}
+async function adminDelChannel(id) {
+  const ch = state.channels[id]; if (!ch) return;
+  const typed = prompt(`⚠️ "# ${ch.name}" 채널과 그 안의 모든 글이 삭제돼요. 되돌릴 수 없어요.\n계속하려면 채널 ID "${id}" 를 입력하세요.`);
+  if (typed === null) return;
+  if (typed.trim() !== id) { toast('채널 ID가 달라서 취소했어요'); return; }
+  const { error } = await sb.from('channels').delete().eq('id', id);
+  if (error) throw error;
+  delete state.feeds[id]; if (state.channelId === id) state.channelId = null;
+  toast('채널을 삭제했어요'); await refreshStructure();
+}
+async function adminAddSpace() {
+  const id = (prompt('스페이스 ID (영문 소문자·숫자·_·- 2~24자, 만든 뒤엔 바꿀 수 없어요)') || '').trim().toLowerCase();
+  if (!id) return;
+  if (!ID_RE.test(id)) { toast('스페이스 ID 형식이 맞지 않아요'); return; }
+  if (state.spaces.some(s => s.id === id)) { toast('이미 있는 스페이스 ID예요'); return; }
+  const name = askText('스페이스 이름', '', 20); if (name === null) return;
+  const icon = askText('아이콘(이모지 1개)', '🌐', 4); if (icon === null) return;
+  const description = askText('설명(비워도 돼요)', '', 60, { required: false }); if (description === null) return;
+  const { error } = await sb.from('spaces').insert({ id, name, icon, description, sort: nextSort(state.spaces.map(s => ({ sort: s.sort }))) });
+  if (error) throw error;
+  toast('스페이스를 만들었어요'); await refreshStructure();
+}
+async function adminEditSpace(id) {
+  const sp = state.spaces.find(s => s.id === id); if (!sp) return;
+  const name = askText('스페이스 이름', sp.name, 20); if (name === null) return;
+  const icon = askText('아이콘(이모지 1개)', sp.icon, 4); if (icon === null) return;
+  const description = askText('설명(비워도 돼요)', sp.desc, 60, { required: false }); if (description === null) return;
+  const { error } = await sb.from('spaces').update({ name, icon, description }).eq('id', id);
+  if (error) throw error;
+  toast('스페이스를 수정했어요'); await refreshStructure();
+}
+
+/* ---- 기록 ---- */
+async function loadAdminLogs() {
+  const { data, error } = await sb.from('mod_log').select('*').order('created_at', { ascending: false }).limit(50);
+  if (error) throw error;
+  const rows = data || [];
+  const pm = await profilesByIds(rows.flatMap(r => [r.actor_id, r.target_user]));
+  const body = adminBodyFor('logs'); if (!body) return;
+  body.innerHTML = rows.length ? rows.map(r => {
+    const note = r.action === 'set_role' ? (ROLE_LABELS[r.note] || r.note || '') : (r.action.startsWith('report_') ? '' : (r.note || ''));
+    return `<div class="admin-log"><b>${esc(LOG_LABELS[r.action] || r.action)}</b> · ${timeAgo(r.created_at)}<br>
+      ${pm.get(r.actor_id) ? esc(pm.get(r.actor_id).display_name) : '(알 수 없음)'}${r.target_user ? ` → ${pm.get(r.target_user) ? esc(pm.get(r.target_user).display_name) : '(탈퇴한 이용자)'}` : ''}${note ? ` · ${esc(note)}` : ''}</div>`;
+  }).join('') : '<div class="empty">아직 운영 기록이 없어요</div>';
+}
+
+/* ---- 관리자 패널 이벤트 ---- */
+async function runAdm(t) {
+  const a = t.dataset.adm;
+  if (a === 'tab') { state.admin.tab = t.dataset.admTab; renderAdmin(); return; }
+  if (a === 'toggleResolved') { state.admin.showResolved = !state.admin.showResolved; loadAdminTab(); return; }
+  if (a === 'reload') { loadAdminTab(); return; }
+  if (a === 'delPost') {
+    if (!confirm('이 글을 삭제하고 신고를 처리할까요?')) return;
+    const { error } = await sb.rpc('mod_delete_post', { p_post: t.dataset.post, p_note: '신고 처리' });
+    if (error) throw error;
+    removePostLocal(t.dataset.post); toast('🗑️ 글을 삭제했어요'); await refreshReportCount(); loadAdminTab(); return;
+  }
+  if (a === 'resolve') {
+    const { error } = await sb.rpc('mod_resolve_report', { p_report: t.dataset.report, p_resolution: t.dataset.res });
+    if (error) throw error;
+    toast('신고를 처리했어요'); await refreshReportCount(); loadAdminTab(); return;
+  }
+  if (a === 'ban' || a === 'unban') {
+    const ban = a === 'ban';
+    if (!confirm(ban ? '이 이용자를 차단할까요?\n글쓰기·스파크·댓글이 모두 막히고 로그인도 되지 않아요.' : '이 이용자의 차단을 해제할까요?')) return;
+    const note = prompt('사유 (운영 기록에 남아요, 비워도 돼요)', ''); if (note === null) return;
+    const { error } = await sb.rpc('mod_set_ban', { p_user: t.dataset.user, p_banned: ban, p_note: note.trim().slice(0, 300) });
+    if (error) throw error;
+    toast(ban ? '🚫 차단했어요' : '✅ 차단을 해제했어요'); loadAdminTab(); return;
+  }
+  if (a === 'purge') {
+    if (!confirm('이 사람이 쓴 모든 글을 삭제할까요? 되돌릴 수 없어요.')) return;
+    const { data, error } = await sb.rpc('mod_purge_user_posts', { p_user: t.dataset.user, p_note: '운영진 일괄 삭제' });
+    if (error) throw error;
+    Object.keys(state.feeds).forEach(k => { state.feeds[k].loaded = false; });
+    toast(`🧹 ${Number(data) || 0}개의 글을 삭제했어요`); await refreshReportCount(); loadAdminTab(); return;
+  }
+  if (a === 'role') {
+    const role = t.dataset.role;
+    if (!confirm(role === 'mod' ? '이 이용자를 운영진으로 지정할까요?\n신고 처리, 글 삭제, 이용자 차단을 할 수 있게 돼요.' : '운영진 권한을 해제할까요?')) return;
+    const { error } = await sb.rpc('admin_set_role', { p_user: t.dataset.user, p_role: role });
+    if (error) throw error;
+    toast('권한을 변경했어요'); loadAdminTab(); return;
+  }
+  if (a === 'addChannel') return adminAddChannel(t.dataset.space);
+  if (a === 'editChannel') return adminEditChannel(t.dataset.ch);
+  if (a === 'delChannel') return adminDelChannel(t.dataset.ch);
+  if (a === 'addSpace') return adminAddSpace();
+  if (a === 'editSpace') return adminEditSpace(t.dataset.space);
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-adm]');
+  if (!t || !state.me || !isStaff()) return;
+  if (t.disabled) return;
+  t.disabled = true;
+  try { await runAdm(t); }
+  catch (err) { toast(friendlyError(err, '처리하지 못했어요')); }
+  finally { t.disabled = false; }
+});
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-adm-form]'); if (!f) return;
+  e.preventDefault();
+  if (f.dataset.admForm === 'userSearch') { state.admin.q = $('#admUserQ').value; loadAdminTab(); }
+});
+
 /* ================= 시작 ================= */
 function boot() {
   renderSpaces(); renderNav(); renderMain(); renderWidget();
+  const urlInfo = (location.hash || '') + '&' + (location.search || '');
+  if (/type=recovery/.test(urlInfo)) recoveryMode = true;                      // 비밀번호 재설정 링크로 들어옴
+  if (/error_code=otp_expired|error=access_denied/.test(urlInfo)) {            // 만료된 메일 링크
+    setTimeout(() => gateMsg('링크가 만료되었거나 이미 사용됐어요. 다시 받아 주세요.'), 0);
+    history.replaceState(null, '', location.pathname);
+  }
   if (!sb) {
     setGate(true);
-    gateMsg(CONFIGURED ? 'Supabase 라이브러리를 불러오지 못했어요. 네트워크를 확인해 주세요.' : '⚙️ 서버 설정이 필요해요. 파일 상단의 SUPABASE_URL / SUPABASE_ANON_KEY 를 입력해 주세요.');
+    gateMsg(CONFIGURED ? 'Supabase 라이브러리를 불러오지 못했어요. 네트워크를 확인해 주세요.' : '⚙️ 서버 설정이 필요해요. 파일 상단의 SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY 를 입력해 주세요.');
     return;
   }
   // 콜백 안에서 직접 쿼리하면 supabase-js 가 교착될 수 있어서 setTimeout 으로 한 틱 미룸
   sb.auth.onAuthStateChange((event, session) => {
     setTimeout(() => {
-      if (event === 'SIGNED_OUT') onSignedOut();
-      else if (session && session.user && (event === 'INITIAL_SESSION' || event === 'SIGNED_IN')) onSignedIn(session.user);
+      if (event === 'PASSWORD_RECOVERY') { recoveryMode = true; showRecovery(); return; }
+      if (event === 'SIGNED_OUT') { recoveryMode = false; onSignedOut(); }
+      else if (session && session.user && (event === 'INITIAL_SESSION' || event === 'SIGNED_IN')) {
+        if (recoveryMode) { showRecovery(); return; }                          // 새 비밀번호를 정하기 전에는 입장시키지 않아요
+        onSignedIn(session.user);
+      }
       else if (event === 'INITIAL_SESSION' && !session) setGate(true);
     }, 0);
   });
