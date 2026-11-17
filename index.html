@@ -719,13 +719,13 @@ body.logged-out{overflow:hidden}
 /* 쇼츠: 업로드 + 휠 */
 .shorts-stage{position:relative;flex:1;min-height:0;display:flex;overflow:hidden}
 .shorts-stage .shorts-wrap{flex:1;min-width:0}
-.wheel{position:absolute;right:-112px;bottom:-112px;width:224px;height:224px;border-radius:50%;z-index:5;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none}
+.wheel{position:absolute;right:-112px;bottom:-112px;width:224px;height:224px;border-radius:50%;z-index:5;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none;--wheel-rim-light:#e8822a;--wheel-rim-dark:#b8510e;--wheel-spoke:#fa9a63;--wheel-glow:rgba(248,147,95,.65);filter:drop-shadow(0 0 22px var(--wheel-glow));transition:filter .25s ease}
 .wheel.grab{cursor:grabbing}
-.wheel svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 14px rgba(0,0,0,.55))}
-.wheel-ring{transform-origin:50% 50%;will-change:transform}
+.wheel svg{width:100%;height:100%;display:block;overflow:visible}
+.wheel-ring{transform-origin:0 0;will-change:transform}
 .wheel.grab .wheel-glow{opacity:1}
-.wheel-glow{opacity:.35;transition:opacity .15s}
-.wheel-count{position:absolute;left:23%;top:23%;transform:translate(-50%,-50%);font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none;white-space:nowrap}
+.wheel-glow{opacity:.55;transition:opacity .15s}
+.wheel-count{position:absolute;left:23%;top:23%;transform:translate(-50%,-50%);padding:2px 7px;border-radius:999px;background:rgba(0,0,0,.48);font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none;white-space:nowrap}
 .wheel:focus-visible{box-shadow:0 0 0 3px var(--depiy-orange)}
 .wheel-hint{position:absolute;right:122px;bottom:36px;z-index:5;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;pointer-events:none;transition:opacity .4s;white-space:nowrap}
 .wheel-hint.gone{opacity:0}
@@ -3646,7 +3646,7 @@ const shortVideo = p => (p.media || []).find(m => m && m.type === 'video' && med
 function shortHTML(p) {
   const v = shortVideo(p);
   return `<article class="short" data-post="${p.id}">
-    <video src="${esc(v.url)}" playsinline loop ${state.shortsMuted ? 'muted' : ''} preload="metadata" aria-label="영상"></video>
+    <video src="${esc(v.url)}" crossorigin="anonymous" playsinline loop ${state.shortsMuted ? 'muted' : ''} preload="metadata" aria-label="영상"></video>
     <div class="short-shade"></div>
     <div class="short-info">
       <button type="button" class="short-author" data-act="viewProfile" data-user="${esc(p.authorId)}"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><span>${esc(p.name)}</span></button>
@@ -3658,19 +3658,115 @@ function shortHTML(p) {
 }
 
 function wheelSVG() {
-  let ticks = '';
-  for (let a = 0; a < 360; a += 6) {
-    const major = a % 30 === 0, r1 = major ? 86 : 94, r2 = 103, rad = a * Math.PI / 180;
-    ticks += `<line x1="${(Math.cos(rad) * r1).toFixed(1)}" y1="${(Math.sin(rad) * r1).toFixed(1)}" x2="${(Math.cos(rad) * r2).toFixed(1)}" y2="${(Math.sin(rad) * r2).toFixed(1)}" stroke="${major ? '#F8935F' : 'rgba(255,255,255,.38)'}" stroke-width="${major ? 2.6 : 1.4}" stroke-linecap="round"/>`;
+  return `<svg viewBox="-112 -112 224 224" aria-hidden="true"><defs>
+      <radialGradient id="wheelRimGrad" cx="0" cy="0" r="104" gradientUnits="userSpaceOnUse">
+        <stop offset="76%" style="stop-color:var(--wheel-rim-dark)"/>
+        <stop offset="88%" style="stop-color:var(--wheel-rim-light)"/>
+        <stop offset="100%" style="stop-color:var(--wheel-rim-dark)"/>
+      </radialGradient>
+      <radialGradient id="wheelAmbientGrad" cx="0" cy="0" r="118" gradientUnits="userSpaceOnUse">
+        <stop offset="62%" style="stop-color:var(--wheel-glow);stop-opacity:0"/>
+        <stop offset="86%" style="stop-color:var(--wheel-glow);stop-opacity:.42"/>
+        <stop offset="100%" style="stop-color:var(--wheel-glow);stop-opacity:0"/>
+      </radialGradient>
+    </defs>
+    <circle class="wheel-glow" r="116" fill="url(#wheelAmbientGrad)"/>
+    <g class="wheel-ring">
+      <g style="fill:var(--wheel-spoke)">
+        <rect x="-22" y="-86" width="44" height="172" rx="7"/>
+        <rect x="-86" y="-22" width="172" height="44" rx="7"/>
+      </g>
+      <circle r="92" fill="none" stroke="url(#wheelRimGrad)" stroke-width="24"/>
+    </g></svg>`;
+}
+
+let wheelAmbientRaf = 0;
+function stopWheelAmbient() {
+  if (wheelAmbientRaf) { cancelAnimationFrame(wheelAmbientRaf); wheelAmbientRaf = 0; }
+}
+function startWheelAmbient() {
+  stopWheelAmbient();
+  const wheel = $('#shortsWheel'), wrap = $('#shortsWrap');
+  if (!wheel || !wrap) return;
+  const cv = document.createElement('canvas');
+  cv.width = 12; cv.height = 12;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  if (!ctx) return;
+
+  const DEF = [248, 147, 95]; // 기본 드피 오렌지 (#F8935F)
+  let cur = [...DEF], tgt = [...DEF], lastSample = 0;
+  const clamp = v => Math.max(0, Math.min(255, Math.round(v)));
+  const mix = (c, target, t) => [
+    clamp(c[0] + (target[0] - c[0]) * t),
+    clamp(c[1] + (target[1] - c[1]) * t),
+    clamp(c[2] + (target[2] - c[2]) * t)
+  ];
+  const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+  function applyColor(c) {
+    const spoke = mix(c, [255, 255, 255], 0.16);
+    const rimLight = mix(c, [255, 240, 225], 0.04);
+    const rimDark = mix(c, [0, 0, 0], 0.34);
+    wheel.style.setProperty('--wheel-spoke', rgb(spoke));
+    wheel.style.setProperty('--wheel-rim-light', rgb(rimLight));
+    wheel.style.setProperty('--wheel-rim-dark', rgb(rimDark));
+    wheel.style.setProperty('--wheel-glow', `rgba(${c[0]},${c[1]},${c[2]},.72)`);
   }
-  return `<svg viewBox="-112 -112 224 224" aria-hidden="true"><defs><radialGradient id="wheelGrad" cx="50%" cy="50%" r="50%"><stop offset="55%" stop-color="#26262c"/><stop offset="92%" stop-color="#3b3b44"/><stop offset="100%" stop-color="#15151a"/></radialGradient></defs>
-    <circle class="wheel-glow" r="111" fill="none" stroke="rgba(248,147,95,.7)" stroke-width="3"/>
-    <g class="wheel-ring"><circle r="108" fill="url(#wheelGrad)" stroke="rgba(255,255,255,.14)" stroke-width="1.5"/>${ticks}<circle r="62" fill="rgba(0,0,0,.35)" stroke="rgba(255,255,255,.1)"/></g>
-    <path d="M -84 -84 l 9 -3 l -3 9 z" fill="#F8935F"/></svg>`;
+
+  function sampleActiveVideo() {
+    const active = $('.short.playing video', wrap) || (() => {
+      const shorts = $$('.short', wrap);
+      if (!shorts.length) return null;
+      const idx = Math.max(0, Math.min(shorts.length - 1, Math.round(wrap.scrollTop / (wrap.clientHeight || 1))));
+      return $('video', shorts[idx]);
+    })();
+    if (!active || active.readyState < 2 || !active.videoWidth) { tgt = [...DEF]; return; }
+    try {
+      ctx.drawImage(active, 0, 0, 12, 12);
+      const d = ctx.getImageData(0, 0, 12, 12).data;
+      let rSum = 0, gSum = 0, bSum = 0, wSum = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i + 1], b = d[i + 2];
+        const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+        const lum = (mx + mn) / 2;
+        if (lum < 14 || lum > 246) continue;
+        const sat = mx ? (mx - mn) / mx : 0;
+        const w = 0.25 + sat * 2.5;
+        rSum += r * w; gSum += g * w; bSum += b * w; wSum += w;
+      }
+      if (wSum > 0) {
+        let r = rSum / wSum, g = gSum / wSum, b = bSum / wSum;
+        const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+        if (mx < 95 && mx > 0) { const k = 95 / mx; r *= k; g *= k; b *= k; } // 어두운 영상에서도 앰비언트 색감이 살아나도록 보정
+        tgt = [clamp(r), clamp(g), clamp(b)];
+      } else {
+        tgt = [...DEF];
+      }
+    } catch (_) {
+      tgt = [...DEF];
+    }
+  }
+
+  const tick = now => {
+    if (state.view !== 'shorts' || !document.body.contains(wheel)) { wheelAmbientRaf = 0; return; }
+    if (now - lastSample >= 120) {
+      lastSample = now;
+      sampleActiveVideo();
+    }
+    cur = [
+      cur[0] + (tgt[0] - cur[0]) * 0.14,
+      cur[1] + (tgt[1] - cur[1]) * 0.14,
+      cur[2] + (tgt[2] - cur[2]) * 0.14
+    ];
+    applyColor(cur.map(Math.round));
+    wheelAmbientRaf = requestAnimationFrame(tick);
+  };
+  wheelAmbientRaf = requestAnimationFrame(tick);
 }
 
 function stopShorts() {
   if (shortsObserver) { shortsObserver.disconnect(); shortsObserver = null; }
+  stopWheelAmbient();
   wheelState = null;
 }
 function renderShorts() {
@@ -3680,6 +3776,7 @@ function renderShorts() {
       <div class="wheel" id="shortsWheel" role="slider" tabindex="0" aria-label="쇼츠 넘기기 휠 (시계방향으로 돌리면 다음 쇼츠)">${wheelSVG()}<span class="wheel-count" id="wheelCount"></span></div>
       <div class="wheel-hint" id="wheelHint">↻ 시계방향으로 돌려 보세요</div></div>`;
   initWheel();
+  startWheelAmbient();
   try { if (localStorage.getItem('depiy_wheel_seen')) hideWheelHint(true); } catch (_) {}
   const f = getFeed('shorts');
   if (!f.loaded && !f.loading) loadShorts(); else drawShorts();
@@ -3779,12 +3876,13 @@ function initWheel() {
   const norm = d => { while (d > 180) d -= 360; while (d < -180) d += 360; return d; };
 
   function rotateBy(deg) {                        // 각도 ↔ 스크롤 1:1 동기화
-    S.angle += deg; ring.style.transform = `rotate(${S.angle}deg)`;
+    S.angle += deg;
+    ring.setAttribute('transform', `rotate(${S.angle.toFixed(3)})`);
     const before = wrap.scrollTop;
     wrap.scrollTop = before + deg * H() / WHEEL_DEG_PER_SHORT;
     S.hap += Math.abs(deg); while (S.hap >= 12) { S.hap -= 12; vib(4); }     // 눈금 하나(12°)마다 짧은 진동
     const i = idxNow(); if (i !== S.lastIdx) { S.lastIdx = i; vib(9); updateWheelCount(); }
-    return wrap.scrollTop !== before;
+    return count() <= 1 ? true : wrap.scrollTop !== before;
   }
   function begin() { S.busy = true; wrap.style.scrollSnapType = 'none'; cancelAnimationFrame(S.raf); S.vel = 0; }
   function settle() {
