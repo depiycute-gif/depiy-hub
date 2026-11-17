@@ -775,6 +775,23 @@ body.has-status .dp-app{padding-top:38px}
 .pdot.away{background:#74c0fc}
 .pdot.rest{background:#b197fc}
 .pf-status{margin-top:6px;font-size:12.5px;color:var(--text-dim)}
+
+/* ===== 인터랙티브 튜토리얼 ===== */
+.tut-layer{display:none;position:fixed;inset:0;z-index:120;pointer-events:none}
+.tut-layer.show{display:block}
+.tut-spot{position:fixed;border-radius:14px;border:2px solid var(--depiy-orange);box-shadow:0 0 0 9999px rgba(8,8,12,.76),0 0 26px rgba(248,147,95,.48);pointer-events:none;transition:top .28s cubic-bezier(.22,1,.36,1),left .28s cubic-bezier(.22,1,.36,1),width .28s cubic-bezier(.22,1,.36,1),height .28s cubic-bezier(.22,1,.36,1),border-radius .28s}
+.tut-card{position:fixed;width:min(340px,calc(100vw - 24px));background:#1c1c22;border:1px solid rgba(248,147,95,.48);border-radius:16px;padding:15px 16px;box-shadow:0 18px 48px rgba(0,0,0,.62);pointer-events:auto;color:var(--text);transition:top .28s cubic-bezier(.22,1,.36,1),left .28s cubic-bezier(.22,1,.36,1)}
+.tut-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tut-step{font-size:11.5px;font-weight:800;color:var(--depiy-orange);background:rgba(248,147,95,.14);padding:2px 8px;border-radius:999px}
+.tut-bar{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+.tut-bar i{display:block;height:100%;background:var(--depiy-orange);border-radius:4px;transition:width .25s ease}
+.tut-skip{background:none;border:0;color:var(--text-mute);font-size:12px;cursor:pointer;padding:2px 4px}
+.tut-skip:hover{color:var(--text)}
+.tut-title{margin:0 0 6px;font-size:15.5px;font-weight:800;line-height:1.35}
+.tut-desc{margin:0;font-size:13px;line-height:1.55;color:var(--text-dim)}
+.tut-try{margin-top:8px;padding:6px 10px;border-radius:10px;background:rgba(248,147,95,.12);border:1px dashed rgba(248,147,95,.4);font-size:12px;color:#ffb48a}
+.tut-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.tut-foot .tut-btns{display:flex;gap:6px;margin-left:auto}
 </style>
 </head>
 <body class="logged-out">
@@ -1024,6 +1041,12 @@ body.has-status .dp-app{padding-top:38px}
 <div id="lightbox" class="lightbox">
   <button class="lightbox-close" id="btnCloseLightbox" aria-label="닫기">✕</button>
   <img id="lightboxImg" src="" alt="확대 보기">
+</div>
+
+<!-- 인터랙티브 튜토리얼 -->
+<div id="tutLayer" class="tut-layer" role="dialog" aria-modal="false" aria-label="인터랙티브 튜토리얼">
+  <div id="tutSpot" class="tut-spot"></div>
+  <div id="tutCard" class="tut-card"></div>
 </div>
 
 <!-- 모바일 하단 내비게이션 바 -->
@@ -1378,6 +1401,7 @@ function renderNav() {
       <button class="nav-item${v === 'search' ? ' active' : ''}" data-act="go" data-view="search"${cur(v === 'search')}><span class="ni">🔍</span><span class="grow ell">검색</span></button>
       <button class="nav-item${v === 'saved' ? ' active' : ''}" data-act="go" data-view="saved"${cur(v === 'saved')}><span class="ni">🔖</span><span class="grow ell">저장함</span></button>
       <button class="nav-item" data-act="checkIn"><span class="ni">📅</span><span class="grow ell">출석 체크</span></button>
+      <button class="nav-item" data-act="startTutorial"><span class="ni">🧭</span><span class="grow ell">튜토리얼</span></button>
       <h3>채널</h3>
       ${sp ? sp.channels.map(c => {
         const ch = state.channels[c], on = v === 'channel' && state.channelId === c;
@@ -2299,6 +2323,7 @@ function closeProfile() {
   if (stagedAvatarBlob && stagedAvatarUrl) { try { URL.revokeObjectURL(stagedAvatarUrl); } catch (_) {} }
   if (stagedBannerBlob && stagedBannerUrl) { try { URL.revokeObjectURL(stagedBannerUrl); } catch (_) {} }
   stagedAvatarUrl = null; stagedAvatarBlob = null; stagedBannerUrl = null; stagedBannerBlob = null; bannerCleared = false;
+  if (state.me && !needsConsent() && state.me.nicknameInitialized && state.me.handle) maybeStartTutorial();
 }
 
 // 캔버스 아바타 압축 리사이징 (256x256 max)
@@ -2684,7 +2709,9 @@ function postSignInPrompts() {
   if (needsConsent()) { showConsent(); return; }   // 약관에 동의하기 전에는 다른 안내를 띄우지 않아요
   if (!state.me.nicknameInitialized || !state.me.handle) {
     setTimeout(() => { openProfile(); toast('🎉 환영해요! 커뮤니티에서 사용할 닉네임과 사용자 ID를 설정해 주세요.'); }, 300);
+    return;
   }
+  maybeStartTutorial();
 }
 async function acceptTerms() {
   const cb = $('#consentCheck'); if (!cb || !cb.checked) return;
@@ -2810,7 +2837,7 @@ function onSignedOut() {
   state.dm = { threads: [], loaded: false, active: null, msgs: new Map(), peers: {} }; stopShorts(); updateBnavBadges();
   state.status = null; state.chat = null; state.plazaTab = 'rec'; closeCompose(true); closeServerSheet(); closeShortUpload(); renderStatusBanner();
   const cm = $('#consentModal'); if (cm) cm.classList.remove('show');
-  closeProfile(); closeLegal(); closeLightbox(); closeEchoMenu(); closeDrawer();
+  closeProfile(); closeLegal(); closeLightbox(); closeEchoMenu(); closeDrawer(); endTutorial(false);
   renderSpaces(); renderNav(); renderMain(); renderWidget(); setGate(true);
   showGateStep('login');
   if (pendingGateMsg) { gateMsg(pendingGateMsg); pendingGateMsg = ''; }
@@ -2913,6 +2940,10 @@ document.addEventListener('click', e => {
     case 'applySanction': run(applySanction()); break;
     case 'revokeSanction': run(revokeSanction(t.dataset.id)); break;
     case 'legacyUnban': run(legacyUnban(t.dataset.user)); break;
+    case 'startTutorial': closeDrawer(); startTutorial(true); break;
+    case 'tutNext': tutStep(1); break;
+    case 'tutPrev': tutStep(-1); break;
+    case 'tutClose': endTutorial(true); break;
   }
 });
 
@@ -2931,7 +2962,7 @@ document.addEventListener('submit', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeEchoMenu(); closeDrawer(); closeLightbox(); if ($('#legalModal').classList.contains('show')) closeLegal(); else closeProfile(); closeCompose(); closeServerSheet(); closeShortUpload(); closeSanctionSheet(); }
+  if (e.key === 'Escape') { if (tutActive) endTutorial(true); closeEchoMenu(); closeDrawer(); closeLightbox(); if ($('#legalModal').classList.contains('show')) closeLegal(); else closeProfile(); closeCompose(); closeServerSheet(); closeShortUpload(); closeSanctionSheet(); }
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.target.matches('.composer textarea')) { e.preventDefault(); const f = e.target.closest('form'); if (f) submitPost(f); }
   if (e.key === 'Enter' && (e.target.id === 'profileName' || e.target.id === 'profileHandle')) { e.preventDefault(); saveProfile(); }
 });
@@ -4547,6 +4578,146 @@ async function inviteOk(code) {
   } catch (_) {}
   return { ok: true, code: c };
 }
+
+/* ================= 인터랙티브 튜토리얼 ================= */
+let tutActive = false, tutIdx = 0, tutTimer = 0;
+const isMobileNav = () => matchMedia('(max-width:767px)').matches;
+const TUT_STEPS = [
+  {
+    view: 'plaza',
+    target: () => $('.x-prompt') || $('.fab'),
+    title: '📣 광장 & 글쓰기',
+    desc: '모두가 모이는 광장 피드예요. 추천·팔로잉 탭을 오가고, 여기를 눌러 글·사진·영상·#태그를 바로 올릴 수 있어요.',
+    tryText: '💡 직접 눌러보거나 [다음]으로 넘어가도 돼요!'
+  },
+  {
+    view: 'plaza',
+    target: () => $('.post .acts') || $('#main'),
+    title: '⚡ 스파크 · 에코 · 라이브 스레드',
+    desc: '좋아요 대신 ⚡ 스파크, 리트윗 대신 📡 에코로 반응하고, 💬 LIVE 스레드에서 실시간 댓글을 나눌 수 있어요.',
+    tryText: '🔖 오른쪽 저장 버튼으로 마음에 드는 글을 모아 보세요.'
+  },
+  {
+    view: 'shorts',
+    target: () => $('#shortsWheel'),
+    title: '🎡 쇼츠 & 십자 바퀴',
+    desc: '오른쪽 아래 십자 바퀴를 시계방향으로 돌리면 다음 쇼츠로 넘어가요! 재생 중인 영상 색감에 맞춰 바퀴 빛깔도 변한답니다.',
+    tryText: '✨ 지금 바퀴를 직접 빙글 돌려 보세요!'
+  },
+  {
+    view: 'plaza',
+    target: () => isMobileNav() ? $('[data-bnav="channel"]') : $('#spaces'),
+    title: '🌐 서버 & 실시간 채널',
+    desc: '서버를 직접 만들거나 초대 코드로 들어가 친구들과 전용 채널·실시간 채팅을 즐길 수 있어요.',
+    tryText: null
+  },
+  {
+    view: 'plaza',
+    target: () => isMobileNav() ? $('[data-bnav="dm"]') : $('[data-act="go"][data-view="dm"]'),
+    title: '💬 DM & 친구',
+    desc: '1:1 다이렉트 메시지로 실시간 대화하고, 친구 추가와 온라인 상태 확인도 한 번에 할 수 있어요.',
+    tryText: null
+  },
+  {
+    view: 'plaza',
+    target: () => isMobileNav() ? $('[data-bnav="menu"]') : $('[data-act="checkIn"]'),
+    title: '📅 출석 체크 & 칭호',
+    desc: '매일 출석 체크를 누르고 활동하면 자동 칭호가 열려요. 메뉴의 [🧭 튜토리얼]에서 언제든 다시 볼 수 있어요!',
+    tryText: null
+  }
+];
+
+function maybeStartTutorial() {
+  try { if (localStorage.getItem('depiy_tut_done')) return; } catch (_) {}
+  setTimeout(() => {
+    if (!state.me || needsConsent() || tutActive) return;
+    if ($('#profileModal')?.classList.contains('show')) return;
+    startTutorial(false);
+  }, 450);
+}
+
+function positionTut() {
+  if (!tutActive) return;
+  const layer = $('#tutLayer'), spot = $('#tutSpot'), card = $('#tutCard');
+  if (!layer || !spot || !card) return;
+  const step = TUT_STEPS[tutIdx];
+  const el = step && step.target ? step.target() : null;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let rect = null;
+  if (el && el.getBoundingClientRect) {
+    const r = el.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) rect = r;
+  }
+  if (!rect) rect = { left: vw / 2 - 120, top: vh / 2 - 40, width: 240, height: 80, right: vw / 2 + 120, bottom: vh / 2 + 40 };
+
+  const pad = 6;
+  const sl = Math.max(4, rect.left - pad), st = Math.max(4, rect.top - pad);
+  const sw = Math.min(vw - sl - 4, rect.width + pad * 2), sh = Math.min(vh - st - 4, rect.height + pad * 2);
+  spot.style.left = sl + 'px'; spot.style.top = st + 'px';
+  spot.style.width = sw + 'px'; spot.style.height = sh + 'px';
+  spot.style.borderRadius = (el && el.id === 'shortsWheel') ? '50%' : '14px';
+
+  const cw = Math.min(340, vw - 24), ch = card.offsetHeight || 200;
+  let cl = clamp(sl + sw / 2 - cw / 2, 12, vw - cw - 12);
+  let ct = st + sh + 14;
+  if (ct + ch > vh - 12) ct = st - ch - 14;
+  if (ct < 12) ct = clamp(vh - ch - 18, 12, vh - ch - 12);
+  card.style.left = cl + 'px'; card.style.top = ct + 'px';
+}
+
+function renderTutStep() {
+  if (!tutActive) return;
+  const step = TUT_STEPS[tutIdx], card = $('#tutCard'), layer = $('#tutLayer');
+  if (!step || !card || !layer) return;
+  if (step.view && state.view !== step.view) {
+    go(step.view);
+    clearTimeout(tutTimer);
+    tutTimer = setTimeout(renderTutStep, 140);
+    return;
+  }
+  const n = TUT_STEPS.length, pct = Math.round(((tutIdx + 1) / n) * 100);
+  card.innerHTML = `
+    <div class="tut-top">
+      <span class="tut-step">${tutIdx + 1} / ${n}</span>
+      <div class="tut-bar"><i style="width:${pct}%"></i></div>
+      <button type="button" class="tut-skip" data-act="tutClose">건너뛰기</button>
+    </div>
+    <h3 class="tut-title">${step.title}</h3>
+    <p class="tut-desc">${step.desc}</p>
+    ${step.tryText ? `<div class="tut-try">${step.tryText}</div>` : ''}
+    <div class="tut-foot">
+      ${tutIdx > 0 ? '<button type="button" class="btn sm ghost" data-act="tutPrev">이전</button>' : '<span></span>'}
+      <div class="tut-btns">
+        <button type="button" class="btn sm" data-act="tutNext">${tutIdx === n - 1 ? '시작하기 🎉' : '다음 →'}</button>
+      </div>
+    </div>`;
+  layer.classList.add('show');
+  requestAnimationFrame(positionTut);
+}
+
+function startTutorial(manual) {
+  if (!state.me) return;
+  tutActive = true; tutIdx = 0;
+  if (manual) toast('🧭 튜토리얼을 시작할게요');
+  renderTutStep();
+}
+function tutStep(delta) {
+  if (!tutActive) return;
+  const next = tutIdx + delta;
+  if (next >= TUT_STEPS.length) { endTutorial(true); toast('🎉 튜토리얼 완료! 즐겁게 둘러보세요'); return; }
+  if (next < 0) return;
+  tutIdx = next;
+  renderTutStep();
+}
+function endTutorial(save) {
+  clearTimeout(tutTimer);
+  const was = tutActive;
+  tutActive = false;
+  const layer = $('#tutLayer'); if (layer) layer.classList.remove('show');
+  if (save) { try { localStorage.setItem('depiy_tut_done', '1'); } catch (_) {} }
+  if (was && state.view === 'shorts') go('plaza');
+}
+window.addEventListener('resize', () => { if (tutActive) positionTut(); });
 
 /* ================= 시작 ================= */
 function boot() {
