@@ -621,9 +621,165 @@ body.logged-out{overflow:hidden}
 
 .panel-close{display:none}
 .short .panel-close{display:grid;place-items:center;position:sticky;top:4px;margin:4px 8px 0 auto;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);border:0;color:#fff;cursor:pointer;z-index:2;float:right}
+
+/* ===== v8: 광장(X 스타일) · 일반(디스코드 스타일) · 쇼츠 휠 ===== */
+.x-top{flex:none;position:relative;z-index:5;background:rgba(18,18,20,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.x-top-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 2px}
+.x-av{width:34px;height:34px;border-radius:50%;overflow:hidden;background:var(--glass-hi);display:grid;place-items:center;font-weight:700;border:0;padding:0;cursor:pointer;color:inherit}
+.x-logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:17px;letter-spacing:-.3px}
+.x-logo i{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--depiy-orange);color:var(--on-orange);font-style:normal;font-size:14px}
+.x-icon{position:relative;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:none;border:0;color:var(--text);cursor:pointer;font-size:18px}
+.x-icon .nav-badge{position:absolute;top:0;right:-2px;margin:0}
+.x-tabs{display:flex}
+.x-tab{flex:1;position:relative;padding:13px 0 12px;font-size:14.5px;font-weight:600;color:var(--text-mute);background:none;border:0;cursor:pointer}
+.x-tab:hover{background:var(--glass)}
+.x-tab.active{color:var(--text);font-weight:800}
+.x-tab.active::after{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:56px;height:4px;border-radius:4px;background:var(--depiy-orange)}
+.dp-scroll.x-scroll{padding:0 0 96px}
+.col.x-col{max-width:640px;border-left:1px solid var(--line);border-right:1px solid var(--line);min-height:100%}
+.x-prompt{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;text-align:left;color:var(--text-mute);background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font-size:16px}
+.x-prompt:hover{background:rgba(255,255,255,.02)}
+.x-prompt .av-sm{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--glass-hi);display:grid;place-items:center;font-weight:700;color:var(--text);flex:none}
+.xpost{padding:12px 16px;margin:0;border-radius:0;background:none;border:0;border-bottom:1px solid var(--line);backdrop-filter:none;-webkit-backdrop-filter:none}
+.xpost:hover{background:rgba(255,255,255,.02)}
+.xp-grid{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px}
+.xp-av{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--glass-hi);display:grid;place-items:center;font-weight:700;border:0;padding:0;cursor:pointer;color:inherit}
+.xp-main{min-width:0}
+.xpost .echo-src{margin:0 0 6px 56px;padding:0;border:0;font-size:12.5px;color:var(--text-mute)}
+.xpost .post-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 5px}
+.xpost .post-head small{display:inline;font-size:13px;color:var(--text-mute)}
+.xpost .post-head small::before{content:"·";margin-right:5px}
+.xpost .post-head .post-tools{margin-left:auto}
+.xp-body{margin:2px 0 6px;font-size:15.5px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
+.xp-body.clamp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.xp-more{font-size:14px;color:#5ea0ff;padding:0 0 6px;text-decoration:none}
+.xpost .post-media{margin:6px 0 8px;border-radius:16px}
+.xpost .acts{justify-content:space-between;max-width:420px;margin-top:4px}
+.xpost .act{padding:6px 8px;gap:6px;background:none;border-color:transparent}
+.xpost .act:hover{background:var(--glass)}
+.fab{position:fixed;right:22px;bottom:26px;width:58px;height:58px;border-radius:50%;background:var(--depiy-orange);color:var(--on-orange);font-size:30px;font-weight:300;line-height:1;display:grid;place-items:center;box-shadow:0 8px 26px var(--orange-glow);z-index:40;border:0;cursor:pointer}
+.fab:active{transform:scale(.94)}
+@media (max-width:767px){ .fab{bottom:84px;right:16px} .x-prompt{display:none} .col.x-col{border:0} }
+.sheet{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:6vh 12px}
+.sheet.show{display:flex}
+.sheet-box{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:var(--bg-1);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.sheet-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sheet-head h3{margin:0;font-size:15px;flex:1}
+.sheet-box .composer{border:0;padding:6px 0;margin:0;background:none;backdrop-filter:none}
+@media (max-width:767px){ .sheet{padding:0} .sheet-box{max-width:none;height:100%;max-height:none;border-radius:0;border:0} }
+
+/* 채널: 디스코드 스타일 대화 */
+.chat-wrap{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+.chat-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:6px 0}
+.chat-list{max-width:920px;margin:0 auto;padding:0 6px}
+.chat-more,.chat-start{display:flex;justify-content:center;padding:14px;color:var(--text-mute);font-size:12.5px;text-align:center}
+.chat-day{display:flex;align-items:center;gap:12px;margin:14px 10px 6px;font-size:11.5px;color:var(--text-mute)}
+.chat-day::before,.chat-day::after{content:"";flex:1;height:1px;background:var(--line)}
+.chat-divider{display:flex;align-items:center;gap:10px;margin:10px 10px;font-size:12px;font-weight:700;color:#ff6b6b}
+.chat-divider::before,.chat-divider::after{content:"";flex:1;height:1px;background:rgba(255,107,107,.55)}
+.chat-msg{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:2px 12px;margin:0;border-radius:8px;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.chat-msg.head{padding-top:12px;margin-top:2px}
+.chat-msg:hover{background:rgba(255,255,255,.035)}
+.cm-av{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--glass-hi);display:grid;place-items:center;font-weight:700;border:0;padding:0;cursor:pointer;color:inherit}
+.cm-gutter{padding-top:5px;text-align:center;font-size:10px;color:var(--text-mute);opacity:0}
+.chat-msg:hover .cm-gutter{opacity:1}
+.cm-main{min-width:0}
+.cm-head{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.cm-head .name-link b{font-size:15.5px}
+.cm-head time{font-size:11.5px;color:var(--text-mute)}
+.cm-name-admin b{color:var(--depiy-orange)}
+.cm-name-mod b{color:#8ec5ff}
+.cm-body{margin:1px 0 0;font-size:15px;line-height:1.5;word-break:break-word;white-space:pre-wrap}
+.chat-msg .echo-src{margin:0 0 4px;padding:0;border:0;font-size:12px}
+.chat-msg .post-media{margin:6px 0 2px;max-width:420px}
+.chat-msg .acts{margin-top:3px;gap:2px}
+.chat-msg .act{padding:2px 9px;font-size:12px;background:var(--glass);border-color:var(--line)}
+.chat-msg .act.z{display:none}
+.chat-msg:hover .act.z,.chat-msg.show-acts .act.z{display:inline-flex}
+.chat-msg .post-tools{position:absolute;right:8px;top:-6px;background:var(--bg-1);border:1px solid var(--line);border-radius:8px;opacity:0;transition:opacity .12s}
+.chat-msg:hover .post-tools,.chat-msg.show-acts .post-tools{opacity:1}
+.chat-msg .thread-panel{margin-top:6px}
+.chat-unread-banner{position:absolute;top:0;left:0;right:0;z-index:4;display:flex;align-items:center;gap:8px;padding:9px 14px;background:#5865F2;color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.chat-unread-banner span{flex:1}
+.chat-unread-banner button{background:none;border:0;color:#fff;font-size:18px;cursor:pointer;line-height:1}
+.chat-new-pill{position:absolute;left:50%;transform:translateX(-50%);bottom:80px;z-index:4;padding:8px 14px;border-radius:999px;background:var(--depiy-orange);color:var(--on-orange);font-weight:700;font-size:12.5px;border:0;cursor:pointer;box-shadow:0 6px 20px var(--orange-glow)}
+.chat-new-pill[hidden]{display:none}
+.chat-compose-wrap{flex:none;width:100%;max-width:920px;margin:0 auto;padding:4px 10px 10px}
+.chat-compose-wrap .composer-media-grid{margin:0 6px 6px}
+.chat-composer{display:flex;align-items:flex-end;gap:4px;background:var(--glass-hi);border:1px solid var(--line);border-radius:24px;padding:5px 6px}
+.chat-composer textarea{flex:1;min-width:0;max-height:120px;background:none;border:0;outline:none;color:var(--text);font-size:15px;line-height:1.4;padding:9px 6px;resize:none;font-family:inherit}
+.cc-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--text-dim);background:none;border:0;cursor:pointer;flex:none}
+.cc-btn:hover{background:var(--glass);color:var(--text)}
+.cc-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cc-send{background:var(--depiy-orange);color:var(--on-orange)}
+.cc-send:hover{background:var(--depiy-orange);color:var(--on-orange);filter:brightness(1.08)}
+.cc-send:disabled{opacity:.45}
+@media (max-width:767px){ .chat-wrap{padding-bottom:64px} .chat-new-pill{bottom:140px} .chat-msg .post-tools{opacity:0} }
+
+/* 쇼츠: 업로드 + 휠 */
+.shorts-stage{position:relative;flex:1;min-height:0;display:flex;overflow:hidden}
+.shorts-stage .shorts-wrap{flex:1;min-width:0}
+.wheel{position:absolute;right:-112px;bottom:-112px;width:224px;height:224px;border-radius:50%;z-index:5;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none}
+.wheel.grab{cursor:grabbing}
+.wheel svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 14px rgba(0,0,0,.55))}
+.wheel-ring{transform-origin:50% 50%;will-change:transform}
+.wheel.grab .wheel-glow{opacity:1}
+.wheel-glow{opacity:.35;transition:opacity .15s}
+.wheel-count{position:absolute;left:23%;top:23%;transform:translate(-50%,-50%);font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none;white-space:nowrap}
+.wheel:focus-visible{box-shadow:0 0 0 3px var(--depiy-orange)}
+.wheel-hint{position:absolute;right:122px;bottom:36px;z-index:5;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;pointer-events:none;transition:opacity .4s;white-space:nowrap}
+.wheel-hint.gone{opacity:0}
+.short-rail{bottom:150px}
+.short-info{right:128px}
+@media (max-width:767px){
+  .wheel{bottom:calc(64px - 112px)}
+  .wheel-hint{bottom:calc(64px + 36px)}
+  .short-rail{bottom:calc(64px + 130px)}
+}
+.shorts-stage.no-wheel .wheel,.shorts-stage.no-wheel .wheel-hint{display:none}
+.short-up video{width:100%;max-height:36vh;border-radius:12px;background:#000;margin:8px 0}
+
+/* ===== v10: 제재 · 서버 · 검색 · 칭호 ===== */
+.status-banner{position:fixed;top:0;left:0;right:0;z-index:90;padding:8px 14px;font-size:12.5px;line-height:1.5;text-align:center;background:#f59f00;color:#1a1200}
+.status-banner.danger{background:#c92a2a;color:#fff}
+.status-banner small{opacity:.85}
+.status-banner[hidden]{display:none}
+body.has-status .dp-app{padding-top:38px}
+.tag-link{background:none;border:0;padding:0;color:#5ea0ff;cursor:pointer;font:inherit}
+.tag-link:hover{text-decoration:underline;text-underline-offset:3px}
+.act.bm.on{color:var(--depiy-orange)}
+.act.bm.on svg{fill:currentColor}
+.act.bm svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.short-rail .act.bm{min-width:48px}
+.space.add{font-size:22px;color:var(--text-dim);border:1px dashed var(--line);background:none}
+.space.add:hover{color:var(--depiy-orange);border-color:var(--orange-line)}
+.nav-head{position:relative}
+.nav-gear{position:absolute;right:10px;top:12px;width:30px;height:30px;border-radius:8px;background:none;border:0;color:var(--text-dim);cursor:pointer;font-size:16px}
+.nav-gear:hover{background:var(--glass-hi);color:var(--text)}
+.san-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.san-row small{display:block;color:var(--text-mute);font-size:11.5px}
+.san-row.dim{opacity:.6}
+.san-h{margin:16px 0 6px;font-size:12.5px;color:var(--text-mute);font-weight:700}
+.san-past{margin-top:8px;font-size:12.5px;color:var(--text-dim)}
+.field-row{display:flex;gap:8px}
+.field-row input,.field-row select{padding:11px 14px;border-radius:12px;background:var(--glass);border:1px solid var(--line);color:var(--text);font-size:14px;outline:none;min-width:0}
+.field-row input{flex:1}
+.field-row select option{background:#1c1c20}
+.tp-row{margin:8px 0}
+.tp-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tp-head small{color:var(--text-mute);font-size:11.5px}
+.tp-bar{height:6px;border-radius:6px;background:var(--glass-hi);margin-top:5px;overflow:hidden}
+.tp-bar i{display:block;height:100%;background:var(--depiy-orange);border-radius:6px}
+.tp-row.done .tp-bar i{background:#51cf66}
+.pdot.working{background:#fcc419}
+.pdot.away{background:#74c0fc}
+.pdot.rest{background:#b197fc}
+.pf-status{margin-top:6px;font-size:12.5px;color:var(--text-dim)}
 </style>
 </head>
 <body class="logged-out">
+<div id="statusBanner" class="status-banner" hidden role="status"></div>
+
 
 <div class="dp-app" id="app">
   <nav class="spacebar" id="spaces" aria-label="스페이스 목록"></nav>
@@ -674,6 +830,7 @@ body.logged-out{overflow:hidden}
         <input id="signupHandle" type="text" autocomplete="off" placeholder="예: cute_fox (영문소문자/숫자/_ 3~15자)" maxlength="15" required>
         <span class="field-status" id="signupHandleStatus"></span>
       </label>
+      <label class="field" id="signupInviteWrap" hidden><span>초대 코드 (지금은 초대받은 분만 가입할 수 있어요)</span><input id="signupInvite" maxlength="20" autocomplete="off" placeholder="초대 코드"></label>
       <div class="consent-row">
         <input type="checkbox" id="signupConsent">
         <span><label for="signupConsent">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="signupConsent">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="signupConsent">에 동의합니다.</label></span>
@@ -687,6 +844,7 @@ body.logged-out{overflow:hidden}
     <!-- 매직 링크 폼 (비밀번호 없는 로그인) -->
     <form id="magicForm" class="gate-form" data-form="magic" hidden novalidate>
       <label class="field"><span>이메일</span><input id="gateEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label class="field" id="magicInviteWrap" hidden><span>초대 코드 (지금은 초대받은 분만 가입할 수 있어요)</span><input id="magicInvite" maxlength="20" autocomplete="off" placeholder="초대 코드"></label>
       <div class="consent-row">
         <input type="checkbox" id="magicConsent">
         <span><label for="magicConsent">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="magicConsent">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="magicConsent">에 동의합니다.</label></span>
@@ -766,6 +924,15 @@ body.logged-out{overflow:hidden}
       <span>칭호 (운영진이 부여한 칭호를 착용해요)</span>
       <select id="profileTitleSelect"><option value="">(칭호 없음)</option></select>
     </label>
+    <label class="field">
+      <span>상태</span>
+      <div class="field-row"><select id="profileStatus"><option value="online">🟢 온라인</option><option value="working">💻 작업 중</option><option value="away">🌙 자리비움</option><option value="rest">☕ 휴식</option></select><input id="profileStatusText" maxlength="30" placeholder="한 줄 상태 (30자)"></div>
+    </label>
+    <details class="acct-section">
+      <summary>🏆 칭호 도전 · 📅 출석</summary>
+      <div id="titleProgress"><p class="field-hint">불러오는 중…</p></div>
+      <button type="button" class="btn sm" data-act="checkIn">📅 오늘 출석 체크</button>
+    </details>
     <p class="field-hint" id="profileEmail"></p>
     <p class="field-hint" id="profileCooldownHint" style="color:var(--text-dim);margin-top:2px"></p>
     <div class="modal-row">
@@ -814,6 +981,42 @@ body.logged-out{overflow:hidden}
     <h3 id="legalTitle">이용약관</h3>
     <div class="legal-body" id="legalBody"></div>
     <div class="modal-row" style="margin-top:14px"><button type="button" class="btn" data-act="closeLegal">닫기</button></div>
+  </div>
+</div>
+
+
+<!-- 글쓰기 시트 · 서버 시트 -->
+<div id="composeSheet" class="sheet" role="dialog" aria-modal="true" aria-label="글쓰기"></div>
+<div id="serverSheet" class="sheet" role="dialog" aria-modal="true" aria-label="서버"></div>
+
+<!-- 쇼츠 올리기 -->
+<div id="shortSheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="shortTitle">
+  <div class="sheet-box short-up">
+    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeShortUpload">취소</button><h3 id="shortTitle">🎬 쇼츠 올리기</h3></div>
+    <label class="btn ghost" style="display:block;text-align:center;cursor:pointer">영상 선택<input type="file" id="shortFileInput" accept="video/mp4,video/webm,video/quicktime" hidden></label>
+    <div id="shortPreview"></div>
+    <label class="field"><span>설명 (150자, 선택) — #태그도 쓸 수 있어요</span><textarea id="shortCaption" maxlength="150" rows="2"></textarea></label>
+    <label class="consent-row"><input type="checkbox" id="shortToPlaza" checked><span>광장 타임라인에도 올리기 (끄면 쇼츠에만 보여요)</span></label>
+    <p class="field-hint">60초 이하 · 25MB 이하 · MP4/WebM/MOV</p>
+    <button type="button" class="btn" id="btnShortSubmit" data-act="submitShort" disabled>올리기</button>
+  </div>
+</div>
+
+<!-- 관리자: 제재 시트 -->
+<div id="sanctionSheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="sanctionTitle">
+  <div class="sheet-box">
+    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeSanction">닫기</button><h3 id="sanctionTitle">⚖️ 제재</h3></div>
+    <div id="sanActive"></div>
+    <h4 class="san-h">새 제재</h4>
+    <label class="field"><span>종류</span><select id="sanKind"></select></label>
+    <div id="sanDuration" class="field" hidden><span>정지 기간 (1분 ~ 10년)</span>
+      <div class="field-row"><input id="sanAmount" type="number" min="1" value="1"><select id="sanUnit"><option value="min">분</option><option value="hour">시간</option><option value="day" selected>일</option><option value="month">개월</option><option value="year">년</option></select></div></div>
+    <div id="sanIpOpts" class="field" hidden><span>IP 밴 기간 (시간, 비우면 영구)</span>
+      <div class="field-row"><input id="sanIpHours" type="number" min="1" placeholder="영구"></div>
+      <label class="consent-row" style="margin-top:8px"><input type="checkbox" id="sanAlsoBan" checked><span>계정도 영구정지</span></label></div>
+    <label class="field"><span>사유 (이용자에게 이메일로 안내돼요)</span><textarea id="sanReason" maxlength="300" rows="3"></textarea></label>
+    <p class="field-hint" id="sanHint"></p>
+    <button type="button" class="btn danger" id="btnSanction" data-act="applySanction">제재하기</button>
   </div>
 </div>
 
@@ -903,7 +1106,7 @@ function avatarHTML(url, name) {
 /* ================= 서비스 정보 · 약관 ================= */
 const SERVICE_NAME = 'De_piy Hub (드피 허브)';
 const CONTACT_EMAIL = 'depiy.hub@gmail.com';
-const TERMS_VERSION = '2026-11-15';        // 약관을 바꾸면 이 날짜를 바꾸세요 → 모든 이용자가 다시 동의해요
+const TERMS_VERSION = '2026-11-16';        // 약관을 바꾸면 이 날짜를 바꾸세요 → 모든 이용자가 다시 동의해요
 const PW_MIN = 8;
 const roleCache = new Map();                // 접속자 목록용 (id → role). 접속 정보(presence)의 role 은 믿지 않아요.
 function roleBadge(role) {
@@ -954,9 +1157,11 @@ const LEGAL = {
 <h4>제7조 (신고와 운영자의 조치)</h4>
 <ol>
 <li>이용자는 부적절한 게시물을 "신고" 기능으로 알릴 수 있습니다.</li>
-<li>운영진은 신고 내용과 약관 위반 여부를 확인하여 게시물 삭제, 이용 제한(차단) 등의 조치를 할 수 있습니다. 운영진의 조치 내역은 서비스 운영 기록으로 보관됩니다.</li>
+<li>운영진은 신고 내용과 약관 위반 여부를 확인하여 게시물 삭제, 경고, 일정 기간 이용 정지, 계정 영구정지, 위반이 심각하거나 반복되는 경우 해당 접속 IP의 활동 제한 등의 조치를 할 수 있습니다. 경고가 일정 횟수(기본 2회) 쌓이면 자동으로 이용이 정지될 수 있으며, 제재 사실과 사유는 이용자의 이메일로 안내합니다. 운영진의 조치 내역은 서비스 운영 기록으로 보관됩니다.</li>
 <li>이용 제한에 대한 이의는 아래 문의 이메일로 알릴 수 있습니다.</li>
 </ol>
+<h4>제7조의2 (이용자가 만든 서버)</h4>
+<p>이용자는 서버를 만들고 운영할 수 있으며, 서버 안의 게시물과 활동에 대한 1차 관리 책임은 서버 운영자에게 있습니다. 서버에서도 이 약관이 그대로 적용되며, 서비스는 약관을 위반한 서버나 게시물을 삭제하거나 서버 운영을 제한할 수 있습니다. 서버 운영자는 멤버를 내보내거나 차단할 수 있습니다.</p>
 <h4>제8조 (서비스의 변경 및 중단)</h4>
 <p>서비스는 운영상 또는 기술상 필요에 따라 서비스의 일부 또는 전부를 변경하거나 중단할 수 있으며, 가능한 경우 미리 알립니다. 무료로 제공되는 서비스의 변경·중단에 대해서는 법령에 특별한 규정이 없는 한 별도의 보상을 하지 않습니다.</p>
 <h4>제9조 (계정 삭제)</h4>
@@ -978,33 +1183,32 @@ const LEGAL = {
 <li><b>가입 시(필수)</b>: 이메일 주소, 닉네임, 사용자 ID, 약관 동의 기록(버전·일시). 비밀번호로 가입하는 경우 비밀번호(암호화되어 저장되며 운영자는 볼 수 없습니다)</li>
 <li><b>선택</b>: 프로필 사진, 배너 사진, 소개글, 착용한 칭호</li>
 <li><b>서비스 이용 중 이용자가 만드는 정보</b>: 게시물, 첨부한 사진·영상, 스파크·에코·스레드 메시지, 친구 관계(요청·수락)와 차단 목록, 1:1 대화(DM) 내용, 신고 내용</li>
-<li><b>자동으로 생성·수집되는 정보</b>: 접속 일시, IP 주소, 기기·브라우저 정보 등 접속 기록(호스팅·인증 서비스 제공업체의 로그)</li>
+<li><b>자동으로 생성·수집되는 정보</b>: 접속 일시, IP 주소, 기기·브라우저 정보 등 접속 기록(호스팅·인증 서비스 제공업체의 로그), 그리고 부정 이용 방지를 위해 서비스가 직접 기록하는 접속 IP</li>
 </ul>
 <h4>2. 개인정보의 이용 목적</h4>
 <ul>
 <li>회원 가입, 본인 확인(이메일 인증), 로그인 및 계정 관리</li>
 <li>커뮤니티 서비스 제공(게시물 표시, 닉네임·프로필 사진·소개글 표시, 친구와 DM 기능 제공)</li>
-<li>신고 처리, 약관 위반 행위 및 부정 이용 방지, 분쟁 대응</li>
+<li>신고 처리, 제재(경고·정지·영구정지·IP 접속 제한)와 그 안내 메일 발송, 약관 위반 행위 및 부정 이용 방지, 분쟁 대응</li>
 <li>서비스 안정성 확보, 장애 대응, 문의 응대</li>
 </ul>
-<p>이메일 주소는 로그인과 인증 메일 발송, 문의 응대에만 사용하며 다른 이용자에게 공개하지 않습니다. 닉네임, 사용자 ID, 프로필 사진, 배너 사진, 소개글, 칭호, 게시물은 서비스 안에서 다른 이용자에게 공개됩니다.</p>
+<p>이메일 주소는 로그인과 인증 메일 발송, 문의 응대, 이용 제한(경고·정지·차단) 안내에만 사용하며 다른 이용자에게 공개하지 않습니다. 닉네임, 사용자 ID, 프로필 사진, 배너 사진, 소개글, 칭호, 게시물은 서비스 안에서 다른 이용자에게 공개됩니다.</p>
 <p>1:1 대화(DM)의 내용은 대화 당사자에게만 보입니다. 운영자는 신고·분쟁 처리나 법령상 필요가 있는 경우를 제외하고 열람하지 않지만, 데이터베이스 관리 권한상 기술적으로 접근할 수 있습니다. 이용자가 "대화 신고"를 하면 신고된 대화의 최근 20개 메시지가 운영진에게 전달됩니다.</p>
-<p>서비스는 이용자의 동의가 있거나 법령에 근거가 있는 경우를 제외하고 개인정보를 제3자에게 제공하지 않습니다.</p>
-<h4>3. 보유 및 이용 기간 및 파기</h4>
+<h4>3. 보유 및 이용 기간</h4>
 <ul>
 <li>이용자가 계정을 삭제하면 계정, 프로필, 게시물, 첨부 파일, 친구 관계, 보낸 DM 메시지를 지체 없이 삭제합니다. 보낸 DM 메시지는 상대방 화면에서도 사라집니다.</li>
-<li>법령에서 보존 의무를 정한 정보는 해당 기간 동안 보관 후 삭제합니다: 「통신비밀보호법」에 따른 웹사이트 방문 기록(접속 로그, IP 등) 3개월.</li>
+<li>서비스가 기록한 접속 IP는 90일이 지나면 자동으로 삭제합니다. IP 접속 제한이 적용된 동안에는 제한을 유지하는 데 필요한 IP 정보를 보관합니다.</li>
+<li>법령에서 보존 의무를 정한 정보(예: 통신사실확인자료 등 접속 기록)는 해당 기간 동안 보관 후 삭제합니다.</li>
 <li>신고·이용 제한 처리 기록은 분쟁 및 부정 이용 방지를 위해 이용자를 식별할 수 있는 정보를 제거한 형태로 보관할 수 있습니다.</li>
 </ul>
-<p><b>파기 절차 및 방법:</b> 보유 기간이 지나거나 처리 목적이 달성된 개인정보는 지체 없이 파기합니다. 전자적 파일 형태의 정보는 복구할 수 없는 기술적 방법(데이터베이스 영구 삭제 등)으로 삭제합니다.</p>
 <h4>4. 개인정보 처리의 위탁 및 국외 이전</h4>
-<p>서비스는 안정적인 운영을 위해 아래 업체에 개인정보 처리를 위탁하고 있으며, 이 과정에서 개인정보가 국외 서버에 저장·처리됩니다. 이전 시점과 방법은 서비스 이용 중 네트워크를 통한 전송이며, 보유 기간은 위 3항과 같습니다.</p>
+<p>서비스는 안정적인 운영을 위해 아래 업체의 서비스를 이용하며, 이 과정에서 개인정보가 해외 서버에 저장·처리될 수 있습니다. 이전 시점과 방법은 서비스 이용 중 네트워크를 통한 전송이며, 보유 기간은 위 3항과 같습니다.</p>
 <ul>
-<li><b>Supabase, Inc. (일본 · 도쿄 리전)</b> — 데이터베이스, 로그인(인증), 파일 저장 (이메일, 닉네임, 사용자 ID, 게시물, 첨부 파일 등)</li>
-<li><b>GitHub, Inc. (미국)</b> — 웹사이트 호스팅(GitHub Pages) (접속 정보)</li>
-<li><b>Google LLC (미국)</b> — 인증 메일 발송(Gmail SMTP) (이메일 주소, 메일 내용)</li>
+<li><b>Supabase, Inc.</b> — 데이터베이스, 로그인(인증), 파일 저장 (이메일, 닉네임, 사용자 ID, 게시물, 첨부 파일 등). 데이터는 서비스가 선택한 Supabase 프로젝트 리전의 서버에 저장됩니다.</li>
+<li><b>GitHub, Inc.</b> — 웹사이트 호스팅(GitHub Pages) (접속 정보)</li>
+<li><b>Google LLC</b> — 인증 메일 발송(Gmail SMTP) (이메일 주소, 메일 내용)</li>
 </ul>
-<p>이용자는 계정 삭제 또는 문의 이메일을 통해 개인정보의 국외 이전을 거부할 수 있습니다. 다만 서비스 제공에 필수적인 인프라이므로 거부 시 서비스 이용이 제한되거나 불가능할 수 있습니다.</p>
+<p>위 업체 외의 제3자에게는 이용자의 동의가 있거나 법령에 근거가 있는 경우를 제외하고 개인정보를 제공하지 않습니다.</p>
 <h4>5. 이용자의 권리</h4>
 <ul>
 <li>이용자는 언제든지 자신의 개인정보를 열람하고, 프로필 설정에서 닉네임·사용자 ID·프로필 사진을 수정할 수 있습니다.</li>
@@ -1022,16 +1226,8 @@ const LEGAL = {
 <li>데이터베이스 접근 권한을 행 단위 보안(RLS)으로 제한하며, 운영진의 조치는 운영 기록으로 남깁니다.</li>
 </ul>
 <h4>9. 개인정보 보호책임자 및 문의</h4>
-<p>개인정보 보호책임자: ${SERVICE_NAME} 운영팀 (담당자: 드피)<br>문의: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></p>
-<h4>10. 권익침해 구제방법</h4>
-<p>개인정보 침해에 대한 신고나 상담이 필요한 경우 아래 기관에 문의하실 수 있습니다.</p>
-<ul>
-<li>개인정보침해신고센터 (privacy.kisa.or.kr / 국번없이 118)</li>
-<li>개인정보 분쟁조정위원회 (www.kopico.go.kr / 1833-6972)</li>
-<li>대검찰청 (www.spo.go.kr / 국번없이 1301)</li>
-<li>경찰청 (ecrm.police.go.kr / 국번없이 182)</li>
-</ul>
-<h4>11. 방침의 변경</h4>
+<p>개인정보 보호책임자: ${SERVICE_NAME} 운영자<br>문의: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></p>
+<h4>10. 방침의 변경</h4>
 <p>이 방침이 바뀌면 시행일과 변경 내용을 서비스 화면에 미리 알립니다.</p>
 <p class="meta">이 방침은 ${TERMS_VERSION}부터 시행합니다.</p>`
 };
@@ -1054,7 +1250,8 @@ const state = {
   online: [], trending: [],
   admin: { tab: 'reports', showResolved: false, q: '' }, reportCount: 0,
   profileId: null, profile: null, friendsTab: 'friends', friends: { rows: [], blocked: [], loaded: false }, counts: { dm: 0, friendIn: 0 },
-  dm: { threads: [], loaded: false, active: null, msgs: new Map(), peers: {} }, shortsMuted: true
+  dm: { threads: [], loaded: false, active: null, msgs: new Map(), peers: {} }, shortsMuted: true,
+  plazaTab: 'rec', chat: null, status: null, search: { q: '', tab: 'users' }, composeDraft: '', inviteRequired: false, checkedIn: false
 };
 const curSpace = () => state.spaces.find(s => s.id === state.spaceId) || state.spaces[0] || null;
 const feedKey = () => state.view === 'plaza' ? 'plaza' : state.view === 'channel' ? state.channelId : null;
@@ -1095,11 +1292,31 @@ const SERVER_MSGS = {
   already_requested: '이미 친구 요청을 보냈어요',
   dm_limit: '친구가 아닌 상대에게는 답장을 받기 전까지 3개까지만 보낼 수 있어요',
   dm_length: '메시지는 1~1000자로 보내 주세요',
-  title_not_owned: '부여받지 않은 칭호예요'
+  title_not_owned: '부여받지 않은 칭호예요',
+  reason_required: '사유를 입력해 주세요',
+  invalid_duration: '기간을 확인해 주세요',
+  duration_limit: '운영진은 최대 7일까지 정지할 수 있어요. 더 길게는 관리자에게 요청해 주세요',
+  no_ip_known: '이 사용자의 접속 IP 기록이 아직 없어요',
+  self_ip: '내 IP와 같아서 적용할 수 없어요 (관리자가 잠길 수 있어요)',
+  invalid_setting: '설정 값이 올바르지 않아요',
+  invite_exists: '이미 있는 초대 코드예요',
+  space_name: '서버 이름은 1~20자로 입력해 주세요',
+  space_icon: '아이콘은 4자 이내로 입력해 주세요',
+  space_desc: '서버 설명은 60자 이내로 입력해 주세요',
+  space_limit: '서버는 최대 3개까지 만들 수 있어요',
+  channel_name: '채널 이름은 1~20자로 입력해 주세요',
+  channel_topic: '채널 주제는 60자 이내로 입력해 주세요',
+  channel_limit: '채널은 서버당 최대 15개까지예요',
+  last_channel: '마지막 채널은 삭제할 수 없어요',
+  private_space: '비공개 서버예요. 초대 코드가 필요해요',
+  space_banned: '이 서버에서 차단되어 참여할 수 없어요',
+  invalid_invite: '유효하지 않은 초대 코드예요',
+  owner_cannot_leave: '서버 주인은 나갈 수 없어요. 서버를 삭제하거나 운영진에게 넘겨 주세요'
 };
 function friendlyError(e, fallback) {
   const m = (e && (e.message || e.error_description)) || '';
   console.warn(fallback, e);
+  const cd = m.match(/cooldown_(\d+)/); if (cd) return `글쓰기 쿨다운 중이에요. ${cd[1]}초 뒤에 다시 써 주세요 ⏳`;
   for (const k in SERVER_MSGS) if (m.includes(k)) return SERVER_MSGS[k];
   if (m.includes('rate_limited')) return '너무 빠르게 쓰고 있어요. 잠시 후 다시 시도해 주세요 ⏳';
   if ((e && e.code === '42501') || /row-level security|permission denied/i.test(m)) return '권한이 없거나 이용이 제한된 계정이에요';
@@ -1113,7 +1330,7 @@ function toPost(r) {
   const echo = !!r.echo_of;
   return {
     id: r.id, key: r.channel_id || 'plaza', ownerId: r.author_id,
-    authorId: echo ? (r.orig_author || r.author_id) : r.author_id, title: echo ? r.orig_title : r.author_title, hasVideo: !!r.has_video,
+    authorId: echo ? (r.orig_author || r.author_id) : r.author_id, title: echo ? r.orig_title : r.author_title, hasVideo: !!r.has_video, saved: !!r.bookmarked_by_me, shortsOnly: !!r.shorts_only,
     name: echo ? (r.orig_name || '알 수 없음') : (r.author_name || '알 수 없음'),
     handle: echo ? (r.orig_handle || '') : (r.author_handle || ''),
     role: echo ? (r.orig_role || 'member') : (r.author_role || 'member'),
@@ -1135,42 +1352,6 @@ async function fetchPostRow(id) {
 }
 
 /* ================= 데이터 로딩 ================= */
-async function loadSpaces() {
-  const [sp, ch] = await Promise.all([
-    sb.from('spaces').select('*').order('sort'),
-    sb.from('channels').select('*').order('sort')
-  ]);
-  if (sp.error) throw sp.error; if (ch.error) throw ch.error;
-  state.channels = {};
-  (ch.data || []).forEach(c => { state.channels[c.id] = c; });
-  state.spaces = (sp.data || []).map(s => ({
-    id: s.id, name: s.name, icon: s.icon, desc: s.description || '',
-    channels: (ch.data || []).filter(c => c.space_id === s.id).map(c => c.id)
-  }));
-  if (!state.spaces.some(s => s.id === state.spaceId)) state.spaceId = state.spaces[0] ? state.spaces[0].id : null;
-}
-
-async function loadFeed(key, more = false) {
-  const f = getFeed(key);
-  if (f.loading || (more && f.done)) return;
-  f.loading = true; f.error = false;
-  if (!more && feedKey() === key) refreshList(key);
-  try {
-    let q = sb.from('post_feed').select('*').order('created_at', { ascending: false }).limit(PAGE);
-    q = key === 'plaza' ? q.is('channel_id', null) : q.eq('channel_id', key);
-    if (more && f.items.length) q = q.lt('created_at', f.items[f.items.length - 1].created);
-    const { data, error } = await q;
-    if (error) throw error;
-    const rows = (data || []).map(toPost);
-    if (more) { const have = new Set(f.items.map(p => p.id)); f.items.push(...rows.filter(p => !have.has(p.id))); }
-    else f.items = rows;
-    f.done = rows.length < PAGE; f.loaded = true;
-  } catch (e) { f.error = true; toast(friendlyError(e, '글을 불러오지 못했어요')); }
-  f.loading = false;
-  if (feedKey() === key) refreshList(key);
-  renderWidget();
-}
-
 async function loadTrending() {
   try {
     const since = new Date(Date.now() - 7 * 864e5).toISOString();
@@ -1182,18 +1363,11 @@ async function loadTrending() {
 }
 
 /* ================= 렌더: 스페이스 / 내비 ================= */
-function renderSpaces() {
-  $('#spaces').innerHTML =
-    `<button class="logo" data-act="go" data-view="plaza" aria-label="광장으로 이동">D</button><span class="sep"></span>` +
-    state.spaces.map(s => `<button class="space${s.id === state.spaceId ? ' active' : ''}" data-act="space" data-id="${esc(s.id)}" aria-label="${esc(s.name)}" title="${esc(s.name)}"${s.id === state.spaceId ? ' aria-current="true"' : ''}>${esc(s.icon)}</button>`).join('') +
-    `<span class="grow"></span><button class="me-av" data-act="profile" aria-label="내 프로필">${state.me ? avatarHTML(state.me.avatar, state.me.name) : ''}</button>`;
-}
-
 function renderNav() {
   const sp = curSpace(), v = state.view;
   const cur = on => on ? ' aria-current="page"' : '';
   $('#nav').innerHTML = `
-    <div class="nav-head"><h2 class="ell">${esc(sp ? sp.name : 'De_piy Hub')}</h2><p class="ell">${esc(sp ? sp.desc : '')}</p></div>
+    <div class="nav-head"><h2 class="ell">${esc(sp ? sp.name : 'De_piy Hub')}</h2><p class="ell">${esc(sp ? sp.desc : '')}</p>${sp && !sp.official && sp.myRole ? `<button type="button" class="nav-gear" data-act="serverSettings" data-id="${esc(sp.id)}" aria-label="서버 설정">⚙</button>` : ''}</div>
     <div class="nav-scroll">
       <h3>홈</h3>
       <button class="nav-item${v === 'plaza' ? ' active' : ''}" data-act="go" data-view="plaza"${cur(v === 'plaza')}><span class="ni">📣</span><span class="grow ell">광장</span></button>
@@ -1201,6 +1375,9 @@ function renderNav() {
       <button class="nav-item${v === 'dm' ? ' active' : ''}" data-act="go" data-view="dm"${cur(v === 'dm')}><span class="ni">💬</span><span class="grow ell">DM</span>${state.counts.dm ? `<em class="nav-badge">${state.counts.dm}</em>` : ''}</button>
       <button class="nav-item${v === 'friends' ? ' active' : ''}" data-act="go" data-view="friends"${cur(v === 'friends')}><span class="ni">👥</span><span class="grow ell">친구</span>${state.counts.friendIn ? `<em class="nav-badge">${state.counts.friendIn}</em>` : ''}</button>
       <button class="nav-item${v === 'profile' && state.me && state.profileId === state.me.id ? ' active' : ''}" data-act="go" data-view="profile" data-id="${state.me ? state.me.id : ''}"><span class="ni">👤</span><span class="grow ell">내 프로필</span></button>
+      <button class="nav-item${v === 'search' ? ' active' : ''}" data-act="go" data-view="search"${cur(v === 'search')}><span class="ni">🔍</span><span class="grow ell">검색</span></button>
+      <button class="nav-item${v === 'saved' ? ' active' : ''}" data-act="go" data-view="saved"${cur(v === 'saved')}><span class="ni">🔖</span><span class="grow ell">저장함</span></button>
+      <button class="nav-item" data-act="checkIn"><span class="ni">📅</span><span class="grow ell">출석 체크</span></button>
       <h3>채널</h3>
       ${sp ? sp.channels.map(c => {
         const ch = state.channels[c], on = v === 'channel' && state.channelId === c;
@@ -1226,9 +1403,10 @@ function headHTML(title, sub, extra = '') {
 function actionsHTML(p) {
   const open = state.openThreads.has(p.id);
   return `<div class="acts">
-    <button type="button" class="act spark${p.sparked ? ' on' : ''}" data-act="spark" data-id="${p.id}" aria-pressed="${p.sparked}" aria-label="스파크 ${p.sparks}개">${SVG.spark}<span>${p.sparks}</span></button>
-    <button type="button" class="act echo${p.echoedTo.length ? ' on' : ''}" data-act="echo" data-id="${p.id}" aria-haspopup="menu" aria-expanded="false" aria-label="에코 ${p.echoes}회">${SVG.echo}<span>${p.echoes}</span></button>
-    <button type="button" class="act thread${open ? ' on' : ''}" data-act="thread" data-id="${p.id}" aria-expanded="${open}" aria-label="라이브 스레드 ${p.threads}개 메시지">${SVG.chat}<span>${p.threads}</span><em class="live-pill">LIVE</em></button>
+    <button type="button" class="act spark${p.sparked ? ' on' : ''}${(!p.sparks && !p.sparked) ? ' z' : ''}" data-act="spark" data-id="${p.id}" aria-pressed="${p.sparked}" aria-label="스파크 ${p.sparks}개">${SVG.spark}<span>${p.sparks}</span></button>
+    <button type="button" class="act echo${p.echoedTo.length ? ' on' : ''}${p.echoes ? '' : ' z'}" data-act="echo" data-id="${p.id}" aria-haspopup="menu" aria-expanded="false" aria-label="에코 ${p.echoes}회">${SVG.echo}<span>${p.echoes}</span></button>
+    <button type="button" class="act thread${open ? ' on' : ''}${(p.threads || open) ? '' : ' z'}" data-act="thread" data-id="${p.id}" aria-expanded="${open}" aria-label="라이브 스레드 ${p.threads}개 메시지">${SVG.chat}<span>${p.threads}</span><em class="live-pill">LIVE</em></button>
+    <button type="button" class="act bm${p.saved ? ' on' : ''}" data-act="bookmark" data-id="${p.id}" aria-pressed="${!!p.saved}" aria-label="저장">${SVG.bm}</button>
   </div>`;
 }
 
@@ -1260,17 +1438,37 @@ function renderPostMediaHTML(media) {
   return `<div class="post-media post-media-grid">${list.map(one).join('')}</div>`;
 }
 
+/* ================= 광장(X 스타일) · 채널(디스코드 스타일) ================= */
+SVG.bm = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+const isChatKey = k => !!(k && state.channels[k]);
+const listKey = () => state.view === 'plaza'
+  ? (state.plazaTab === 'hot' ? 'plaza:hot' : state.plazaTab === 'friends' ? 'plaza:friends' : 'plaza')
+  : state.view === 'channel' ? state.channelId : null;
+const tsOf = p => new Date(p.created).getTime();
+const kTime = iso => new Date(iso).toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true });
+const dayLabel = iso => new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+const sameDay = (a, b) => dayLabel(a) === dayLabel(b);
+const linkify = t => esc(t).replace(/(^|[\s(])#([가-힣a-zA-Z0-9_]{1,30})/g,
+  (m, pre, tag) => `${pre}<button type="button" class="tag-link" data-act="searchTag" data-tag="${tag}">#${tag}</button>`);
+
+/* ---------- 타임라인 글 (X 스타일) ---------- */
 function postHTML(p) {
-  const cls = 'post' + (p.fresh ? ' fresh' : ''); p.fresh = false;
+  const cls = 'post xpost' + (p.fresh ? ' fresh' : ''); p.fresh = false;
   const canDel = state.me && (p.ownerId === state.me.id || isStaff());
-    return `<article class="${cls}" data-post="${p.id}">
-    ${p.echo ? `<div class="echo-src">${SVG.echo}<span><b>${esc(p.echo.by)}</b>${roleBadge(p.echoRole)} 님이 에코${p.echo.from ? ` · 출처 <b>${esc(p.echo.from)}</b>` : ''}</span></div>` : ''}
-    <header class="post-head"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><div class="grow">${profileLink(p.authorId, `<b>${esc(p.name)}</b>`)}${roleBadge(p.role)}${titleChip(p.title)}${p.handle ? `<span class="post-handle">@${esc(p.handle)}</span>` : ""}<small>${timeAgo(p.created)}</small></div>
-      <div class="post-tools"><button type="button" class="post-tool" data-act="report" data-id="${p.id}">신고</button>${canDel ? `<button type="button" class="post-tool danger" data-act="delPost" data-id="${p.id}">삭제</button>` : ''}</div></header>
-    ${p.text ? `<p class="post-body">${esc(p.text)}</p>` : ''}
-    ${renderPostMediaHTML(p.media)}
-    ${actionsHTML(p)}
-    ${state.openThreads.has(p.id) ? panelHTML(p.id) : ''}
+  const long = (p.text || '').length > 280 || (p.text || '').split('\n').length > 7;
+  return `<article class="${cls}" data-post="${p.id}">
+    ${p.echo ? `<div class="echo-src">${SVG.echo}<span><b>${esc(p.echo.by)}</b> 님이 에코${p.echo.from ? ` · 출처 <b>${esc(p.echo.from)}</b>` : ''}</span></div>` : ''}
+    <div class="xp-grid">
+      <button type="button" class="xp-av" data-act="viewProfile" data-user="${esc(p.authorId)}" aria-label="${esc(p.name)} 프로필">${avatarHTML(p.picture, p.name)}</button>
+      <div class="xp-main">
+        <div class="post-head">${profileLink(p.authorId, `<b>${esc(p.name)}</b>`)}${roleBadge(p.role)}${titleChip(p.title)}${p.handle ? `<span class="post-handle">@${esc(p.handle)}</span>` : ''}<small>${timeAgo(p.created)}</small>
+          <div class="post-tools"><button type="button" class="post-tool" data-act="report" data-id="${p.id}">신고</button>${canDel ? `<button type="button" class="post-tool danger" data-act="delPost" data-id="${p.id}">삭제</button>` : ''}</div></div>
+        ${p.text ? `<p class="xp-body${long ? ' clamp' : ''}">${linkify(p.text)}</p>${long ? '<button type="button" class="link-btn xp-more" data-act="expandPost">더 보기</button>' : ''}` : ''}
+        ${renderPostMediaHTML(p.media)}
+        ${actionsHTML(p)}
+        ${state.openThreads.has(p.id) ? panelHTML(p.id) : ''}
+      </div>
+    </div>
   </article>`;
 }
 
@@ -1278,48 +1476,260 @@ function postsHTML(key) {
   const f = getFeed(key);
   if (f.loading && !f.items.length) return `<div class="empty">불러오는 중…</div>`;
   if (f.error && !f.items.length) return `<div class="empty">글을 불러오지 못했어요.<br><button class="btn sm ghost" data-act="retry" style="margin-top:12px">다시 시도</button></div>`;
-  if (!f.items.length) return `<div class="empty">아직 글이 없어요. 첫 스파크를 터뜨려 보세요 ⚡</div>`;
-  return f.items.map(postHTML).join('') +
-    (f.done ? '' : `<div class="more-wrap"><button class="btn ghost" data-act="more"${f.loading ? ' disabled' : ''}>${f.loading ? '불러오는 중…' : '더 보기'}</button></div>`);
+  if (!f.items.length) {
+    const msg = key === 'plaza:friends' ? '친구가 쓴 글이 여기에 보여요.<br><small>프로필에서 ＋ 친구 추가를 눌러 보세요</small>'
+      : key === 'plaza:hot' ? '아직 인기 글이 없어요. 스파크를 눌러 보세요 ⚡' : '아직 글이 없어요. 첫 스파크를 터뜨려 보세요 ⚡';
+    return `<div class="empty">${msg}</div>`;
+  }
+  return f.items.map(postHTML).join('') + (f.done ? '' : `<div class="more-wrap"><button class="btn ghost" data-act="more"${f.loading ? ' disabled' : ''}>${f.loading ? '불러오는 중…' : '더 보기'}</button></div>`);
 }
 
+/* ---------- 채널 메시지 (디스코드 스타일) ---------- */
+function chatMsgHTML(p, prev) {
+  const grouped = !!prev && !p.echo && !prev.echo && prev.authorId === p.authorId && (tsOf(p) - tsOf(prev)) < 5 * 60e3 && sameDay(p.created, prev.created);
+  const canDel = state.me && (p.ownerId === state.me.id || isStaff());
+  const cls = 'post chat-msg' + (grouped ? '' : ' head') + (p.fresh ? ' fresh' : ''); p.fresh = false;
+  const nameCls = p.role === 'admin' ? 'cm-name-admin' : p.role === 'mod' ? 'cm-name-mod' : '';
+  const left = grouped ? `<div class="cm-gutter">${esc(hhmm(p.created))}</div>`
+    : `<button type="button" class="cm-av" data-act="viewProfile" data-user="${esc(p.authorId)}" aria-label="${esc(p.name)} 프로필">${avatarHTML(p.picture, p.name)}</button>`;
+  const head = grouped ? '' : `<div class="cm-head"><span class="${nameCls}">${profileLink(p.authorId, `<b>${esc(p.name)}</b>`)}</span>${roleBadge(p.role)}${titleChip(p.title)}<time>${esc(kTime(p.created))}</time></div>`;
+  return `<article class="${cls}" data-post="${p.id}">
+    ${left}
+    <div class="cm-main">
+      ${p.echo ? `<div class="echo-src">${SVG.echo}<span><b>${esc(p.echo.by)}</b> 님이 에코${p.echo.from ? ` · 출처 <b>${esc(p.echo.from)}</b>` : ''}</span></div>` : ''}
+      ${head}
+      ${p.text ? `<p class="cm-body">${linkify(p.text)}</p>` : ''}
+      ${renderPostMediaHTML(p.media)}
+      ${actionsHTML(p)}
+      ${state.openThreads.has(p.id) ? panelHTML(p.id) : ''}
+    </div>
+    <div class="post-tools"><button type="button" class="post-tool" data-act="report" data-id="${p.id}">신고</button>${canDel ? `<button type="button" class="post-tool danger" data-act="delPost" data-id="${p.id}">삭제</button>` : ''}</div>
+  </article>`;
+}
+
+const readKey = key => `depiy_read_${state.me ? state.me.id : '-'}_${key}`;
+const saveRead = (key, ms) => { try { localStorage.setItem(readKey(key), String(ms)); } catch (_) {} };
+function chatUnreadInit(key, items) {          // items: 최신순
+  if (state.chat.initFor === key) return;
+  state.chat.initFor = key;
+  let lr = null; try { lr = localStorage.getItem(readKey(key)); } catch (_) {}
+  const newest = items.length ? tsOf(items[0]) : 0;
+  if (!lr) { state.chat.count = 0; state.chat.firstUnreadId = null; if (newest) saveRead(key, newest); return; }
+  const last = Number(lr) || 0;
+  const unread = items.filter(p => tsOf(p) > last && p.ownerId !== state.me.id);
+  state.chat.count = unread.length;
+  state.chat.firstUnreadId = unread.length ? unread[unread.length - 1].id : null;
+  state.chat.firstUnreadTime = unread.length ? unread[unread.length - 1].created : null;
+}
+function chatListHTML(key) {
+  const f = getFeed(key);
+  if (f.loading && !f.items.length) return '<div class="empty">불러오는 중…</div>';
+  if (f.error && !f.items.length) return `<div class="empty">메시지를 불러오지 못했어요.<br><button class="btn sm ghost" data-act="retry" style="margin-top:12px">다시 시도</button></div>`;
+  const ch = state.channels[key];
+  if (!f.items.length) return `<div class="empty">${f.loading ? '불러오는 중…' : `# ${esc(ch ? ch.name : '')} 의 첫 메시지를 남겨 보세요 👋`}</div>`;
+  chatUnreadInit(key, f.items);
+  let html = f.done ? `<div class="chat-start"># ${esc(ch ? ch.name : '')} 채널의 시작이에요</div>`
+    : `<div class="chat-more"><button class="btn sm ghost" data-act="more"${f.loading ? ' disabled' : ''}>${f.loading ? '불러오는 중…' : '이전 메시지 불러오기'}</button></div>`;
+  let prev = null, lastDay = '';
+  [...f.items].reverse().forEach(p => {
+    const d = dayLabel(p.created);
+    if (d !== lastDay) { html += `<div class="chat-day"><span>${esc(d)}</span></div>`; lastDay = d; prev = null; }
+    if (state.chat.firstUnreadId === p.id) { html += `<div class="chat-divider" id="chatDivider"><span>새로운 메시지</span></div>`; prev = null; }
+    html += chatMsgHTML(p, prev); prev = p;
+  });
+  return html;
+}
+function chatComposerHTML(key) {
+  const ch = state.channels[key];
+  const blocked = !!(state.status && state.status.blocked);
+  return `<div class="chat-compose-wrap">
+    <div id="composerMediaPreview" class="composer-media-grid" style="display:none;"></div>
+    <form class="chat-composer" data-form="post">
+      <label class="cc-btn" title="사진/영상 (갤러리)"><input type="file" id="mediaGalleryInput" accept="image/*,video/*" multiple hidden><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></label>
+      <label class="cc-btn" title="파일"><input type="file" id="mediaFileInput" accept="*/*" multiple hidden><svg viewBox="0 0 24 24"><path d="M21.4 11.1 12.2 20.3a5.5 5.5 0 0 1-7.8-7.8l9.2-9.2a3.7 3.7 0 0 1 5.2 5.2l-9.2 9.2a1.8 1.8 0 0 1-2.6-2.6l8.5-8.5"></path></svg></label>
+      <button type="button" class="cc-btn" id="composerClearMedia" style="display:none;" title="첨부 비우기">✕</button>
+      <textarea name="text" rows="1" maxlength="500" aria-label="메시지 입력" ${blocked ? 'disabled' : ''} placeholder="${blocked ? esc(state.status.message) : '# ' + esc(ch ? ch.name : '') + ' 에 메시지 보내기…'}"></textarea>
+      <button class="cc-btn cc-send icon-only" type="submit" id="postSubmit" aria-label="보내기" ${blocked ? 'disabled' : ''}><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
+    </form>
+  </div>`;
+}
+function chatView(key) {
+  const ch = state.channels[key];
+  return headHTML('<span style="color:var(--text-mute);font-weight:500">#</span> ' + esc(ch ? ch.name : ''), esc(ch ? ch.topic : '')) +
+    `<div class="chat-wrap"><div id="chatBanner"></div>
+      <div class="chat-scroll" id="chatScroll"><div class="chat-list" id="postList">${chatListHTML(key)}</div></div>
+      <button type="button" class="chat-new-pill" id="chatNewPill" data-act="chatToBottom" hidden></button>
+      ${chatComposerHTML(key)}</div>`;
+}
+const nearBottom = sc => sc.scrollHeight - sc.scrollTop - sc.clientHeight < 90;
+function markChatRead(key) {
+  const f = getFeed(key); if (f.items.length) saveRead(key, tsOf(f.items[0]));
+}
+function renderChatBanner() {
+  const box = $('#chatBanner'); if (!box) return;
+  const c = state.chat;
+  if (!c || !c.count || c.bannerClosed || !c.firstUnreadId) { box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="chat-unread-banner" data-act="chatToUnread"><span>${esc(kTime(c.firstUnreadTime))} 이후로 읽지 않은 메시지가 ${c.count}개 있어요</span><button type="button" data-act="chatBannerClose" aria-label="닫기">✕</button></div>`;
+}
+function chatSeenBottom(key) {
+  markChatRead(key);
+  state.chat.bannerClosed = true; state.chat.pill = 0;
+  const pill = $('#chatNewPill'); if (pill) pill.hidden = true;
+  renderChatBanner();
+}
+function chatMount(key) {
+  const sc = $('#chatScroll'); if (!sc) return;
+  sc.onscroll = () => { if (state.chat && state.chat.armed && nearBottom(sc)) chatSeenBottom(key); };
+  setTimeout(() => { if (state.chat && state.chat.key === key) state.chat.armed = true; }, 700);
+  if (getFeed(key).items.length) { sc.scrollTop = sc.scrollHeight; state.chat.first = false; }
+  renderChatBanner();
+}
+
+/* ---------- 광장 화면 ---------- */
+function plazaView(key) {
+  const tabs = [['rec', '추천'], ['hot', '🔥 인기'], ['friends', '친구']];
+  return `<header class="x-top">
+      <div class="x-top-row">
+        <button type="button" class="x-av" data-act="avatarMenu" aria-label="메뉴">${avatarHTML(state.me.avatar, state.me.name)}</button>
+        <div class="x-logo"><i>⚡</i>De_piy</div>
+        <div style="display:flex;gap:2px">
+          <button type="button" class="x-icon" data-act="go" data-view="search" aria-label="검색">🔍</button>
+          <button type="button" class="x-icon" data-act="go" data-view="friends" aria-label="친구">👥${state.counts.friendIn ? `<em class="nav-badge">${state.counts.friendIn}</em>` : ''}</button>
+        </div>
+      </div>
+      <nav class="x-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" class="x-tab${state.plazaTab === k ? ' active' : ''}" aria-selected="${state.plazaTab === k}" data-act="plazaTab" data-ptab="${k}">${l}</button>`).join('')}</nav>
+    </header>
+    <div class="dp-scroll x-scroll"><div class="col x-col">
+      <button type="button" class="x-prompt" data-act="openCompose"><span class="av-sm">${avatarHTML(state.me.avatar, state.me.name)}</span><span>지금 무슨 일이 일어나고 있나요?</span></button>
+      <div id="postList">${postsHTML(key)}</div>
+    </div></div>
+    <button type="button" class="fab" data-act="openCompose" aria-label="글쓰기">＋</button>`;
+}
+function feedView(key) { return state.view === 'plaza' ? plazaView(key) : chatView(key); }
+
 function refreshList(key) {
-  const list = $('#postList'); if (!list || feedKey() !== key) return;
-  list.innerHTML = postsHTML(key);
+  const list = $('#postList'); if (!list || listKey() !== key) return;
+  if (isChatKey(key)) {
+    const sc = $('#chatScroll');
+    const dist = sc ? sc.scrollHeight - sc.scrollTop : 0;
+    const wasFirst = state.chat && state.chat.first;
+    list.innerHTML = chatListHTML(key);
+    if (sc) {
+      if (wasFirst && getFeed(key).items.length) { sc.scrollTop = sc.scrollHeight; state.chat.first = false; }
+      else sc.scrollTop = sc.scrollHeight - dist;
+    }
+    renderChatBanner();
+  } else {
+    list.innerHTML = postsHTML(key);
+  }
   $$('.stream', list).forEach(el => { el.scrollTop = el.scrollHeight; });
 }
 
-function feedView(key) {
-  const isPlaza = key === 'plaza', ch = state.channels[key];
-  const head = isPlaza ? headHTML('📣 광장', '모두의 스파크와 에코가 모이는 곳') : headHTML('# ' + esc(ch ? ch.name : ''), esc(ch ? ch.topic : ''));
-  return head + `<div class="dp-scroll"><div class="col">
+/* ---------- 데이터 로딩 ---------- */
+async function loadFeed(key, more = false) {
+  const f = getFeed(key);
+  if (f.loading || (more && f.done)) return;
+  f.loading = true; f.error = false;
+  if (!more && listKey() === key) refreshList(key);
+  try {
+    let q = sb.from('post_feed').select('*');
+    if (key === 'plaza' || key === 'plaza:hot' || key === 'plaza:friends') {
+      q = q.is('channel_id', null).eq('shorts_only', false);
+      if (key === 'plaza:hot') {
+        q = q.gt('created_at', new Date(Date.now() - 3 * 864e5).toISOString())
+             .order('spark_count', { ascending: false }).order('created_at', { ascending: false }).limit(PAGE);
+      } else if (key === 'plaza:friends') {
+        if (!state.friends.loaded) await refreshSocialCounts();
+        const ids = state.friends.rows.filter(r => r.rel === 'friend').map(r => r.user_id).concat([state.me.id]);
+        q = q.in('author_id', ids).order('created_at', { ascending: false }).limit(PAGE);
+      } else {
+        q = q.order('created_at', { ascending: false }).limit(PAGE);
+      }
+    } else {
+      q = q.eq('channel_id', key).order('created_at', { ascending: false }).limit(PAGE);
+    }
+    if (more && key !== 'plaza:hot' && f.items.length) q = q.lt('created_at', f.items[f.items.length - 1].created);
+    const { data, error } = await q;
+    if (error) throw error;
+    const rows = (data || []).map(toPost);
+    if (more) { const have = new Set(f.items.map(p => p.id)); f.items.push(...rows.filter(p => !have.has(p.id))); }
+    else f.items = rows;
+    f.done = key === 'plaza:hot' ? true : rows.length < PAGE; f.loaded = true;
+  } catch (e) { f.error = true; toast(friendlyError(e, '글을 불러오지 못했어요')); }
+  f.loading = false;
+  if (listKey() === key) refreshList(key);
+  renderWidget();
+}
+
+function addPostToFeed(p, own) {
+  const f = getFeed(p.key);
+  if (f.items.some(x => x.id === p.id)) return;
+  f.items.unshift(p);
+  if (listKey() !== p.key) return;
+  p.fresh = true;
+  const list = $('#postList'); if (!list) return;
+  const e = $('.empty', list); if (e) e.remove();
+  if (isChatKey(p.key)) {
+    const sc = $('#chatScroll');
+    const stick = own || (sc && nearBottom(sc));
+    list.insertAdjacentHTML('beforeend', chatMsgHTML(p, f.items[1] || null));
+    if (sc) {
+      if (stick) { sc.scrollTo({ top: sc.scrollHeight, behavior: reduced() ? 'auto' : 'smooth' }); markChatRead(p.key); }
+      else { state.chat.pill = (state.chat.pill || 0) + 1; const pill = $('#chatNewPill'); if (pill) { pill.hidden = false; pill.textContent = `↓ 새 메시지 ${state.chat.pill}개`; } }
+    }
+  } else {
+    list.insertAdjacentHTML('afterbegin', postHTML(p));
+    if (own) { const sc = $('.dp-scroll'); if (sc) sc.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' }); }
+  }
+}
+
+/* ---------- 글쓰기 시트 (광장 · FAB) ---------- */
+function composeSheetHTML() {
+  return `<div class="sheet-box" role="document">
+    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeCompose">취소</button><h3>새 글</h3></div>
     <form class="composer" data-form="post">
       <span class="av" aria-hidden="true">${avatarHTML(state.me.avatar, state.me.name)}</span>
       <div>
-        <textarea name="text" rows="2" maxlength="500" aria-label="새 글 작성" placeholder="${isPlaza ? '지금 무슨 일이 일어나고 있나요?' : esc('# ' + (ch ? ch.name : '') + '에 글 남기기')}"></textarea>
+        <textarea name="text" rows="4" maxlength="500" aria-label="새 글 작성" placeholder="지금 무슨 일이 일어나고 있나요?"></textarea>
         <div id="composerMediaPreview" class="composer-media-grid" style="display:none;"></div>
         <div class="composer-foot">
           <div class="composer-tools">
-            <label class="tool-btn" title="갤러리에서 사진/영상 선택">
-              <input type="file" id="mediaGalleryInput" accept="image/*,video/*" multiple hidden>
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-              <span>갤러리</span>
-            </label>
-            <label class="tool-btn" title="파일 탐색기에서 선택">
-              <input type="file" id="mediaFileInput" accept="*/*" multiple hidden>
-              <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-              <span>파일</span>
-            </label>
+            <label class="tool-btn" title="갤러리에서 사진/영상 선택"><input type="file" id="mediaGalleryInput" accept="image/*,video/*" multiple hidden><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span>갤러리</span></label>
+            <label class="tool-btn" title="파일 탐색기에서 선택"><input type="file" id="mediaFileInput" accept="*/*" multiple hidden><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg><span>파일</span></label>
             <button type="button" class="tool-btn" id="composerClearMedia" style="display:none;">✕ 비우기</button>
-            <small style="color:var(--text-mute)">Ctrl+Enter로 게시</small>
           </div>
-          <button class="btn" type="submit" id="postSubmit">${isPlaza ? '광장에 띄우기' : '게시'}</button>
+          <button class="btn" type="submit" id="postSubmit">게시</button>
         </div>
       </div>
     </form>
-    <div id="postList">${postsHTML(key)}</div>
-  </div></div>`;
+  </div>`;
 }
+function openCompose() {
+  if (!state.me) return;
+  if (state.status && state.status.blocked) { toast(state.status.message || '지금은 글을 쓸 수 없어요'); return; }
+  const sheet = $('#composeSheet'); if (!sheet) return;
+  sheet.innerHTML = composeSheetHTML(); sheet.classList.add('show');
+  renderComposerMedia();
+  const ta = $('textarea', sheet); if (state.composeDraft) ta.value = state.composeDraft; ta.focus();
+}
+function closeCompose(clear) {
+  const sheet = $('#composeSheet'); if (!sheet || !sheet.classList.contains('show')) return;
+  const ta = $('textarea', sheet);
+  state.composeDraft = clear ? '' : (ta ? ta.value : '');
+  sheet.classList.remove('show'); sheet.innerHTML = '';
+}
+
+/* 채널 입력창: Enter 로 보내기(Shift+Enter 줄바꿈), 입력창 자동 늘리기 */
+document.addEventListener('keydown', e => {
+  const t = e.target;
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229 && t.matches && t.matches('.chat-composer textarea')) {
+    e.preventDefault(); const f = t.closest('form'); if (f) submitPost(f);
+  }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.matches && t.matches('.chat-composer textarea')) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 120) + 'px'; }
+});
 
 function renderMain() {
   stopShorts();
@@ -1330,10 +1740,14 @@ function renderMain() {
   if (state.view === 'friends') { renderFriends(); return; }
   if (state.view === 'dm') { renderDM(); return; }
   if (state.view === 'shorts') { renderShorts(); return; }
+  if (state.view === 'search') { renderSearch(); return; }
+  if (state.view === 'saved') { renderSaved(); return; }
   if (!curSpace()) { m.innerHTML = headHTML('De_piy Hub', '') + `<div class="empty" style="padding:80px 20px">아직 스페이스가 없어요.<br>Supabase SQL 스키마를 실행했는지 확인해 주세요.</div>`; return; }
-  const key = feedKey();
+  const key = listKey();
   if (!key) { state.view = 'plaza'; renderMain(); return; }
+  if (isChatKey(key)) state.chat = { key, initFor: null, firstUnreadId: null, firstUnreadTime: null, count: 0, bannerClosed: false, pill: 0, first: true, armed: false };
   m.innerHTML = feedView(key);
+  if (isChatKey(key)) chatMount(key);
   renderComposerMedia();
   icons();
   if (!getFeed(key).loaded && !getFeed(key).loading) loadFeed(key);
@@ -1344,11 +1758,11 @@ function renderWidget() {
   const w = $('#widget'); if (!w) return;
   if (!state.me) { w.innerHTML = ''; return; }
   const seen = new Set(), list = [];
-  [{ id: state.me.id, name: state.me.name, avatar: state.me.avatar, me: true }, ...state.online].forEach(u => { if (u && u.id && !seen.has(u.id)) { seen.add(u.id); list.push(u); } });
+  [{ id: state.me.id, name: state.me.name, avatar: state.me.avatar, me: true, status: state.me.status, statusText: state.me.statusText }, ...state.online].forEach(u => { if (u && u.id && !seen.has(u.id)) { seen.add(u.id); list.push(u); } });
   const shown = list.slice(0, 30);
   w.innerHTML = `
     <section><h3>접속자 <em>${list.length}명</em></h3><ul class="wlist">
-      ${shown.map(u => `<li class="wuser" data-act="viewProfile" data-user="${esc(u.id)}" style="cursor:pointer"><span class="mini-av" aria-hidden="true">${avatarHTML(u.avatar, u.name)}</span><div class="grow"><b class="ell">${esc(u.name)}${(() => { const b = roleBadge(u.me ? state.me.role : roleCache.get(u.id)); return b ? ' ' + b : ''; })()}${u.me ? ' (나)' : ''}</b></div><span class="pdot"></span></li>`).join('')}
+      ${shown.map(u => `<li class="wuser" data-act="viewProfile" data-user="${esc(u.id)}" style="cursor:pointer"><span class="mini-av" aria-hidden="true">${avatarHTML(u.avatar, u.name)}</span><div class="grow"><b class="ell">${esc(u.name)}${(() => { const b = roleBadge(u.me ? state.me.role : roleCache.get(u.id)); return b ? ' ' + b : ''; })()}${u.me ? ' (나)' : ''}</b></div><span class="pdot ${esc(u.status || 'online')}" title="${esc(statusText(u.status || 'online', u.statusText || ''))}"></span></li>`).join('')}
       ${list.length > shown.length ? `<li class="empty" style="padding:6px">외 ${list.length - shown.length}명</li>` : ''}
     </ul></section>
     <section><h3>트렌딩 Echo</h3><ul class="wlist">
@@ -1384,10 +1798,13 @@ function refreshActions(id) {
   const p = findPost(id), art = $(`[data-post="${id}"]`);
   if (!p || !art) return;
   const s = $('.spark', art), e = $('.echo', art), t = $('.thread', art);
+  s.classList.toggle('z', !p.sparks && !p.sparked); e.classList.toggle('z', !p.echoes);
   s.classList.toggle('on', p.sparked); s.setAttribute('aria-pressed', p.sparked); s.setAttribute('aria-label', `스파크 ${p.sparks}개`); $('span', s).textContent = p.sparks;
   e.classList.toggle('on', p.echoedTo.length > 0); e.setAttribute('aria-label', `에코 ${p.echoes}회`); $('span', e).textContent = p.echoes;
   const open = state.openThreads.has(id);
   t.classList.toggle('on', open); t.setAttribute('aria-expanded', open); t.setAttribute('aria-label', `라이브 스레드 ${p.threads}개 메시지`); $('span', t).textContent = p.threads;
+  t.classList.toggle('z', !p.threads && !open);
+  const bm = $('.bm', art); if (bm) { bm.classList.toggle('on', !!p.saved); bm.setAttribute('aria-pressed', !!p.saved); }
 }
 
 async function toggleSpark(id, ev, btn) {
@@ -1507,23 +1924,11 @@ async function doEcho(id, dest) {
 }
 
 /* ================= 글 추가 / 삭제 / 신고 ================= */
-function addPostToFeed(p, own) {
-  const f = getFeed(p.key);
-  if (f.items.some(x => x.id === p.id)) return;
-  f.items.unshift(p);
-  if (feedKey() === p.key) {
-    p.fresh = true;
-    const list = $('#postList'); if (!list) return;
-    const e = $('.empty', list); if (e) e.remove();
-    list.insertAdjacentHTML('afterbegin', postHTML(p));
-    if (own) { const sc = $('.dp-scroll'); if (sc) sc.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' }); }
-  }
-}
 function removePostLocal(id) {
   for (const k in state.feeds) state.feeds[k].items = state.feeds[k].items.filter(p => p.id !== id);
   const el = $(`[data-post="${id}"]`); if (el) el.remove();
   state.openThreads.delete(id); delete state.threads[id];
-  if (feedKey() && !getFeed(feedKey()).items.length) refreshList(feedKey());
+  if (listKey() && !getFeed(listKey()).items.length) refreshList(listKey());
 }
 async function delPost(id) {
   const p = findPost(id);
@@ -1667,17 +2072,17 @@ async function submitPost(form) {
   if (posting) return;
   const ta = form.elements.text, text = ta.value.trim(), key = feedKey();
   if (!key || (!text && !stagedMedia.length)) return;
-  const btn = $('#postSubmit'); posting = true; if (btn) { btn.disabled = true; btn.textContent = stagedMedia.length ? '업로드 중…' : '게시 중…'; }
+  const btn = $('#postSubmit'); posting = true; if (btn) { btn.disabled = true; if (!btn.classList.contains('icon-only')) btn.textContent = stagedMedia.length ? '업로드 중…' : '게시 중…'; }
   try {
     const media = await uploadStaged();
     const { data, error } = await sb.from('posts').insert({ channel_id: key === 'plaza' ? null : key, body: text, media }).select('id').single();
     if (error) throw error;
     const row = await fetchPostRow(data.id);
-    ta.value = ''; clearStagedMedia();
+    ta.value = ''; ta.style.height = ''; clearStagedMedia();
     if (row) addPostToFeed(toPost(row), true);
-    toast('⚡ 스파크가 터졌어요!');
+    toast('⚡ 스파크가 터졌어요!'); closeCompose(true);
   } catch (e) { toast(friendlyError(e, '글을 올리지 못했어요. 다시 시도해 주세요')); }
-  finally { posting = false; const b = $('#postSubmit'); if (b) { b.disabled = false; b.textContent = feedKey() === 'plaza' ? '광장에 띄우기' : '게시'; } }
+  finally { posting = false; const b = $('#postSubmit'); if (b) { b.disabled = false; if (!b.classList.contains('icon-only')) b.textContent = '게시'; } }
 }
 
 /* ================= 라이트박스 ================= */
@@ -1688,6 +2093,8 @@ function closeLightbox() { const lb = $('#lightbox'); if (lb) { lb.classList.rem
 function closeDrawer() { document.body.classList.remove('drawer-open'); }
 function go(view, id, opts = {}) {
   closeEchoMenu(); closeDrawer();
+  if (state.view === 'channel' && state.channelId && state.chat && state.chat.key === state.channelId) markChatRead(state.channelId);
+  closeCompose();
   if (view === 'admin' && !isStaff()) view = 'plaza';
   const where = () => state.view + ':' + (state.view === 'channel' ? state.channelId : state.view === 'profile' ? state.profileId : state.view === 'dm' ? state.dm.active : '');
   const before = where();
@@ -1865,6 +2272,7 @@ function openProfile() {
   nameInp.value = m.name;
   handleInp.value = m.handle || '';
   $('#profileBio').value = m.bio || ''; $('#profileBioCount').textContent = `${(m.bio || '').length}/150`;
+  $('#profileStatus').value = m.status || 'online'; $('#profileStatusText').value = m.statusText || ''; loadTitleProgress();
   renderProfileAvatarPreview(stagedAvatarUrl, m.name);
   renderBannerPreview(stagedBannerUrl);
   loadMyTitles();
@@ -1958,6 +2366,9 @@ async function saveProfile() {
 
     const bio = $('#profileBio').value.trim().slice(0, 150);
     if (bio !== (m.bio || '')) updates.bio = bio;
+    const stat = $('#profileStatus').value, statTxt = $('#profileStatusText').value.trim().slice(0, 30);
+    if (stat !== (m.status || 'online')) updates.status = stat;
+    if (statTxt !== (m.statusText || '')) updates.status_text = statTxt;
     const titleId = $('#profileTitleSelect').value || null;
     if (titleId !== (m.titleId || null)) updates.title_id = titleId;
 
@@ -1983,6 +2394,7 @@ async function saveProfile() {
       m.avatar = pick('avatar_url', 'avatar_url', m.avatar);
       m.banner = pick('banner_url', 'banner_url', m.banner) || '';
       m.bio = pick('bio', 'bio', m.bio) || '';
+      m.status = pick('status', 'status', m.status) || 'online'; m.statusText = pick('status_text', 'status_text', m.statusText) || '';
       m.titleId = pick('title_id', 'title_id', m.titleId) || null;
       m.lastNickChange = r.last_nickname_changed_at ?? m.lastNickChange;
       m.lastHandleChange = r.last_handle_changed_at ?? m.lastHandleChange;
@@ -2003,7 +2415,7 @@ async function saveProfile() {
     allPosts().forEach(p => {
       if (p.ownerId === m.id && !p.echo) { p.name = m.name; p.handle = m.handle; if (m.avatar) p.picture = m.avatar; }
     });
-    if (feedKey()) refreshList(feedKey());
+    if (listKey()) refreshList(listKey());
     if (state.view === 'profile' && state.profileId === m.id) renderProfile();
     toast('✅ 프로필을 저장했어요');
   } catch (err) {
@@ -2044,6 +2456,7 @@ function subscribeRealtime() {
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, async ({ new: r }) => {
       if (!r || (state.me && r.author_id === state.me.id)) return;
       if (r.echo_of) allPosts().filter(x => x.rootId === r.echo_of).forEach(x => scheduleStats(x.id));
+      if (r.shorts_only) return;
       const key = r.channel_id || 'plaza', f = state.feeds[key];
       if (!f || !f.loaded || f.items.some(p => p.id === r.id)) return;
       try { const row = await fetchPostRow(r.id); if (row) addPostToFeed(toPost(row), false); } catch (_) {}
@@ -2071,13 +2484,13 @@ function subscribeRealtime() {
   presenceChannel = sb.channel('presence-hub', { config: { presence: { key: state.me.id } } })
     .on('presence', { event: 'sync' }, () => {
       const st = presenceChannel.presenceState();
-      state.online = Object.values(st).map(a => a && a[0]).filter(Boolean).map(u => ({ id: String(u.id || ''), name: String(u.name || '').slice(0, 24), avatar: httpsOnly(u.avatar) }));
+      state.online = Object.values(st).map(a => a && a[0]).filter(Boolean).map(u => ({ id: String(u.id || ''), name: String(u.name || '').slice(0, 24), avatar: httpsOnly(u.avatar), status: ['working', 'away', 'rest'].includes(u.status) ? u.status : 'online', statusText: String(u.statusText || '').slice(0, 30) }));
       renderWidget();
       ensureRoles(state.online.map(u => u.id));
     })
     .subscribe(s => { if (s === 'SUBSCRIBED') trackPresence(); });
 }
-function trackPresence() { if (presenceChannel && state.me) presenceChannel.track({ id: state.me.id, name: state.me.name, avatar: state.me.avatar || '' }).catch(() => {}); }
+function trackPresence() { if (presenceChannel && state.me) presenceChannel.track({ id: state.me.id, name: state.me.name, avatar: state.me.avatar || '', status: state.me.status || 'online', statusText: state.me.statusText || '' }).catch(() => {}); }
 function unsubscribeRealtime() {
   if (dbChannel) { sb.removeChannel(dbChannel); dbChannel = null; }
   if (presenceChannel) { sb.removeChannel(presenceChannel); presenceChannel = null; }
@@ -2181,6 +2594,7 @@ async function signupWithPassword(email, password, rawNick, rawHandle) {
   if (!EMAIL_RE.test(em)) { gateMsg('올바른 이메일 주소를 입력해 주세요.'); return; }
   if (!password || password.length < PW_MIN) { gateMsg(`비밀번호는 최소 ${PW_MIN}자리 이상이어야 해요.`); return; }
   if (!$('#signupConsent').checked) { gateMsg('이용약관과 개인정보처리방침에 동의해 주세요.'); return; }
+  const inv = await inviteOk($('#signupInvite').value); if (!inv.ok) { gateMsg(inv.msg); return; }
 
   const vNick = validateNickname(rawNick);
   if (!vNick.ok) { gateMsg(vNick.msg); return; }
@@ -2199,7 +2613,7 @@ async function signupWithPassword(email, password, rawNick, rawHandle) {
       email: em,
       password,
       options: {
-        data: { display_name: vNick.name, handle: vHandle.handle, full_name: vNick.name, terms_version: TERMS_VERSION },
+        data: { display_name: vNick.name, handle: vHandle.handle, full_name: vNick.name, terms_version: TERMS_VERSION, invite_code: inv.code },
         emailRedirectTo: location.origin + location.pathname
       }
     });
@@ -2231,8 +2645,11 @@ async function sendCode(email, resend = false) {
   if (!sb) { gateMsg('서버 설정이 필요해요.'); return; }
   const em = String(email || '').trim().toLowerCase();
   if (!EMAIL_RE.test(em)) { gateMsg('이메일 주소를 확인해 주세요.'); return; }
+  const inv = resend ? { ok: true, code: inviteCache } : await inviteOk($('#magicInvite').value);
+  if (!inv.ok) { gateMsg(inv.msg); return; }
+  inviteCache = inv.code;
   const btn = $('#btnSendCode'); if (btn) btn.disabled = true; gateMsg('');
-  const { error } = await sb.auth.signInWithOtp({ email: em, options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true, data: { terms_version: TERMS_VERSION } } });
+  const { error } = await sb.auth.signInWithOtp({ email: em, options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true, data: { terms_version: TERMS_VERSION, invite_code: inv.code } } });
   if (btn) btn.disabled = false;
   if (error) { gateMsg(friendlyAuthError(error)); return; }
   gateEmailValue = em; showGateStep('code'); startResendCooldown();
@@ -2366,7 +2783,8 @@ async function onSignedIn(user) {
       nicknameInitialized: !!prof.nickname_initialized,
       createdAt: prof.created_at,
       termsVersion: prof.terms_version || '',
-      bio: prof.bio || '', banner: prof.banner_url || '', titleId: prof.title_id || null
+      bio: prof.bio || '', banner: prof.banner_url || '', titleId: prof.title_id || null,
+      status: prof.status || 'online', statusText: prof.status_text || ''
     };
 
     await loadSpaces();
@@ -2374,7 +2792,7 @@ async function onSignedIn(user) {
     gateMsg(''); setGate(false);
     history.replaceState({ v: 'plaza', id: null }, '', location.pathname);
     renderSpaces(); renderNav(); renderMain(); renderWidget(); icons();
-    subscribeRealtime(); loadTrending(); refreshSocialCounts();
+    subscribeRealtime(); loadTrending(); refreshSocialCounts(); touchSession();
 
     if (isStaff()) refreshReportCount();
     postSignInPrompts();   // 약관 동의 → 닉네임·ID 설정 순서로 안내
@@ -2390,6 +2808,7 @@ function onSignedOut() {
   state.admin = { tab: 'reports', showResolved: false, q: '' }; state.reportCount = 0; state.view = 'plaza'; roleCache.clear();
   state.friends = { rows: [], blocked: [], loaded: false }; state.counts = { dm: 0, friendIn: 0 }; state.profile = null; state.profileId = null;
   state.dm = { threads: [], loaded: false, active: null, msgs: new Map(), peers: {} }; stopShorts(); updateBnavBadges();
+  state.status = null; state.chat = null; state.plazaTab = 'rec'; closeCompose(true); closeServerSheet(); closeShortUpload(); renderStatusBanner();
   const cm = $('#consentModal'); if (cm) cm.classList.remove('show');
   closeProfile(); closeLegal(); closeLightbox(); closeEchoMenu(); closeDrawer();
   renderSpaces(); renderNav(); renderMain(); renderWidget(); setGate(true);
@@ -2400,7 +2819,10 @@ function onSignedOut() {
 /* ================= 이벤트 위임 ================= */
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act], [data-lightbox], [data-tab], .bnav-item, #btnCloseLightbox, #composerClearMedia');
-  if (!t) { closeEchoMenu(); if (e.target === $('#profileModal')) closeProfile(); if (e.target === $('#legalModal')) closeLegal(); if (e.target === $('#lightbox')) closeLightbox(); return; }
+  if (!t) { closeEchoMenu(); if (e.target === $('#profileModal')) closeProfile(); if (e.target === $('#legalModal')) closeLegal(); if (e.target === $('#lightbox')) closeLightbox();
+    if (e.target.classList && e.target.classList.contains('sheet')) { closeCompose(); closeServerSheet(); closeShortUpload(); closeSanctionSheet(); }
+    const cm = e.target.closest && e.target.closest('.chat-msg'); if (cm && !e.target.closest('a,button,input,textarea,video,img,label')) cm.classList.toggle('show-acts');
+    return; }
   if (t.id === 'btnCloseLightbox') return closeLightbox();
   if (t.id === 'composerClearMedia') return clearStagedMedia();
   if (t.dataset.lightbox) return openLightbox(t.dataset.lightbox);
@@ -2422,8 +2844,8 @@ document.addEventListener('click', e => {
     case 'thread': toggleThread(id); break;
     case 'delPost': delPost(id); break;
     case 'report': reportPost(id); break;
-    case 'more': loadFeed(feedKey(), true); break;
-    case 'retry': { const k = feedKey(); if (k) { getFeed(k).loaded = false; loadFeed(k); } break; }
+    case 'more': loadFeed(listKey(), true); break;
+    case 'retry': { const k = listKey(); if (k) { getFeed(k).loaded = false; loadFeed(k); } break; }
     case 'rmStaged': removeStagedMedia(Number(t.dataset.idx)); break;
     case 'profile': openProfile(); break;
     case 'triggerAvatar': { const f = $('#profileAvatarInput'); if (f) f.click(); } break;
@@ -2453,6 +2875,44 @@ document.addEventListener('click', e => {
     case 'installApp': installApp(); break;
     case 'triggerBanner': $('#profileBannerInput').click(); break;
     case 'clearBanner': clearBannerSelection(); break;
+    case 'openCompose': openCompose(); break;
+    case 'closeCompose': closeCompose(); break;
+    case 'plazaTab': { state.plazaTab = t.dataset.ptab; const k = listKey(); if (k !== 'plaza') getFeed(k).loaded = false; renderMain(); break; }
+    case 'expandPost': { const b = t.previousElementSibling; if (b) b.classList.remove('clamp'); t.remove(); break; }
+    case 'avatarMenu': if (matchMedia('(max-width:767px)').matches) document.body.classList.toggle('drawer-open'); else go('profile', state.me.id); break;
+    case 'chatToBottom': { const sc = $('#chatScroll'); if (sc) sc.scrollTo({ top: sc.scrollHeight, behavior: 'smooth' }); if (state.chat) chatSeenBottom(state.chat.key); break; }
+    case 'chatToUnread': { const d = $('#chatDivider'); if (d) d.scrollIntoView({ block: 'center', behavior: 'smooth' }); break; }
+    case 'chatBannerClose': if (state.chat) { state.chat.bannerClosed = true; renderChatBanner(); } break;
+    case 'searchTag': state.search = { q: '#' + t.dataset.tag, tab: 'posts' }; go('search'); break;
+    case 'searchTab': state.search.tab = t.dataset.stab; renderSearch(); break;
+    case 'serverAdd': openServerAdd(); break;
+    case 'srvTab': srvTab = t.dataset.srvtab; drawServerAdd(); break;
+    case 'srvCreate': run(srvCreate()); break;
+    case 'srvJoinCode': run(srvJoinCode()); break;
+    case 'srvJoin': run(srvJoin(t.dataset.id)); break;
+    case 'closeServerSheet': closeServerSheet(); break;
+    case 'serverSettings': run(openServerSettings(t.dataset.id)); break;
+    case 'srvSave': run(srvSave()); break;
+    case 'srvChAdd': run(srvChAdd()); break;
+    case 'srvChEdit': run(srvChEdit(t.dataset.ch)); break;
+    case 'srvChDel': run(srvChDel(t.dataset.ch)); break;
+    case 'srvRegen': run(srvRegen()); break;
+    case 'srvCopyInvite': run(srvCopyInvite()); break;
+    case 'srvLeave': run(srvLeave()); break;
+    case 'srvDelete': run(srvDelete()); break;
+    case 'srvKick': run(srvMember('space_kick', t.dataset.user, {}, '내보냈어요', '이 멤버를 서버에서 내보낼까요?')); break;
+    case 'srvBan': run(srvMember('space_ban', t.dataset.user, { p_reason: '' }, '차단했어요', '이 멤버를 차단할까요? 다시 참여할 수 없어요.')); break;
+    case 'srvUnban': run(srvMember('space_unban', t.dataset.user, {}, '차단을 해제했어요')); break;
+    case 'srvRole': run(srvMember('space_set_role', t.dataset.user, { p_role: t.dataset.role }, '권한을 바꿨어요')); break;
+    case 'openShortUpload': openShortUpload(); break;
+    case 'closeShortUpload': closeShortUpload(); break;
+    case 'submitShort': run(submitShort()); break;
+    case 'bookmark': run(toggleBookmark(id)); break;
+    case 'checkIn': run(checkIn()); break;
+    case 'closeSanction': closeSanctionSheet(); break;
+    case 'applySanction': run(applySanction()); break;
+    case 'revokeSanction': run(revokeSanction(t.dataset.id)); break;
+    case 'legacyUnban': run(legacyUnban(t.dataset.user)); break;
   }
 });
 
@@ -2471,12 +2931,13 @@ document.addEventListener('submit', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeEchoMenu(); closeDrawer(); closeLightbox(); if ($('#legalModal').classList.contains('show')) closeLegal(); else closeProfile(); }
+  if (e.key === 'Escape') { closeEchoMenu(); closeDrawer(); closeLightbox(); if ($('#legalModal').classList.contains('show')) closeLegal(); else closeProfile(); closeCompose(); closeServerSheet(); closeShortUpload(); closeSanctionSheet(); }
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.target.matches('.composer textarea')) { e.preventDefault(); const f = e.target.closest('form'); if (f) submitPost(f); }
   if (e.key === 'Enter' && (e.target.id === 'profileName' || e.target.id === 'profileHandle')) { e.preventDefault(); saveProfile(); }
 });
 
 document.addEventListener('change', e => {
+  if (e.target.id === 'sanKind') { onSanKindChange(); return; }
   if (e.target.id === 'consentCheck') { const b = $('#btnAcceptTerms'); if (b) b.disabled = !e.target.checked; return; }
   if (e.target.id === 'mediaGalleryInput' || e.target.id === 'mediaFileInput' || e.target.id === 'mediaUploadInput') { handleMediaFiles(Array.from(e.target.files || [])); e.target.value = ''; }
   else if (e.target.id === 'profileAvatarInput') { const fl = e.target.files; if (fl && fl[0]) handleAvatarSelected(fl[0]); e.target.value = ''; }
@@ -2513,7 +2974,7 @@ document.addEventListener('input', e => {
 setInterval(() => { $$('.post[data-post]').forEach(a => { const p = findPost(a.dataset.post), s = $('.post-head small', a); if (p && s) s.textContent = timeAgo(p.created); }); }, 60000);
 setInterval(() => { if (state.me && !document.hidden) { loadTrending(); if (isStaff()) refreshReportCount(); refreshSocialCounts(); } }, 120000);
 /* ================= 관리자 패널 ================= */
-const LOG_LABELS = { delete_post: '글 삭제', report_resolved: '신고 처리 완료', report_dismissed: '신고 기각(문제 없음)', ban: '이용자 차단', unban: '차단 해제', purge_posts: '글 일괄 삭제', set_role: '권한 변경', grant_title: '칭호 부여', revoke_title: '칭호 해제' };
+const LOG_LABELS = { delete_post: '글 삭제', report_resolved: '신고 처리 완료', report_dismissed: '신고 기각(문제 없음)', ban: '이용자 차단', unban: '차단 해제', purge_posts: '글 일괄 삭제', set_role: '권한 변경', grant_title: '칭호 부여', revoke_title: '칭호 해제', warn: '경고', suspend: '정지', ban_account: '계정 영구정지', ip_ban: 'IP 밴', sanction_revoke: '제재 해제', set_setting: '설정 변경', delete_space: '서버 삭제' };
 const ROLE_LABELS = { member: '일반', mod: '운영진' };
 const chName = key => (state.channels[key] ? state.channels[key].name : key);
 const ID_RE = /^[a-z0-9_-]{2,24}$/;
@@ -2543,7 +3004,7 @@ function renderAdmin() {
   const m = $('#main');
   if (!isStaff()) { go('plaza'); return; }
   const tab = state.admin.tab;
-  const tabs = [['reports', '🚩 신고'], ['users', '👥 이용자'], ...(isAdminMe() ? [['channels', '# 채널'], ['titles', '🏷️ 칭호']] : []), ['logs', '📜 기록']];
+  const tabs = [['reports', '🚩 신고'], ['users', '👥 이용자'], ['sanctions', '⚖️ 제재'], ...(isAdminMe() ? [['channels', '# 채널'], ['titles', '🏷️ 칭호'], ['settings', '⚙️ 설정']] : []), ['logs', '📜 기록']];
   if (!tabs.some(t => t[0] === tab)) state.admin.tab = 'reports';
   m.innerHTML = headHTML('🛡️ 관리자 패널', isAdminMe() ? '신고 처리 · 이용자 관리 · 채널 관리' : '신고 처리 · 이용자 관리') +
     `<div class="dp-scroll"><div class="col">
@@ -2560,6 +3021,8 @@ async function loadAdminTab() {
     else if (tab === 'users') await loadAdminUsers();
     else if (tab === 'channels') loadAdminChannels();
     else if (tab === 'titles') await loadAdminTitles();
+    else if (tab === 'sanctions') await loadAdminSanctions();
+    else if (tab === 'settings') await loadAdminSettings();
     else if (tab === 'logs') await loadAdminLogs();
   } catch (e) {
     const b = $('#adminBody');
@@ -2595,7 +3058,7 @@ async function loadAdminReports() {
           ? `<div class="admin-done">✅ ${esc(resLabel[r.resolution] || '처리됨')} · ${r.resolved_at ? timeAgo(r.resolved_at) : ''} · ${userLine(pm.get(r.resolved_by))}</div>`
           : `<div class="admin-actions">
               ${gone ? '' : `<button type="button" class="btn sm danger" data-adm="delPost" data-post="${r.post_id}">🗑️ 글 삭제</button>`}
-              ${r.post_author && r.post_author !== state.me.id ? `<button type="button" class="btn sm ghost" data-adm="ban" data-user="${r.post_author}">🚫 작성자 차단</button>` : ''}
+              ${r.post_author && r.post_author !== state.me.id ? `<button type="button" class="btn sm ghost" data-adm="sanction" data-user="${r.post_author}" data-name="${esc(au ? au.display_name : '')}">⚖️ 작성자 제재</button>` : ''}
               <button type="button" class="btn sm" data-adm="resolve" data-report="${r.id}" data-res="resolved">✔ 처리 완료</button>
               <button type="button" class="btn sm ghost" data-adm="resolve" data-report="${r.id}" data-res="dismissed">문제 없음</button>
             </div>`}
@@ -2632,7 +3095,7 @@ async function loadAdminUsers() {
           <span class="av" aria-hidden="true">${avatarHTML(u.avatar_url, u.display_name)}</span>
           <div class="grow">${userLine(u)}${mine ? ' (나)' : ''}<br><small class="meta">가입 ${timeAgo(u.created_at)}</small></div>
           <div class="admin-actions">
-            ${canTouch ? `<button type="button" class="btn sm ${u.banned ? '' : 'ghost'}" data-adm="${u.banned ? 'unban' : 'ban'}" data-user="${u.id}">${u.banned ? '✅ 차단 해제' : '🚫 차단'}</button>` : ''}
+            ${canTouch ? `<button type="button" class="btn sm" data-adm="sanction" data-user="${u.id}" data-name="${esc(u.display_name)}">⚖️ 제재</button>` : ''}
             ${canTouch ? `<button type="button" class="btn sm ghost" data-adm="purge" data-user="${u.id}">🧹 글 전체 삭제</button>` : ''}
             ${isAdminMe() && !mine && u.role !== 'admin' ? `<button type="button" class="btn sm ghost" data-adm="role" data-user="${u.id}" data-role="${u.role === 'mod' ? 'member' : 'mod'}">${u.role === 'mod' ? '🛡️ 운영진 해제' : '🛡️ 운영진 지정'}</button>` : ''}
             ${isAdminMe() ? `<button type="button" class="btn sm ghost" data-adm="grantTitle" data-user="${u.id}">🏷️ 칭호</button>` : ''}
@@ -2656,11 +3119,6 @@ function loadAdminChannels() {
       }).join('') : '<li><span class="meta">채널이 없어요</span></li>'}</ul></section>`).join('') +
     `<div class="admin-bar"><button type="button" class="btn" data-adm="addSpace">＋ 스페이스 추가</button></div>
      <p class="field-hint">채널을 삭제하면 그 채널의 글도 모두 사라져요. 다른 접속자 화면에는 새로고침해야 반영돼요.</p>`;
-}
-async function refreshStructure() {
-  await loadSpaces();
-  renderSpaces(); renderNav();
-  if (state.view === 'admin') loadAdminChannels();
 }
 const nextSort = list => (list.reduce((mx, x) => Math.max(mx, Number(x.sort) || 0), 0) + 1);
 function askText(label, def, max, { required = true } = {}) {
@@ -2823,6 +3281,11 @@ async function runAdm(t) {
     if (error) throw error;
     toast('권한을 변경했어요'); loadAdminTab(); return;
   }
+  if (a === 'sanction') return openSanctionSheet(t.dataset.user, t.dataset.name);
+  if (a === 'saveSetting') return saveSetting(t.dataset.key, $('#' + t.dataset.input).value);
+  if (a === 'toggleInvite') return saveSetting('invite_required', t.dataset.on === '1' ? 'true' : 'false');
+  if (a === 'newInvite') return newInvite();
+  if (a === 'revokeInvite') { if (!confirm('이 초대 코드를 폐기할까요?')) return; const { error } = await sb.rpc('admin_revoke_invite', { p_code: t.dataset.code }); if (error) throw error; toast('폐기했어요'); return loadAdminSettings(); }
   if (a === 'addTitle') return adminAddTitle();
   if (a === 'delTitle') return adminDelTitle(t.dataset.title);
   if (a === 'grantTitle') return adminTitleGrant(t.dataset.user);
@@ -2901,6 +3364,7 @@ function profileHTML(d, mutual) {
         <div class="pf-av" aria-hidden="true">${avatarHTML(d.avatar_url, d.display_name)}</div>
         <div class="pf-name"><b>${esc(d.display_name)}</b>${roleBadge(d.role)}${d.handle ? `<span class="post-handle">@${esc(d.handle)}</span>` : ''}${titleChip(d.title)}${d.banned ? ' <span class="badge-ban">이용 제한</span>' : ''}</div>
         <p class="pf-bio">${d.bio ? esc(d.bio) : '<span style="color:var(--text-mute)">아직 소개글이 없어요</span>'}</p>
+        <div class="pf-status">${esc(statusText(d.status || 'online', d.status_text || ''))}</div>
         <div class="pf-stats"><span><b>${Number(d.friend_count) || 0}</b> 친구</span><span><b>${Number(d.post_count) || 0}</b> 글</span><span>${new Date(d.created_at).toLocaleDateString('ko-KR')} 가입</span></div>
         ${mutualHTML}
         <div class="pf-actions">${actions}</div>
@@ -3173,8 +3637,10 @@ async function dmReport(tid) {
   toast(error ? friendlyError(error, '신고하지 못했어요') : '🙏 신고가 접수됐어요. 확인 후 조치할게요');
 }
 
-/* ================= 쇼츠 (세로로 넘기는 영상 피드) ================= */
-let shortsObserver = null, shortsMore = null;
+/* ================= 쇼츠: 영상 모아보기 + 올리기 + 휠 ================= */
+let shortsObserver = null, shortPick = null, shortUploading = false;
+const MAX_SHORT_SEC = 60;
+const WHEEL_DEG_PER_SHORT = 90;      // 휠을 90°(사분원 한 번) 돌리면 쇼츠 1개가 넘어가요
 const shortVideo = p => (p.media || []).find(m => m && m.type === 'video' && mediaOk(m.url));
 
 function shortHTML(p) {
@@ -3184,20 +3650,37 @@ function shortHTML(p) {
     <div class="short-shade"></div>
     <div class="short-info">
       <button type="button" class="short-author" data-act="viewProfile" data-user="${esc(p.authorId)}"><span class="av" aria-hidden="true">${avatarHTML(p.picture, p.name)}</span><span>${esc(p.name)}</span></button>
-      ${p.text ? `<p>${esc(p.text)}</p>` : ''}
+      ${p.text ? `<p>${linkify(p.text)}</p>` : ''}
     </div>
     <div class="short-rail">${actionsHTML(p)}<button type="button" class="short-mute" data-act="shortMute" aria-label="소리 켜기/끄기">${state.shortsMuted ? '🔇' : '🔊'}</button></div>
     ${state.openThreads.has(p.id) ? panelHTML(p.id) : ''}
   </article>`;
 }
 
+function wheelSVG() {
+  let ticks = '';
+  for (let a = 0; a < 360; a += 6) {
+    const major = a % 30 === 0, r1 = major ? 86 : 94, r2 = 103, rad = a * Math.PI / 180;
+    ticks += `<line x1="${(Math.cos(rad) * r1).toFixed(1)}" y1="${(Math.sin(rad) * r1).toFixed(1)}" x2="${(Math.cos(rad) * r2).toFixed(1)}" y2="${(Math.sin(rad) * r2).toFixed(1)}" stroke="${major ? '#F8935F' : 'rgba(255,255,255,.38)'}" stroke-width="${major ? 2.6 : 1.4}" stroke-linecap="round"/>`;
+  }
+  return `<svg viewBox="-112 -112 224 224" aria-hidden="true"><defs><radialGradient id="wheelGrad" cx="50%" cy="50%" r="50%"><stop offset="55%" stop-color="#26262c"/><stop offset="92%" stop-color="#3b3b44"/><stop offset="100%" stop-color="#15151a"/></radialGradient></defs>
+    <circle class="wheel-glow" r="111" fill="none" stroke="rgba(248,147,95,.7)" stroke-width="3"/>
+    <g class="wheel-ring"><circle r="108" fill="url(#wheelGrad)" stroke="rgba(255,255,255,.14)" stroke-width="1.5"/>${ticks}<circle r="62" fill="rgba(0,0,0,.35)" stroke="rgba(255,255,255,.1)"/></g>
+    <path d="M -84 -84 l 9 -3 l -3 9 z" fill="#F8935F"/></svg>`;
+}
+
 function stopShorts() {
   if (shortsObserver) { shortsObserver.disconnect(); shortsObserver = null; }
-  shortsMore = null;
+  wheelState = null;
 }
 function renderShorts() {
   stopShorts();
-  $('#main').innerHTML = headHTML('🎬 쇼츠', '영상만 모아 보기') + `<div class="shorts-wrap" id="shortsWrap"></div>`;
+  $('#main').innerHTML = headHTML('🎬 쇼츠', '영상만 모아 보기', `<button type="button" class="btn sm" data-act="openShortUpload">＋ 올리기</button>`) +
+    `<div class="shorts-stage" id="shortsStage"><div class="shorts-wrap" id="shortsWrap"></div>
+      <div class="wheel" id="shortsWheel" role="slider" tabindex="0" aria-label="쇼츠 넘기기 휠 (시계방향으로 돌리면 다음 쇼츠)">${wheelSVG()}<span class="wheel-count" id="wheelCount"></span></div>
+      <div class="wheel-hint" id="wheelHint">↻ 시계방향으로 돌려 보세요</div></div>`;
+  initWheel();
+  try { if (localStorage.getItem('depiy_wheel_seen')) hideWheelHint(true); } catch (_) {}
   const f = getFeed('shorts');
   if (!f.loaded && !f.loading) loadShorts(); else drawShorts();
 }
@@ -3223,18 +3706,28 @@ function drawShorts(append) {
   const f = getFeed('shorts');
   const items = f.items.filter(shortVideo);
   if (!items.length) {
-    wrap.innerHTML = `<div class="shorts-empty">${f.loading ? '불러오는 중…' : f.error ? '영상을 불러오지 못했어요' : '아직 영상이 없어요.<br>글을 쓸 때 영상을 첨부하면 여기에 나와요 🎬'}</div>`;
-    return;
+    wrap.innerHTML = `<div class="shorts-empty">${f.loading ? '불러오는 중…' : f.error ? '영상을 불러오지 못했어요' : '아직 영상이 없어요.<br>＋ 올리기로 첫 쇼츠를 올려 보세요 🎬'}</div>`;
+    updateWheelCount(); return;
   }
   const scrollTop = wrap.scrollTop;
   wrap.innerHTML = items.map(shortHTML).join('') + (f.done ? '' : '<div class="shorts-loading" id="shortsMore">더 불러오는 중…</div>');
   if (append) wrap.scrollTop = scrollTop;
-  observeShorts();
+  observeShorts(); updateWheelCount();
+}
+function syncShortsPlaying() {
+  const wrap = $('#shortsWrap'); if (!wrap) return;
+  const i = Math.round(wrap.scrollTop / (wrap.clientHeight || 1));
+  $$('.short', wrap).forEach((el, k) => {
+    const v = $('video', el); if (!v) return;
+    if (k === i) { el.classList.add('playing'); v.muted = !!state.shortsMuted; const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
+    else { el.classList.remove('playing'); try { v.pause(); } catch (_) {} }
+  });
 }
 function observeShorts() {
   const wrap = $('#shortsWrap'); if (!wrap) return;
   if (shortsObserver) shortsObserver.disconnect();
   shortsObserver = new IntersectionObserver(entries => {
+    if (wheelState && wheelState.busy) return;            // 휠을 돌리는 동안엔 멈출 때 한 번만 재생해요
     entries.forEach(en => {
       const el = en.target;
       if (el.id === 'shortsMore') { if (en.isIntersecting) loadShorts(true); return; }
@@ -3242,6 +3735,7 @@ function observeShorts() {
       if (en.isIntersecting && en.intersectionRatio >= 0.6) {
         el.classList.add('playing'); v.muted = !!state.shortsMuted;
         const pr = v.play(); if (pr && pr.catch) pr.catch(() => {});
+        updateWheelCount();
       } else { el.classList.remove('playing'); try { v.pause(); } catch (_) {} }
     });
   }, { root: wrap, threshold: [0, 0.6, 1] });
@@ -3258,6 +3752,158 @@ document.addEventListener('click', e => {
   const art = v.closest('.short');
   if (art && $('.thread-panel', art)) { run(toggleThread(art.dataset.post)); return; }   // 댓글이 열려 있으면 영상을 눌러 닫기
   if (v.paused) { const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); } else v.pause();
+});
+
+/* ---------- 휠: 시계방향으로 돌리면 다음 쇼츠, 빠르게 돌리면 빠르게 넘어가요 ---------- */
+let wheelState = null;
+function hideWheelHint(now) {
+  const h = $('#wheelHint'); if (!h) return;
+  if (now) h.classList.add('gone'); else setTimeout(() => h.classList.add('gone'), 0);
+  try { localStorage.setItem('depiy_wheel_seen', '1'); } catch (_) {}
+}
+function updateWheelCount() {
+  const c = $('#wheelCount'), wrap = $('#shortsWrap'); if (!c || !wrap) return;
+  const n = $$('.short', wrap).length;
+  c.textContent = n ? `${Math.max(0, Math.min(n - 1, Math.round(wrap.scrollTop / (wrap.clientHeight || 1)))) + 1}/${n}` : '';
+}
+function initWheel() {
+  const wheel = $('#shortsWheel'), wrap = $('#shortsWrap'); if (!wheel || !wrap) return;
+  const ring = $('.wheel-ring', wheel);
+  const S = wheelState = { busy: false, dragging: false, angle: 0, vel: 0, raf: 0, samples: [], acc: 0, last: 0, hap: 0, lastIdx: -1 };
+  const vib = ms => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (_) {} };
+  const H = () => wrap.clientHeight || 1;
+  const count = () => $$('.short', wrap).length;
+  const idxNow = () => Math.max(0, Math.min(Math.max(0, count() - 1), Math.round(wrap.scrollTop / H())));
+  const centerOf = () => { const r = wheel.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+  const angOf = e => { const c = centerOf(); return Math.atan2(e.clientY - c.y, e.clientX - c.x) * 180 / Math.PI; };
+  const norm = d => { while (d > 180) d -= 360; while (d < -180) d += 360; return d; };
+
+  function rotateBy(deg) {                        // 각도 ↔ 스크롤 1:1 동기화
+    S.angle += deg; ring.style.transform = `rotate(${S.angle}deg)`;
+    const before = wrap.scrollTop;
+    wrap.scrollTop = before + deg * H() / WHEEL_DEG_PER_SHORT;
+    S.hap += Math.abs(deg); while (S.hap >= 12) { S.hap -= 12; vib(4); }     // 눈금 하나(12°)마다 짧은 진동
+    const i = idxNow(); if (i !== S.lastIdx) { S.lastIdx = i; vib(9); updateWheelCount(); }
+    return wrap.scrollTop !== before;
+  }
+  function begin() { S.busy = true; wrap.style.scrollSnapType = 'none'; cancelAnimationFrame(S.raf); S.vel = 0; }
+  function settle() {
+    S.busy = false; wrap.style.scrollSnapType = '';
+    const i = idxNow(); wrap.scrollTo({ top: i * H(), behavior: 'smooth' });
+    vib(14);
+    setTimeout(() => { updateWheelCount(); syncShortsPlaying(); }, 320);
+  }
+  function fling() {                              // 손을 뗀 뒤에도 속도만큼 계속 돌다가 서서히 멈춰요
+    let last = performance.now();
+    const step = now => {
+      const dt = Math.min(32, now - last); last = now;
+      S.vel *= Math.exp(-dt / 320);
+      if (Math.abs(S.vel) < 0.012) { settle(); return; }
+      if (!rotateBy(S.vel * dt)) { settle(); return; }
+      S.raf = requestAnimationFrame(step);
+    };
+    S.raf = requestAnimationFrame(step);
+  }
+  wheel.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    try { wheel.setPointerCapture(e.pointerId); } catch (_) {}
+    S.dragging = true; wheel.classList.add('grab'); begin();
+    S.last = angOf(e); S.acc = 0; S.samples = [{ t: e.timeStamp, a: 0 }]; S.lastIdx = idxNow();
+    hideWheelHint();
+  });
+  wheel.addEventListener('pointermove', e => {
+    if (!S.dragging) return;
+    const a = angOf(e), d = norm(a - S.last); S.last = a; S.acc += d;
+    rotateBy(d);
+    S.samples.push({ t: e.timeStamp, a: S.acc });
+    while (S.samples.length > 2 && e.timeStamp - S.samples[0].t > 90) S.samples.shift();
+  });
+  const end = e => {
+    if (!S.dragging) return;
+    S.dragging = false; wheel.classList.remove('grab');
+    const s = S.samples.filter(x => e.timeStamp - x.t <= 90);      // 손을 떼기 직전 0.09초의 움직임만 속도로 써요 (멈췄다 떼면 속도 0)
+    S.vel = (s.length >= 2 && s[s.length - 1].t > s[0].t) ? (s[s.length - 1].a - s[0].a) / (s[s.length - 1].t - s[0].t) : 0;
+    S.vel = Math.max(-1.8, Math.min(1.8, S.vel));     // 최대 속도 제한 (deg/ms)
+    if (Math.abs(S.vel) > 0.05) fling(); else settle();
+  };
+  wheel.addEventListener('pointerup', end);
+  wheel.addEventListener('pointercancel', end);
+  wheel.addEventListener('keydown', e => {          // 키보드: ↓/→ 다음, ↑/← 이전
+    const dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : (e.key === 'ArrowUp' || e.key === 'ArrowLeft') ? -1 : 0;
+    if (!dir) return;
+    e.preventDefault();
+    const i = Math.max(0, Math.min(count() - 1, idxNow() + dir));
+    wrap.scrollTo({ top: i * H(), behavior: 'smooth' }); vib(10);
+    setTimeout(() => { updateWheelCount(); syncShortsPlaying(); }, 350);
+  });
+}
+
+/* ---------- 쇼츠 올리기 ---------- */
+function videoDuration(file) {
+  return new Promise((resolve, reject) => {
+    const v = document.createElement('video'), u = URL.createObjectURL(file);
+    v.preload = 'metadata';
+    v.onloadedmetadata = () => { const d = v.duration; URL.revokeObjectURL(u); resolve(d); };
+    v.onerror = () => { URL.revokeObjectURL(u); reject(new Error('영상을 읽지 못했어요. 다른 파일을 선택해 주세요')); };
+    v.src = u;
+  });
+}
+function resetShortSheet() {
+  if (shortPick && shortPick.url) { try { URL.revokeObjectURL(shortPick.url); } catch (_) {} }
+  shortPick = null;
+  $('#shortPreview').innerHTML = ''; $('#shortCaption').value = ''; $('#shortToPlaza').checked = true; $('#btnShortSubmit').disabled = true;
+}
+function openShortUpload() {
+  if (!state.me) return;
+  if (state.status && state.status.blocked) { toast(state.status.message || '지금은 올릴 수 없어요'); return; }
+  resetShortSheet(); $('#shortSheet').classList.add('show');
+}
+function closeShortUpload() { const s = $('#shortSheet'); if (s) s.classList.remove('show'); resetShortSheet(); }
+async function onShortFile(file) {
+  if (!file) return;
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  const mime = file.type || ({ mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime' })[ext] || '';
+  if (!['video/mp4', 'video/webm', 'video/quicktime'].includes(mime)) { toast('MP4, WebM, MOV 영상만 올릴 수 있어요'); return; }
+  if (file.size > MAX_VIDEO_MB * 1048576) { toast(`영상은 ${MAX_VIDEO_MB}MB 이하만 올릴 수 있어요`); return; }
+  try {
+    const d = await videoDuration(file);
+    if (isFinite(d) && d > MAX_SHORT_SEC + 0.5) { toast(`쇼츠는 ${MAX_SHORT_SEC}초 이하만 올릴 수 있어요 (지금 ${Math.round(d)}초)`); return; }
+  } catch (e) { toast(e.message); return; }
+  if (shortPick && shortPick.url) { try { URL.revokeObjectURL(shortPick.url); } catch (_) {} }
+  shortPick = { file, mime, ext: mime === 'video/webm' ? 'webm' : mime === 'video/quicktime' ? 'mov' : 'mp4', url: URL.createObjectURL(file) };
+  $('#shortPreview').innerHTML = `<video src="${shortPick.url}" controls playsinline muted></video>`;
+  $('#btnShortSubmit').disabled = false;
+}
+async function submitShort() {
+  if (shortUploading || !shortPick) return;
+  shortUploading = true;
+  const btn = $('#btnShortSubmit'); btn.disabled = true; btn.textContent = '업로드 중…';
+  let path = null;
+  try {
+    path = `${state.me.id}/${Date.now()}-short.${shortPick.ext}`;
+    const { error: upErr } = await sb.storage.from(BUCKET).upload(path, shortPick.file, { contentType: shortPick.mime, cacheControl: '31536000', upsert: false });
+    if (upErr) throw upErr;
+    const url = sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+    const toPlaza = $('#shortToPlaza').checked;
+    const { data, error } = await sb.from('posts').insert({ channel_id: null, body: $('#shortCaption').value.trim().slice(0, 150), media: [{ type: 'video', url }], shorts_only: !toPlaza }).select('id').single();
+    if (error) throw error;
+    path = null;
+    const row = await fetchPostRow(data.id);
+    if (row) {
+      const p = toPost(row), sf = getFeed('shorts');
+      if (!sf.items.some(x => x.id === p.id)) sf.items.unshift(p);
+      if (toPlaza) addPostToFeed(p, false);
+    }
+    closeShortUpload(); drawShorts();
+    const w = $('#shortsWrap'); if (w) w.scrollTop = 0;
+    toast('🎬 쇼츠를 올렸어요!');
+  } catch (e) {
+    if (path) { try { await sb.storage.from(BUCKET).remove([path]); } catch (_) {} }
+    toast(friendlyError(e, '쇼츠를 올리지 못했어요'));
+  } finally { shortUploading = false; btn.textContent = '올리기'; btn.disabled = !shortPick; }
+}
+document.addEventListener('change', e => {
+  if (e.target.id === 'shortFileInput') { const f = e.target.files && e.target.files[0]; if (f) onShortFile(f); e.target.value = ''; }
 });
 
 /* ================= PWA: 설치 · 서비스 워커 ================= */
@@ -3280,6 +3926,530 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   });
 }
 
+/* ================= 제재: 내 상태 배너 · 관리자 제재 시트 ================= */
+const fmtDate = iso => new Date(iso).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+const KIND_LABEL = { warn: '⚠️ 경고', suspend: '⏸ 정지', ban: '🚫 계정 영구정지', ip_ban: '🌐 IP 밴' };
+
+async function touchSession() {
+  try {
+    const { data, error } = await sb.rpc('touch_session');
+    if (error) throw error;
+    const d = data || {};
+    const susp = d.suspended_until && new Date(d.suspended_until) > new Date();
+    state.status = {
+      warnings: Number(d.warnings) || 0, suspendedUntil: susp ? d.suspended_until : null, reason: d.suspend_reason || '',
+      ipBanned: !!d.ip_banned, blocked: !!(susp || d.ip_banned), message: ''
+    };
+    if (state.status.suspendedUntil) state.status.message = `정지 중이라 글쓰기·DM을 할 수 없어요 (${fmtDate(state.status.suspendedUntil)}까지)`;
+    else if (state.status.ipBanned) state.status.message = '이 네트워크(IP)에서는 활동이 제한되어 있어요';
+    if (Array.isArray(d.unlocked) && d.unlocked.length) toast('🏆 새 칭호를 얻었어요: ' + d.unlocked.join(', '));
+  } catch (e) {
+    state.status = { warnings: 0, blocked: false, message: '' };
+    console.warn('접속 확인(touch_session) 실패 — SQL 패치 v10 적용 여부를 확인하세요', e);
+  }
+  renderStatusBanner();
+  if (state.status.blocked && state.view === 'channel') renderMain();
+}
+function renderStatusBanner() {
+  const el = $('#statusBanner'); if (!el) return;
+  const s = state.status;
+  if (!state.me || !s || (!s.blocked && !s.warnings)) { el.hidden = true; document.body.classList.remove('has-status'); return; }
+  let html;
+  if (s.blocked) html = `⛔ ${esc(s.message)}${s.reason ? ` · 사유: ${esc(s.reason)}` : ''} <small>(읽기는 가능해요 · 문의 ${esc(CONTACT_EMAIL)})</small>`;
+  else html = `⚠️ 경고 ${s.warnings}회가 있어요. 경고가 쌓이면 자동으로 정지될 수 있어요. 규칙을 확인해 주세요.`;
+  el.className = 'status-banner' + (s.blocked ? ' danger' : ''); el.innerHTML = html; el.hidden = false;
+  document.body.classList.add('has-status');
+}
+
+/* ---------- 관리자: 제재 시트 ---------- */
+let sanTarget = null;
+const UNIT_MIN = { min: 1, hour: 60, day: 1440, month: 43200, year: 525600 };
+const sanActive = s => !s.revoked_at && (s.kind === 'ban' || s.kind === 'ip_ban' ? (!s.ends_at || new Date(s.ends_at) > new Date()) : (s.kind === 'warn' ? (!s.consumed && new Date(s.ends_at) > new Date()) : new Date(s.ends_at) > new Date()));
+const sanPeriod = s => s.ends_at ? `${fmtDate(s.starts_at)} ~ ${fmtDate(s.ends_at)}` : `${fmtDate(s.starts_at)} ~ 영구`;
+
+async function openSanctionSheet(uid, name) {
+  if (!isStaff()) return;
+  sanTarget = { id: uid, name: name || '' };
+  const kinds = [['warn', '⚠️ 경고'], ['suspend', '⏸ 정지 (기간 지정)']];
+  if (isAdminMe()) kinds.push(['ban', '🚫 계정 영구정지'], ['ip_ban', '🌐 IP 밴 (접속 차단)']);
+  $('#sanctionTitle').textContent = `⚖️ 제재 — ${name || '이용자'}`;
+  $('#sanKind').innerHTML = kinds.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+  $('#sanAmount').value = '1'; $('#sanUnit').value = 'day'; $('#sanIpHours').value = ''; $('#sanAlsoBan').checked = true; $('#sanReason').value = '';
+  onSanKindChange();
+  $('#sanctionSheet').classList.add('show');
+  loadSanctionHistory();
+}
+function closeSanctionSheet() { const s = $('#sanctionSheet'); if (s) s.classList.remove('show'); sanTarget = null; }
+function onSanKindChange() {
+  const k = $('#sanKind').value;
+  $('#sanDuration').hidden = k !== 'suspend';
+  $('#sanIpOpts').hidden = k !== 'ip_ban';
+  const hint = {
+    warn: `경고는 90일 뒤 사라져요. ${'자동 처벌 기준(기본 2회)'}에 닿으면 자동으로 정지돼요.`,
+    suspend: '정지 중에는 읽기만 가능해요. 운영진(mod)은 최대 7일까지, 관리자는 최대 10년까지 줄 수 있어요.',
+    ban: '이 계정은 로그인할 수 없어요. (같은 사람이 새 계정을 만드는 것은 막지 않아요)',
+    ip_ban: '이 사용자가 최근 30일간 접속한 IP에서는 로그인해도 활동할 수 없어요. 학교·통신사처럼 공용 IP면 다른 사람도 막힐 수 있으니 신중하게 쓰세요.'
+  }[k];
+  $('#sanHint').textContent = hint || '';
+  $('#btnSanction').textContent = { warn: '경고 주기', suspend: '정지시키기', ban: '영구정지', ip_ban: 'IP 밴 적용' }[k] || '제재하기';
+}
+async function loadSanctionHistory() {
+  const box = $('#sanActive'); if (!box || !sanTarget) return;
+  box.innerHTML = '<p class="field-hint">제재 내역 불러오는 중…</p>';
+  const uid = sanTarget.id;
+  try {
+    const [h, pm] = await Promise.all([
+      sb.from('sanctions').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(20),
+      profilesByIds([uid])
+    ]);
+    if (h.error) throw h.error;
+    if (!sanTarget || sanTarget.id !== uid) return;
+    const rows = h.data || [], active = rows.filter(sanActive), u = pm.get(uid);
+    let html = '';
+    if (u && u.banned && !active.some(s => s.kind === 'ban' || s.kind === 'ip_ban')) {
+      html += `<div class="san-row"><span>🚫 계정 차단 상태 (이전 방식)</span><button type="button" class="btn sm" data-act="legacyUnban" data-user="${uid}">차단 해제</button></div>`;
+    }
+    html += active.map(s => `<div class="san-row"><span>${KIND_LABEL[s.kind] || s.kind}${s.auto ? ' (자동)' : ''} · ${esc(s.reason)}<small>${esc(sanPeriod(s))}</small></span><button type="button" class="btn sm ghost" data-act="revokeSanction" data-id="${s.id}">해제</button></div>`).join('');
+    const past = rows.filter(s => !sanActive(s));
+    box.innerHTML = (html ? `<h4 class="san-h">진행 중인 제재</h4>${html}` : '<p class="field-hint">진행 중인 제재가 없어요.</p>') +
+      (past.length ? `<details class="san-past"><summary>지난 제재 ${past.length}건</summary>${past.map(s => `<div class="san-row dim"><span>${KIND_LABEL[s.kind] || s.kind} · ${esc(s.reason)}<small>${esc(sanPeriod(s))}${s.revoked_at ? ' · 해제됨' : ''}</small></span></div>`).join('')}</details>` : '');
+  } catch (e) { box.innerHTML = `<p class="field-hint">내역을 불러오지 못했어요 (${esc(friendlyError(e, 'SQL 패치 v10 확인'))})</p>`; }
+}
+async function applySanction() {
+  if (!sanTarget) return;
+  const kind = $('#sanKind').value, reason = $('#sanReason').value.trim(), uid = sanTarget.id;
+  if (!reason) { toast('사유를 입력해 주세요 (이용자에게 메일로 안내돼요)'); return; }
+  const btn = $('#btnSanction'); btn.disabled = true;
+  try {
+    if (kind === 'warn') {
+      if (!confirm(`${sanTarget.name} 님에게 경고를 줄까요?`)) return;
+      const { data, error } = await sb.rpc('mod_warn', { p_user: uid, p_reason: reason });
+      if (error) throw error;
+      toast(data && data.auto_suspended ? `⚠️ 경고가 쌓여 자동으로 정지됐어요 (${fmtDate(data.ends_at)}까지)` : `⚠️ 경고 ${data ? data.warnings : ''}회를 줬어요`);
+    } else if (kind === 'suspend') {
+      const amount = Number($('#sanAmount').value), mins = Math.round(amount * UNIT_MIN[$('#sanUnit').value]);
+      if (!(amount > 0) || mins < 1) { toast('정지 기간을 확인해 주세요'); return; }
+      if (mins > 5256000) { toast('정지는 최대 10년까지예요'); return; }
+      if (!confirm(`${sanTarget.name} 님을 ${amount}${{ min: '분', hour: '시간', day: '일', month: '개월', year: '년' }[$('#sanUnit').value]} 동안 정지할까요?`)) return;
+      const { data, error } = await sb.rpc('mod_suspend', { p_user: uid, p_minutes: mins, p_reason: reason });
+      if (error) throw error;
+      toast(`⏸ ${fmtDate(data)}까지 정지했어요`);
+    } else if (kind === 'ban') {
+      if (!confirm(`${sanTarget.name} 님의 계정을 영구정지할까요?`)) return;
+      const { error } = await sb.rpc('mod_ban_account', { p_user: uid, p_reason: reason });
+      if (error) throw error;
+      toast('🚫 계정을 영구정지했어요');
+    } else if (kind === 'ip_ban') {
+      const hrs = $('#sanIpHours').value.trim() === '' ? null : Math.round(Number($('#sanIpHours').value));
+      if (hrs !== null && !(hrs >= 1)) { toast('IP 밴 시간(시간 단위)을 확인해 주세요'); return; }
+      if (!confirm(`${sanTarget.name} 님의 접속 IP를 ${hrs === null ? '영구' : hrs + '시간'} 차단할까요?\n공용 IP라면 다른 사람도 막힐 수 있어요.`)) return;
+      const { data, error } = await sb.rpc('mod_ip_ban', { p_user: uid, p_reason: reason, p_hours: hrs, p_ban_account: $('#sanAlsoBan').checked });
+      if (error) throw error;
+      toast(`🌐 ${Number(data) || 0}개 IP를 차단했어요`);
+    }
+    closeSanctionSheet();
+    if (state.view === 'admin') loadAdminTab();
+    refreshReportCount();
+  } catch (e) { toast(friendlyError(e, '제재하지 못했어요')); }
+  finally { btn.disabled = false; }
+}
+async function revokeSanction(id) {
+  if (!confirm('이 제재를 해제할까요?')) return;
+  const { error } = await sb.rpc('mod_sanction_revoke', { p_sanction: id });
+  if (error) throw error;
+  toast('제재를 해제했어요'); loadSanctionHistory(); if (state.view === 'admin') loadAdminTab();
+}
+async function legacyUnban(uid) {
+  const { error } = await sb.rpc('mod_set_ban', { p_user: uid, p_banned: false, p_note: '제재 시트에서 해제' });
+  if (error) throw error;
+  toast('차단을 해제했어요'); loadSanctionHistory(); if (state.view === 'admin') loadAdminTab();
+}
+
+/* ---------- 관리자 탭: 제재 목록 ---------- */
+async function loadAdminSanctions() {
+  const { data, error } = await sb.from('sanctions').select('*').order('created_at', { ascending: false }).limit(50);
+  if (error) throw error;
+  const rows = data || [];
+  const pm = await profilesByIds(rows.flatMap(r => [r.user_id, r.issued_by]));
+  const body = adminBodyFor('sanctions'); if (!body) return;
+  body.innerHTML = rows.length ? rows.map(s => {
+    const act = sanActive(s);
+    return `<article class="admin-card"><div class="admin-card-head"><b>${KIND_LABEL[s.kind] || s.kind}${s.auto ? ' (자동)' : ''} · ${esc(pm.get(s.user_id) ? pm.get(s.user_id).display_name : '(탈퇴)')}</b><small>${esc(s.reason)} · ${esc(sanPeriod(s))} · ${timeAgo(s.created_at)}${s.issued_by && pm.get(s.issued_by) ? ' · ' + esc(pm.get(s.issued_by).display_name) : ''}</small></div>
+      ${act ? `<div class="admin-actions"><button type="button" class="btn sm ghost" data-act="revokeSanction" data-id="${s.id}">제재 해제</button></div>` : `<div class="admin-done">${s.revoked_at ? '해제됨' : '종료됨'}</div>`}</article>`;
+  }).join('') : '<div class="empty">아직 제재 기록이 없어요</div>';
+}
+
+/* ================= 디스코드식 서버 ================= */
+async function loadSpaces() {
+  const [sp, ch, mem] = await Promise.all([
+    sb.from('spaces').select('*').order('sort'),
+    sb.from('channels').select('*').order('sort'),
+    sb.from('space_members').select('space_id,role').eq('user_id', state.me.id)
+  ]);
+  if (sp.error) throw sp.error; if (ch.error) throw ch.error;
+  const roles = new Map((mem.error ? [] : (mem.data || [])).map(m => [m.space_id, m.role]));
+  const hasServers = (sp.data || []).some(s => s.is_official !== undefined);       // v10 SQL 적용 여부
+  const visible = (sp.data || []).filter(s => !hasServers || s.is_official || roles.has(s.id));
+  state.channels = {};
+  (ch.data || []).forEach(c => { state.channels[c.id] = c; });
+  state.spaces = visible.map(s => ({
+    id: s.id, name: s.name, icon: s.icon, desc: s.description || '', sort: Number(s.sort) || 0,
+    official: !hasServers || !!s.is_official, isPublic: s.is_public !== false, owner: s.owner_id || null,
+    myRole: roles.get(s.id) || null, inviteCode: s.invite_code || '',
+    channels: (ch.data || []).filter(c => c.space_id === s.id).map(c => c.id)
+  })).sort((a, b) => (b.official - a.official) || (a.sort - b.sort));
+  if (!state.spaces.some(s => s.id === state.spaceId)) state.spaceId = state.spaces[0] ? state.spaces[0].id : null;
+}
+const canManageSpace = sp => !!sp && (isAdminMe() || sp.myRole === 'owner' || sp.myRole === 'admin');
+async function refreshStructure() {
+  await loadSpaces();
+  renderSpaces(); renderNav();
+  if (state.view === 'admin') loadAdminChannels();
+  if (state.view === 'channel' && !state.channels[state.channelId]) go('plaza');
+}
+
+function renderSpaces() {
+  $('#spaces').innerHTML =
+    `<button class="logo" data-act="go" data-view="plaza" aria-label="광장으로 이동">D</button><span class="sep"></span>` +
+    state.spaces.map(s => `<button class="space${s.id === state.spaceId ? ' active' : ''}" data-act="space" data-id="${esc(s.id)}" aria-label="${esc(s.name)}" title="${esc(s.name)}"${s.id === state.spaceId ? ' aria-current="true"' : ''}>${esc(s.icon)}</button>`).join('') +
+    `<button class="space add" data-act="serverAdd" aria-label="서버 추가·탐색" title="서버 만들기 · 참여 · 탐색">＋</button>` +
+    `<span class="grow"></span><button class="me-av" data-act="profile" aria-label="내 프로필">${state.me ? avatarHTML(state.me.avatar, state.me.name) : ''}</button>`;
+}
+
+/* ---------- 서버 추가 시트: 만들기 · 초대코드 · 탐색 ---------- */
+let srvTab = 'create';
+function openServerAdd(tab) {
+  if (!state.me) return;
+  closeDrawer(); srvTab = tab || 'create';
+  $('#serverSheet').classList.add('show'); drawServerAdd();
+}
+function closeServerSheet() { const s = $('#serverSheet'); if (s) { s.classList.remove('show'); s.innerHTML = ''; } }
+function drawServerAdd() {
+  const tabs = [['create', '만들기'], ['join', '초대코드'], ['discover', '탐색']];
+  $('#serverSheet').innerHTML = `<div class="sheet-box">
+    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeServerSheet">닫기</button><h3>서버</h3></div>
+    <div class="admin-tabs">${tabs.map(([k, l]) => `<button type="button" class="admin-tab${srvTab === k ? ' active' : ''}" data-act="srvTab" data-srvtab="${k}">${l}</button>`).join('')}</div>
+    <div id="srvBody"></div></div>`;
+  const b = $('#srvBody');
+  if (srvTab === 'create') {
+    b.innerHTML = `<label class="field"><span>서버 이름 (20자)</span><input id="srvName" maxlength="20" autocomplete="off" placeholder="예: 우리 동네 모임"></label>
+      <label class="field"><span>아이콘 (이모지 1개)</span><input id="srvIcon" maxlength="4" value="🌐"></label>
+      <label class="field"><span>설명 (60자, 선택)</span><input id="srvDesc" maxlength="60" autocomplete="off"></label>
+      <label class="consent-row"><input type="checkbox" id="srvPublic" checked><span>공개 서버 (탐색에 보이고 누구나 참여할 수 있어요)</span></label>
+      <p class="field-hint">서버는 최대 3개까지 만들 수 있어요. 만들면 "일반" 채널이 자동으로 생겨요.</p>
+      <button type="button" class="btn" data-act="srvCreate">서버 만들기</button>`;
+  } else if (srvTab === 'join') {
+    b.innerHTML = `<label class="field"><span>초대 코드</span><input id="srvCode" maxlength="20" autocomplete="off" placeholder="친구에게 받은 코드"></label>
+      <button type="button" class="btn" data-act="srvJoinCode">참여하기</button>`;
+  } else {
+    b.innerHTML = `<form class="admin-search" data-adm-form="discover"><input id="srvQ" maxlength="20" placeholder="서버 이름·설명 검색" autocomplete="off"><button class="btn sm" type="submit">검색</button></form><div id="srvList"><div class="empty">불러오는 중…</div></div>`;
+    loadDiscover('');
+  }
+}
+async function loadDiscover(q) {
+  const { data, error } = await sb.rpc('discover_spaces', { p_query: q || '' });
+  const box = $('#srvList'); if (!box) return;
+  if (error) { box.innerHTML = `<div class="empty">불러오지 못했어요.<br><small>${esc(friendlyError(error, 'SQL 패치 v10 확인'))}</small></div>`; return; }
+  box.innerHTML = serverRows(data || []);
+}
+function serverRows(rows) {
+  return rows.length ? rows.map(s => `<div class="person"><span class="av" aria-hidden="true">${esc(s.icon)}</span>
+      <div class="grow"><b>${esc(s.name)}</b><span class="sub">${esc(s.description || '')} · 멤버 ${Number(s.member_count) || 0}명</span></div>
+      ${s.joined ? '<span class="meta">✓ 참여 중</span>' : `<button type="button" class="btn sm" data-act="srvJoin" data-id="${esc(s.id)}">참여</button>`}</div>`).join('')
+    : '<div class="empty">공개 서버가 없어요. 직접 만들어 보세요!</div>';
+}
+async function afterServerChange(goSpace) {
+  await refreshStructure();
+  const sp = state.spaces.find(s => s.id === goSpace);
+  if (sp && sp.channels[0]) go('channel', sp.channels[0]);
+}
+async function srvCreate() {
+  const name = $('#srvName').value.trim(); if (!name) { toast('서버 이름을 입력해 주세요'); return; }
+  const { data, error } = await sb.rpc('create_space', { p_name: name, p_icon: $('#srvIcon').value.trim(), p_desc: $('#srvDesc').value.trim(), p_public: $('#srvPublic').checked });
+  if (error) throw error;
+  closeServerSheet(); toast('🎉 서버를 만들었어요!'); await afterServerChange(data);
+}
+async function srvJoinCode() {
+  const code = $('#srvCode').value.trim(); if (!code) { toast('초대 코드를 입력해 주세요'); return; }
+  const { data, error } = await sb.rpc('join_by_invite', { p_code: code });
+  if (error) throw error;
+  closeServerSheet(); toast('✅ 서버에 참여했어요'); await afterServerChange(data);
+}
+async function srvJoin(id) {
+  const { error } = await sb.rpc('join_space', { p_space: id });
+  if (error) throw error;
+  toast('✅ 서버에 참여했어요'); closeServerSheet(); await afterServerChange(id);
+}
+
+/* ---------- 서버 설정 (주인·운영진) ---------- */
+let srvSettingsId = null;
+async function openServerSettings(id) {
+  const sp = state.spaces.find(s => s.id === id); if (!sp) return;
+  srvSettingsId = id; $('#serverSheet').classList.add('show');
+  $('#serverSheet').innerHTML = `<div class="sheet-box"><div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeServerSheet">닫기</button><h3>${esc(sp.icon)} ${esc(sp.name)}</h3></div><div id="srvBody"><div class="empty">불러오는 중…</div></div></div>`;
+  await drawServerSettings();
+}
+async function drawServerSettings() {
+  const sp = state.spaces.find(s => s.id === srvSettingsId); const b = $('#srvBody'); if (!sp || !b) return;
+  const manage = canManageSpace(sp), isOwner = sp.myRole === 'owner' || isAdminMe();
+  let members = [], bans = [];
+  try {
+    const m = await sb.rpc('space_members_list', { p_space: sp.id }); if (!m.error) members = m.data || [];
+    if (manage) { const bn = await sb.rpc('space_bans_list', { p_space: sp.id }); if (!bn.error) bans = bn.data || []; }
+  } catch (_) {}
+  if (srvSettingsId !== sp.id || !$('#srvBody')) return;
+  let html = '';
+  if (manage) {
+    html += `<h4 class="san-h">서버 정보</h4>
+      <label class="field"><span>이름</span><input id="srvName" maxlength="20" value="${esc(sp.name)}"></label>
+      <label class="field"><span>아이콘</span><input id="srvIcon" maxlength="4" value="${esc(sp.icon)}"></label>
+      <label class="field"><span>설명</span><input id="srvDesc" maxlength="60" value="${esc(sp.desc)}"></label>
+      ${sp.official ? '' : `<label class="consent-row"><input type="checkbox" id="srvPublic" ${sp.isPublic ? 'checked' : ''}><span>공개 서버 (탐색에 보여요)</span></label>`}
+      <button type="button" class="btn sm" data-act="srvSave">저장</button>`;
+    if (!sp.official) html += `<h4 class="san-h">초대 코드</h4><div class="person"><div class="grow"><b style="font-family:monospace;font-size:16px" id="srvInviteCode">${esc(sp.inviteCode)}</b><span class="sub">이 코드로 누구나 참여할 수 있어요</span></div><button type="button" class="btn sm ghost" data-act="srvCopyInvite">복사</button><button type="button" class="btn sm ghost" data-act="srvRegen">새로 만들기</button></div>`;
+    html += `<h4 class="san-h">채널</h4>` + sp.channels.map(c => { const ch = state.channels[c]; return `<div class="person"><div class="grow"><b># ${esc(ch.name)}</b><span class="sub">${esc(ch.topic || '')}</span></div><button type="button" class="btn sm ghost" data-act="srvChEdit" data-ch="${esc(c)}">수정</button><button type="button" class="btn sm danger" data-act="srvChDel" data-ch="${esc(c)}">삭제</button></div>`; }).join('') +
+      `<button type="button" class="btn sm" data-act="srvChAdd">＋ 채널 추가</button>`;
+  }
+  html += `<h4 class="san-h">멤버 ${members.length}명</h4>` + (members.length ? members.map(u => {
+    const tools = manage && u.user_id !== state.me.id && u.role !== 'owner'
+      ? `${isOwner ? `<button type="button" class="btn sm ghost" data-act="srvRole" data-user="${u.user_id}" data-role="${u.role === 'admin' ? 'member' : 'admin'}">${u.role === 'admin' ? '운영진 해제' : '운영진 지정'}</button>` : ''}<button type="button" class="btn sm ghost" data-act="srvKick" data-user="${u.user_id}">내보내기</button><button type="button" class="btn sm danger" data-act="srvBan" data-user="${u.user_id}">차단</button>` : '';
+    return `<div class="person"><span class="av" aria-hidden="true">${avatarHTML(u.avatar, u.name)}</span><div class="grow">${profileLink(u.user_id, `<b>${esc(u.name)}</b>`)} ${u.role === 'owner' ? '<span class="badge-admin">👑 주인</span>' : u.role === 'admin' ? '<span class="badge-admin badge-mod">🛡️ 운영진</span>' : ''}</div><div class="admin-actions">${tools}</div></div>`;
+  }).join('') : '<div class="empty">멤버 정보가 없어요</div>');
+  if (manage && bans.length) html += `<h4 class="san-h">차단된 멤버</h4>` + bans.map(x => `<div class="person"><div class="grow"><b>${esc(x.name)}</b><span class="sub">${esc(x.reason || '')}</span></div><button type="button" class="btn sm ghost" data-act="srvUnban" data-user="${x.user_id}">차단 해제</button></div>`).join('');
+  html += `<h4 class="san-h">위험 구역</h4>`;
+  if (!sp.official && sp.myRole && sp.myRole !== 'owner') html += `<button type="button" class="btn sm danger" data-act="srvLeave">이 서버에서 나가기</button>`;
+  if (!sp.official && (sp.myRole === 'owner' || isAdminMe())) html += `<button type="button" class="btn sm danger" data-act="srvDelete">서버 삭제</button>`;
+  $('#srvBody').innerHTML = html;
+}
+async function srvSave() {
+  const sp = state.spaces.find(s => s.id === srvSettingsId); if (!sp) return;
+  const pub = $('#srvPublic');
+  const { error } = await sb.rpc('update_space', { p_space: sp.id, p_name: $('#srvName').value.trim(), p_icon: $('#srvIcon').value.trim(), p_desc: $('#srvDesc').value.trim(), p_public: pub ? pub.checked : true });
+  if (error) throw error;
+  toast('저장했어요'); await refreshStructure(); drawServerSettings();
+}
+async function srvChAdd() {
+  const name = askText('채널 이름', '', 20); if (name === null) return;
+  const topic = askText('채널 주제(비워도 돼요)', '', 60, { required: false }); if (topic === null) return;
+  const { error } = await sb.rpc('create_channel', { p_space: srvSettingsId, p_name: name, p_topic: topic });
+  if (error) throw error;
+  toast(`# ${name} 채널을 만들었어요`); await refreshStructure(); drawServerSettings();
+}
+async function srvChEdit(cid) {
+  const ch = state.channels[cid]; if (!ch) return;
+  const name = askText('채널 이름', ch.name, 20); if (name === null) return;
+  const topic = askText('채널 주제', ch.topic, 60, { required: false }); if (topic === null) return;
+  const { error } = await sb.rpc('update_channel', { p_channel: cid, p_name: name, p_topic: topic });
+  if (error) throw error;
+  toast('수정했어요'); await refreshStructure(); drawServerSettings();
+}
+async function srvChDel(cid) {
+  const ch = state.channels[cid]; if (!ch) return;
+  if (!confirm(`# ${ch.name} 채널과 그 안의 모든 글을 삭제할까요?\n되돌릴 수 없어요.`)) return;
+  const { error } = await sb.rpc('delete_channel', { p_channel: cid });
+  if (error) throw error;
+  delete state.feeds[cid]; toast('삭제했어요'); await refreshStructure(); drawServerSettings();
+}
+async function srvMember(fn, uid, extra, okMsg, confirmMsg) {
+  if (confirmMsg && !confirm(confirmMsg)) return;
+  const { error } = await sb.rpc(fn, { p_space: srvSettingsId, p_user: uid, ...extra });
+  if (error) throw error;
+  toast(okMsg); drawServerSettings();
+}
+async function srvRegen() {
+  if (!confirm('초대 코드를 새로 만들까요? 기존 코드는 더 쓸 수 없어요.')) return;
+  const { error } = await sb.rpc('regen_invite', { p_space: srvSettingsId });
+  if (error) throw error;
+  await refreshStructure(); drawServerSettings(); toast('새 초대 코드를 만들었어요');
+}
+async function srvCopyInvite() {
+  const code = ($('#srvInviteCode') || {}).textContent || '';
+  try { await navigator.clipboard.writeText(code); toast('📋 초대 코드를 복사했어요'); } catch (_) { toast('초대 코드: ' + code); }
+}
+async function srvLeave() {
+  if (!confirm('이 서버에서 나갈까요?')) return;
+  const { error } = await sb.rpc('leave_space', { p_space: srvSettingsId });
+  if (error) throw error;
+  closeServerSheet(); toast('서버에서 나왔어요'); await refreshStructure();
+}
+async function srvDelete() {
+  const sp = state.spaces.find(s => s.id === srvSettingsId); if (!sp) return;
+  const typed = prompt(`⚠️ "${sp.name}" 서버와 모든 채널·글이 삭제돼요. 되돌릴 수 없어요.\n계속하려면 서버 이름을 입력하세요.`);
+  if (typed === null) return;
+  if (typed.trim() !== sp.name) { toast('이름이 달라서 취소했어요'); return; }
+  const { error } = await sb.rpc('delete_space', { p_space: sp.id });
+  if (error) throw error;
+  closeServerSheet(); toast('서버를 삭제했어요'); await refreshStructure();
+}
+
+/* ================= 출석 · 자동 칭호 진행도 ================= */
+const METRIC_LABEL = { sparks_received: '받은 스파크', echoes_received: '받은 에코', posts: '작성한 글', streak: '연속 출석(일)', days: '가입 후 일수' };
+async function checkIn() {
+  const { data, error } = await sb.rpc('check_in');
+  if (error) throw error;
+  const d = data || {};
+  toast(d.new ? `📅 출석 완료! ${d.streak}일 연속이에요` : `오늘은 이미 출석했어요 (${d.streak}일 연속)`);
+  if (Array.isArray(d.unlocked) && d.unlocked.length) setTimeout(() => toast('🏆 새 칭호를 얻었어요: ' + d.unlocked.join(', ')), 1800);
+  state.checkedIn = true;
+  if ($('#profileModal') && $('#profileModal').classList.contains('show')) { loadMyTitles(); loadTitleProgress(); }
+}
+async function loadTitleProgress() {
+  const box = $('#titleProgress'); if (!box) return;
+  const { data, error } = await sb.rpc('my_title_progress');
+  if (error) { box.innerHTML = '<p class="field-hint">칭호 정보를 불러오지 못했어요</p>'; return; }
+  const rows = data || [];
+  box.innerHTML = rows.length ? rows.map(t => {
+    const pct = Math.min(100, Math.round((Number(t.progress) / Number(t.need)) * 100));
+    return `<div class="tp-row${t.unlocked ? ' done' : ''}"><div class="tp-head">${titleChip({ n: t.name, e: t.emoji, c: t.color })}<small>${t.unlocked ? '✅ 획득' : `${esc(METRIC_LABEL[t.metric] || t.metric)} ${Number(t.progress)}/${Number(t.need)}`}</small></div><div class="tp-bar"><i style="width:${t.unlocked ? 100 : pct}%"></i></div></div>`;
+  }).join('') : '<p class="field-hint">도전할 수 있는 칭호가 아직 없어요</p>';
+}
+
+/* ================= 상태 (작업 중 / 자리비움 / 휴식) ================= */
+const STATUS_LABEL = { online: '🟢 온라인', working: '💻 작업 중', away: '🌙 자리비움', rest: '☕ 휴식' };
+const statusText = (s, t) => `${STATUS_LABEL[s] || STATUS_LABEL.online}${t ? ' · ' + t : ''}`;
+
+/* ================= 저장함 (북마크) ================= */
+async function toggleBookmark(id) {
+  const p = findPost(id); if (!p || p.busy) return;
+  p.busy = true; const was = p.saved; p.saved = !was; refreshActions(id);
+  const { error } = was
+    ? await sb.from('bookmarks').delete().eq('post_id', id).eq('user_id', state.me.id)
+    : await sb.from('bookmarks').insert({ post_id: id });
+  p.busy = false;
+  if (error && error.code !== '23505') { p.saved = was; refreshActions(id); toast(friendlyError(error, '저장하지 못했어요')); return; }
+  toast(was ? '저장을 취소했어요' : '🔖 저장함에 담았어요');
+  if (was && state.view === 'saved') { const f = getFeed('saved'); f.items = f.items.filter(x => x.id !== id); drawSaved(); }
+}
+async function renderSaved() {
+  $('#main').innerHTML = headHTML('🔖 저장함', '나중에 다시 볼 글·영상') + `<div class="dp-scroll"><div class="col" id="savedBody"><div class="empty">불러오는 중…</div></div></div>`;
+  const f = getFeed('saved'); f.loading = true;
+  try {
+    const b = await sb.from('bookmarks').select('post_id,created_at').order('created_at', { ascending: false }).limit(50);
+    if (b.error) throw b.error;
+    const ids = (b.data || []).map(x => x.post_id);
+    let rows = [];
+    if (ids.length) {
+      const r = await sb.from('post_feed').select('*').in('id', ids);
+      if (r.error) throw r.error;
+      const order = new Map(ids.map((id, i) => [id, i]));
+      rows = (r.data || []).sort((x, y) => order.get(x.id) - order.get(y.id));
+    }
+    f.items = rows.map(toPost); f.loaded = true; f.done = true;
+  } catch (e) { f.error = true; toast(friendlyError(e, '저장함을 불러오지 못했어요')); }
+  f.loading = false; drawSaved();
+}
+function drawSaved() {
+  const box = $('#savedBody'); if (!box || state.view !== 'saved') return;
+  const f = getFeed('saved');
+  box.innerHTML = f.items.length ? f.items.map(postHTML).join('') : `<div class="empty">${f.error ? '불러오지 못했어요' : '저장한 글이 없어요<br><small>글 아래 🔖 를 눌러 담아 보세요</small>'}</div>`;
+}
+
+/* ================= 검색: 사용자 · 글(#태그) · 서버 ================= */
+function renderSearch() {
+  const s = state.search;
+  $('#main').innerHTML = headHTML('🔍 검색', '사용자 · 글 · #태그 · 서버') +
+    `<div class="dp-scroll"><div class="col">
+      <form class="admin-search" data-adm-form="search"><input id="searchQ" value="${esc(s.q)}" maxlength="40" placeholder="이름, @아이디, 글 내용, #태그" autocomplete="off"><button class="btn sm" type="submit">검색</button></form>
+      <div class="admin-tabs">${[['users', '사용자'], ['posts', '글'], ['servers', '서버']].map(([k, l]) => `<button type="button" class="admin-tab${s.tab === k ? ' active' : ''}" data-act="searchTab" data-stab="${k}">${l}</button>`).join('')}</div>
+      <div id="searchBody"><div class="empty">${s.q ? '검색 중…' : '검색어를 입력해 보세요 🔍'}</div></div></div></div>`;
+  if (s.q) runSearch(); else { const i = $('#searchQ'); if (i) i.focus(); }
+}
+const likePattern = q => '%' + q.replace(/[\\%_]/g, c => '\\' + c) + '%';
+async function runSearch() {
+  const s = state.search, raw = s.q.trim(); if (!raw) return;
+  const body = () => ($('#searchBody') && state.view === 'search' && state.search.q === s.q && state.search.tab === s.tab) ? $('#searchBody') : null;
+  try {
+    if (s.tab === 'users') {
+      const q = raw.replace(/^@/, ''), cols = 'id,display_name,handle,avatar_url,role,bio';
+      const [a, b] = await Promise.all([
+        sb.from('profiles').select(cols).ilike('display_name', likePattern(q)).limit(20),
+        sb.from('profiles').select(cols).ilike('handle', likePattern(q)).limit(20)
+      ]);
+      if (a.error) throw a.error; if (b.error) throw b.error;
+      const seen = new Set(), rows = [];
+      [...(a.data || []), ...(b.data || [])].forEach(u => { if (!seen.has(u.id)) { seen.add(u.id); rows.push(u); } });
+      if (body()) body().innerHTML = rows.length ? rows.map(u => personRow(u.id, u.display_name, u.handle, u.avatar_url, u.bio ? u.bio.slice(0, 40) : '', '')).join('') : '<div class="empty">사용자를 찾지 못했어요</div>';
+    } else if (s.tab === 'posts') {
+      const { data, error } = await sb.from('post_feed').select('*').ilike('body', likePattern(raw)).order('created_at', { ascending: false }).limit(30);
+      if (error) throw error;
+      const f = getFeed('search'); f.items = (data || []).map(toPost); f.loaded = true; f.done = true;
+      if (body()) body().innerHTML = f.items.length ? f.items.map(postHTML).join('') : '<div class="empty">검색 결과가 없어요</div>';
+    } else {
+      const { data, error } = await sb.rpc('discover_spaces', { p_query: raw });
+      if (error) throw error;
+      if (body()) body().innerHTML = serverRows(data || []);
+    }
+  } catch (e) { if (body()) body().innerHTML = `<div class="empty">검색하지 못했어요.<br><small>${esc(friendlyError(e, '잠시 후 다시 시도해 주세요'))}</small></div>`; }
+}
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-adm-form="search"]'); if (!f) return;
+  e.preventDefault();
+  state.search.q = $('#searchQ').value.trim();
+  if (state.search.q.startsWith('#')) state.search.tab = 'posts';
+  renderSearch();
+});
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-adm-form="discover"]'); if (!f) return;
+  e.preventDefault(); loadDiscover($('#srvQ').value.trim());
+});
+
+/* ================= 관리자: 설정 스위치 · 초대코드 · IP 밴 목록 ================= */
+async function loadAdminSettings() {
+  const [st, iv, ib] = await Promise.all([
+    sb.from('app_settings').select('key,value'),
+    sb.from('invite_codes').select('*').order('created_at', { ascending: false }).limit(30),
+    sb.from('ip_bans').select('*').is('revoked_at', null).order('created_at', { ascending: false }).limit(30)
+  ]);
+  if (st.error) throw st.error;
+  const cfg = {}; (st.data || []).forEach(r => { cfg[r.key] = r.value; });
+  const body = adminBodyFor('settings'); if (!body) return;
+  const on = cfg.invite_required === 'true';
+  body.innerHTML = `<article class="admin-card"><div class="admin-card-head"><b>⏱️ 글쓰기 쿨다운</b><small>0이면 꺼짐. 운영진은 적용되지 않아요. 도배가 심할 때 켜세요.</small></div>
+      <div class="admin-search"><input id="setCooldown" type="number" min="0" max="3600" value="${esc(cfg.post_cooldown_seconds || '0')}"><button type="button" class="btn sm" data-adm="saveSetting" data-key="post_cooldown_seconds" data-input="setCooldown">저장 (초)</button></div></article>
+    <article class="admin-card"><div class="admin-card-head"><b>🎟️ 초대코드로만 가입</b><small>켜면 새로 가입하는 사람은 유효한 초대코드가 있어야 해요. (이미 가입한 사람은 그대로 로그인돼요) 테러·봇이 몰릴 때 비상용으로 쓰세요.</small></div>
+      <div class="admin-actions"><button type="button" class="btn sm ${on ? 'danger' : ''}" data-adm="toggleInvite" data-on="${on ? '0' : '1'}">${on ? '지금 켜짐 → 끄기' : '지금 꺼짐 → 켜기'}</button></div></article>
+    <article class="admin-card"><div class="admin-card-head"><b>⚖️ 경고 누적 처벌</b><small>경고가 기준 횟수에 닿으면 자동으로 정지돼요.</small></div>
+      <div class="admin-search"><input id="setWarn" type="number" min="2" max="10" value="${esc(cfg.warn_threshold || '2')}"><button type="button" class="btn sm" data-adm="saveSetting" data-key="warn_threshold" data-input="setWarn">저장 (회)</button></div>
+      <div class="admin-search"><input id="setAutoHrs" type="number" min="1" max="87600" value="${esc(cfg.auto_suspend_hours || '24')}"><button type="button" class="btn sm" data-adm="saveSetting" data-key="auto_suspend_hours" data-input="setAutoHrs">저장 (자동 정지 시간)</button></div></article>
+    <div class="admin-bar"><b>초대 코드</b><button type="button" class="btn sm" data-adm="newInvite">＋ 코드 만들기</button></div>` +
+    ((iv.data || []).length ? (iv.data || []).map(c => `<article class="admin-card"><div class="admin-user"><div class="grow"><b style="font-family:monospace;font-size:15px">${esc(c.code)}</b>${c.revoked ? ' <span class="badge-ban">폐기</span>' : ''}<br><small class="meta">${c.uses}/${c.max_uses}회 사용${c.expires_at ? ' · ~' + esc(fmtDate(c.expires_at)) : ''}</small></div>${c.revoked ? '' : `<button type="button" class="btn sm ghost" data-adm="revokeInvite" data-code="${esc(c.code)}">폐기</button>`}</div></article>`).join('') : '<div class="empty">만든 초대 코드가 없어요</div>') +
+    `<div class="admin-bar" style="margin-top:14px"><b>IP 밴 목록</b></div>` +
+    ((ib.data || []).length ? (ib.data || []).map(b => `<article class="admin-card"><div class="admin-user"><div class="grow"><b style="font-family:monospace">${esc(String(b.ip_key))}</b><br><small class="meta">${esc(b.reason)} · ${b.expires_at ? '~' + esc(fmtDate(b.expires_at)) : '영구'}</small></div>${b.sanction_id ? `<button type="button" class="btn sm ghost" data-act="revokeSanction" data-id="${b.sanction_id}">해제</button>` : ''}</div></article>`).join('') : '<div class="empty">차단된 IP가 없어요</div>');
+}
+async function saveSetting(key, value) {
+  const { error } = await sb.rpc('admin_set_setting', { p_key: key, p_value: String(value) });
+  if (error) throw error;
+  toast('✅ 설정을 저장했어요'); loadAdminSettings();
+}
+async function newInvite() {
+  const code = prompt('초대 코드 (영문·숫자 4~20자, 비우면 자동 생성)', '');
+  if (code === null) return;
+  const max = Number(prompt('몇 명까지 쓸 수 있나요? (1~10000)', '10')); if (!(max >= 1)) { toast('사용 횟수를 확인해 주세요'); return; }
+  const daysRaw = prompt('며칠 동안 유효한가요? (비우면 기간 제한 없음)', '7'); if (daysRaw === null) return;
+  const days = daysRaw.trim() === '' ? null : Math.round(Number(daysRaw)); if (days !== null && !(days >= 1)) { toast('기간을 확인해 주세요'); return; }
+  const { data, error } = await sb.rpc('admin_create_invite', { p_code: code.trim() || null, p_max: Math.round(max), p_days: days });
+  if (error) throw error;
+  toast(`🎟️ 초대 코드 ${data} 를 만들었어요`); loadAdminSettings();
+}
+
+/* ================= 초대코드 가입 (관리자 스위치) ================= */
+let inviteCache = '';
+async function refreshPublicSettings() {
+  try { const { data } = await sb.rpc('public_settings'); state.inviteRequired = !!(data && data.invite_required); }
+  catch (_) { state.inviteRequired = false; }
+  ['signupInviteWrap', 'magicInviteWrap'].forEach(id => { const el = document.getElementById(id); if (el) el.hidden = !state.inviteRequired; });
+}
+async function inviteOk(code) {
+  if (!state.inviteRequired) return { ok: true, code: '' };
+  const c = String(code || '').trim();
+  if (!c) return { ok: false, msg: '초대 코드를 입력해 주세요.' };
+  try {
+    const { data, error } = await sb.rpc('check_invite', { p_code: c });
+    if (!error && data === false) return { ok: false, msg: '유효하지 않거나 만료된 초대 코드예요.' };
+  } catch (_) {}
+  return { ok: true, code: c };
+}
+
 /* ================= 시작 ================= */
 function boot() {
   renderSpaces(); renderNav(); renderMain(); renderWidget();
@@ -3294,6 +4464,7 @@ function boot() {
     gateMsg(CONFIGURED ? 'Supabase 라이브러리를 불러오지 못했어요. 네트워크를 확인해 주세요.' : '⚙️ 서버 설정이 필요해요. 파일 상단의 SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY 를 입력해 주세요.');
     return;
   }
+  refreshPublicSettings();
   // 콜백 안에서 직접 쿼리하면 supabase-js 가 교착될 수 있어서 setTimeout 으로 한 틱 미룸
   sb.auth.onAuthStateChange((event, session) => {
     setTimeout(() => {
