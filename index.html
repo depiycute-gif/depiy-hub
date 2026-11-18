@@ -22,15 +22,15 @@
   --orange-soft:color-mix(in srgb,var(--depiy-orange) 16%,transparent);
   --orange-line:color-mix(in srgb,var(--depiy-orange) 55%,transparent);
   --orange-glow:color-mix(in srgb,var(--depiy-orange) 40%,transparent);
-  --bg-0:#121214;
-  --bg-1:#17171b;
-  --bg-2:#1c1c20;
-  --text:#ececf0;
-  --text-dim:#a2a2ad;
-  --text-mute:#71717d;
-  --glass:rgba(255,255,255,.04);
-  --glass-hi:rgba(255,255,255,.08);
-  --line:rgba(255,255,255,.08);
+  --bg-0:#0b0b0d;
+  --bg-1:#111114;
+  --bg-2:#17171b;
+  --text:#ededf2;
+  --text-dim:#9d9da8;
+  --text-mute:#686873;
+  --glass:rgba(255,255,255,.035);
+  --glass-hi:rgba(255,255,255,.07);
+  --line:rgba(255,255,255,.075);
   --ok:#5fd38d;
   --warn:#e8c25a;
   --danger:#ff6b6b;
@@ -41,7 +41,7 @@ html,body{height:100%}
 body{
   margin:0;color:var(--text);
   font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;
-  background:radial-gradient(900px 520px at 72% -10%,color-mix(in srgb,var(--depiy-orange) 9%,transparent),transparent),var(--bg-0);
+  background:var(--bg-0);
   -webkit-font-smoothing:antialiased;
 }
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -58,7 +58,7 @@ input,textarea{font:inherit;color:inherit}
 /* 스페이스 바 */
 .spacebar{display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 0;background:var(--bg-0);border-right:1px solid var(--line);overflow-y:auto;scrollbar-width:none}
 .spacebar::-webkit-scrollbar{display:none}
-.logo{width:46px;height:46px;border-radius:16px;background:var(--depiy-orange);color:var(--on-orange);font-weight:800;font-size:20px;box-shadow:0 8px 24px var(--orange-glow)}
+.logo{width:44px;height:44px;border-radius:14px;background:var(--depiy-orange);color:var(--on-orange);font-weight:800;font-size:19px}
 .sep{width:28px;height:1px;background:var(--line);flex:none}
 .space{position:relative;width:46px;height:46px;border-radius:50%;background:var(--glass-hi);font-size:21px;display:grid;place-items:center;transition:border-radius .2s,background .2s}
 .space:hover{border-radius:16px}
@@ -67,17 +67,20 @@ input,textarea{font:inherit;color:inherit}
 .me-av{width:40px;height:40px;border-radius:50%;background:var(--glass-hi);display:grid;place-items:center;font-size:20px;flex:none}
 
 /* 네비게이터 */
-.nav{display:flex;flex-direction:column;background:rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid var(--line)}
+.nav{display:flex;flex-direction:column;background:var(--bg-1);border-right:1px solid var(--line)}
 .nav-head{padding:16px 16px 12px;border-bottom:1px solid var(--line);flex:none}
-.nav-head h2{margin:0;font-size:16px;font-weight:800}
+.nav-head h2{margin:0;font-size:15.5px;font-weight:800;letter-spacing:-.02em}
 .nav-head p{margin:3px 0 0;font-size:12px;color:var(--text-dim)}
 .nav-scroll{flex:1;min-height:0;overflow-y:auto;padding:8px 10px 16px;scrollbar-width:thin}
 .nav-scroll h3{margin:16px 6px 6px;font-size:11px;letter-spacing:.06em;color:var(--text-mute);font-weight:700}
-.nav-item{position:relative;display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border-radius:10px;color:var(--text-dim);text-align:left;font-size:14px}
+.nav-item{position:relative;display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:8px;color:var(--text-dim);text-align:left;font-size:13.5px;transition:background .12s,color .12s}
 .nav-item:hover{background:var(--glass-hi);color:var(--text)}
-.nav-item.active{background:var(--orange-soft);color:var(--text);font-weight:700}
+.nav-item.active{background:rgba(248,147,95,.12);color:var(--text);font-weight:700}
 .nav-item.active::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--depiy-orange)}
-.ni{width:20px;text-align:center;flex:none}
+.ni{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;flex:none;color:var(--text-mute)}
+.ni svg{width:16px;height:16px;stroke-width:1.9}
+.nav-item.active .ni{color:var(--depiy-orange)}
+.nav-item:hover .ni{color:var(--text)}
 .cnt{font-size:11px;color:var(--text-mute);flex:none}
 .live-tag{font-size:9px;font-weight:800;padding:2px 6px;border-radius:999px;background:var(--depiy-orange);color:var(--on-orange);flex:none}
 .pdot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
@@ -178,7 +181,7 @@ input,textarea{font:inherit;color:inherit}
 .dp-ripple{position:fixed;z-index:99;width:40px;height:40px;border-radius:50%;pointer-events:none;border:2px solid var(--depiy-orange)}
 
 /* 라이브 위젯 */
-.widget{overflow-y:auto;padding:18px 16px 28px;background:rgba(255,255,255,.02);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-left:1px solid var(--line);scrollbar-width:thin}
+.widget{overflow-y:auto;padding:18px 16px 28px;background:var(--bg-1);border-left:1px solid var(--line);scrollbar-width:thin}
 .widget section{margin-bottom:22px}
 .widget h3{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px;font-size:12px;letter-spacing:.04em;color:var(--text-dim);font-weight:700}
 .widget h3 em{font-style:normal;color:var(--text-mute);font-weight:500}
@@ -194,7 +197,8 @@ input,textarea{font:inherit;color:inherit}
 .stack .mini-av:first-child{margin-left:0}
 .btn.sm{padding:6px 13px;font-size:12px}
 .trend{display:flex;gap:10px;padding:10px 12px;border-radius:12px;background:var(--glass);border:1px solid var(--line)}
-.trend b{color:var(--depiy-orange);font-size:12px;white-space:nowrap}
+.trend b{display:inline-flex;align-items:center;gap:4px;color:var(--depiy-orange);font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.trend b svg{width:13px;height:13px;stroke-width:2.2}
 .trend p{margin:0;font-size:12.5px;line-height:1.45;color:var(--text)}
 .trend small{display:block;margin-top:3px;font-size:11px;color:var(--text-mute)}
 
@@ -328,7 +332,7 @@ input,textarea{font:inherit;color:inherit}
 .login-tab.active{background:rgba(255,255,255,.14);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .login-tab:hover:not(.active){color:#f0f0f0}
 .post-handle{font-size:12px;color:var(--text-dim);font-weight:500;margin-left:4px}
-.badge-admin{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;line-height:1;padding:2px 7px;border-radius:999px;background:linear-gradient(135deg,rgba(248,147,95,.22),rgba(255,184,108,.32));color:#ffb86c;border:1px solid rgba(248,147,95,.5);box-shadow:0 0 8px rgba(248,147,95,.2);vertical-align:middle;margin-left:4px}
+.badge-admin{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;line-height:1;padding:2.5px 6px;border-radius:6px;background:rgba(248,147,95,.12);color:var(--depiy-orange);border:1px solid rgba(248,147,95,.28);vertical-align:middle;margin-left:4px}
 .avatar-edit-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px}
 .avatar-preview-box{width:80px;height:80px;border-radius:50%;overflow:hidden;border:2px solid var(--depiy-orange);box-shadow:0 4px 16px var(--orange-glow);background:#1a1a20;display:grid;place-items:center}
 .avatar-preview-img{width:100%;height:100%;object-fit:cover}
@@ -347,15 +351,15 @@ input,textarea{font:inherit;color:inherit}
   backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
 }
 .login-card{
-  width:100%;max-width:420px;padding:36px 28px;border-radius:24px;
-  background:rgba(24,24,28,.88);border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 24px 64px rgba(0,0,0,.7),0 0 40px var(--orange-glow);
+  width:100%;max-width:420px;padding:36px 28px;border-radius:20px;
+  background:var(--bg-1);border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 24px 64px rgba(0,0,0,.72);
   text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;
 }
 .login-brand{
-  width:64px;height:64px;border-radius:20px;background:var(--depiy-orange);
-  color:var(--on-orange);font-weight:900;font-size:28px;display:grid;place-items:center;
-  box-shadow:0 10px 30px var(--orange-glow);margin-bottom:4px;
+  width:56px;height:56px;border-radius:16px;background:var(--depiy-orange);
+  color:var(--on-orange);font-weight:900;font-size:26px;display:grid;place-items:center;
+  margin-bottom:4px;
 }
 .login-title{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em}
 .login-desc{margin:0;font-size:13.5px;color:var(--text-dim);line-height:1.6}
@@ -435,7 +439,7 @@ input,textarea{font:inherit;color:inherit}
   .bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;transition:stroke .15s,transform .15s}
   .bnav-item:active{transform:scale(.92)}
   .bnav-item.active{color:var(--depiy-orange)}
-  .bnav-item.active svg{stroke:var(--depiy-orange);filter:drop-shadow(0 0 8px var(--orange-glow))}
+  .bnav-item.active svg{stroke:var(--depiy-orange)}
 }
 
 
@@ -623,14 +627,17 @@ body.logged-out{overflow:hidden}
 .short .panel-close{display:grid;place-items:center;position:sticky;top:4px;margin:4px 8px 0 auto;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);border:0;color:#fff;cursor:pointer;z-index:2;float:right}
 
 /* ===== v8: 광장(X 스타일) · 일반(디스코드 스타일) · 쇼츠 휠 ===== */
-.x-top{flex:none;position:relative;z-index:5;background:rgba(18,18,20,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
-.x-top-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 2px}
+.x-top{flex:none;position:relative;z-index:5;background:rgba(11,11,13,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.x-top-row{display:flex;align-items:center;justify-content:space-between;max-width:640px;margin:0 auto;padding:10px 16px 2px}
+@media (min-width:768px){ .x-top-row{display:none} }
 .x-av{width:34px;height:34px;border-radius:50%;overflow:hidden;background:var(--glass-hi);display:grid;place-items:center;font-weight:700;border:0;padding:0;cursor:pointer;color:inherit}
-.x-logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:17px;letter-spacing:-.3px}
-.x-logo i{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--depiy-orange);color:var(--on-orange);font-style:normal;font-size:14px}
-.x-icon{position:relative;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:none;border:0;color:var(--text);cursor:pointer;font-size:18px}
+.x-logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:16px;letter-spacing:-.02em}
+.x-logo i{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--depiy-orange);color:var(--on-orange);font-style:normal;font-size:13px;font-weight:900}
+.x-icon{position:relative;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:none;border:0;color:var(--text-dim);cursor:pointer;font-size:18px}
+.x-icon svg{width:19px;height:19px;stroke-width:1.9}
+.x-icon:hover{color:var(--text)}
 .x-icon .nav-badge{position:absolute;top:0;right:-2px;margin:0}
-.x-tabs{display:flex}
+.x-tabs{display:flex;max-width:640px;margin:0 auto}
 .x-tab{flex:1;position:relative;padding:13px 0 12px;font-size:14.5px;font-weight:600;color:var(--text-mute);background:none;border:0;cursor:pointer}
 .x-tab:hover{background:var(--glass)}
 .x-tab.active{color:var(--text);font-weight:800}
@@ -657,7 +664,7 @@ body.logged-out{overflow:hidden}
 .xpost .acts{justify-content:space-between;max-width:420px;margin-top:4px}
 .xpost .act{padding:6px 8px;gap:6px;background:none;border-color:transparent}
 .xpost .act:hover{background:var(--glass)}
-.fab{position:fixed;right:22px;bottom:26px;width:58px;height:58px;border-radius:50%;background:var(--depiy-orange);color:var(--on-orange);font-size:30px;font-weight:300;line-height:1;display:grid;place-items:center;box-shadow:0 8px 26px var(--orange-glow);z-index:40;border:0;cursor:pointer}
+.fab{position:fixed;right:22px;bottom:26px;width:52px;height:52px;border-radius:50%;background:var(--depiy-orange);color:var(--on-orange);font-size:26px;font-weight:400;line-height:1;display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.45);z-index:40;border:0;cursor:pointer;transition:transform .15s}
 .fab:active{transform:scale(.94)}
 @media (max-width:767px){ .fab{bottom:84px;right:16px} .x-prompt{display:none} .col.x-col{border:0} }
 .sheet{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:6vh 12px}
@@ -1133,8 +1140,8 @@ const TERMS_VERSION = '2026-11-16';        // 약관을 바꾸면 이 날짜를 
 const PW_MIN = 8;
 const roleCache = new Map();                // 접속자 목록용 (id → role). 접속 정보(presence)의 role 은 믿지 않아요.
 function roleBadge(role) {
-  if (role === 'admin') return '<span class="badge-admin">👑 관리자</span>';
-  if (role === 'mod') return '<span class="badge-admin badge-mod">🛡️ 운영진</span>';
+  if (role === 'admin') return '<span class="badge-admin">관리자</span>';
+  if (role === 'mod') return '<span class="badge-admin badge-mod">운영진</span>';
   return '';
 }
 
@@ -1393,23 +1400,23 @@ function renderNav() {
     <div class="nav-head"><h2 class="ell">${esc(sp ? sp.name : 'De_piy Hub')}</h2><p class="ell">${esc(sp ? sp.desc : '')}</p>${sp && !sp.official && sp.myRole ? `<button type="button" class="nav-gear" data-act="serverSettings" data-id="${esc(sp.id)}" aria-label="서버 설정">⚙</button>` : ''}</div>
     <div class="nav-scroll">
       <h3>홈</h3>
-      <button class="nav-item${v === 'plaza' ? ' active' : ''}" data-act="go" data-view="plaza"${cur(v === 'plaza')}><span class="ni">📣</span><span class="grow ell">광장</span></button>
-      <button class="nav-item${v === 'shorts' ? ' active' : ''}" data-act="go" data-view="shorts"${cur(v === 'shorts')}><span class="ni">🎬</span><span class="grow ell">쇼츠</span></button>
-      <button class="nav-item${v === 'dm' ? ' active' : ''}" data-act="go" data-view="dm"${cur(v === 'dm')}><span class="ni">💬</span><span class="grow ell">DM</span>${state.counts.dm ? `<em class="nav-badge">${state.counts.dm}</em>` : ''}</button>
-      <button class="nav-item${v === 'friends' ? ' active' : ''}" data-act="go" data-view="friends"${cur(v === 'friends')}><span class="ni">👥</span><span class="grow ell">친구</span>${state.counts.friendIn ? `<em class="nav-badge">${state.counts.friendIn}</em>` : ''}</button>
-      <button class="nav-item${v === 'profile' && state.me && state.profileId === state.me.id ? ' active' : ''}" data-act="go" data-view="profile" data-id="${state.me ? state.me.id : ''}"><span class="ni">👤</span><span class="grow ell">내 프로필</span></button>
-      <button class="nav-item${v === 'search' ? ' active' : ''}" data-act="go" data-view="search"${cur(v === 'search')}><span class="ni">🔍</span><span class="grow ell">검색</span></button>
-      <button class="nav-item${v === 'saved' ? ' active' : ''}" data-act="go" data-view="saved"${cur(v === 'saved')}><span class="ni">🔖</span><span class="grow ell">저장함</span></button>
-      <button class="nav-item" data-act="checkIn"><span class="ni">📅</span><span class="grow ell">출석 체크</span></button>
-      <button class="nav-item" data-act="startTutorial"><span class="ni">🧭</span><span class="grow ell">튜토리얼</span></button>
+      <button class="nav-item${v === 'plaza' ? ' active' : ''}" data-act="go" data-view="plaza"${cur(v === 'plaza')}><span class="ni">${ico('home', '')}</span><span class="grow ell">광장</span></button>
+      <button class="nav-item${v === 'shorts' ? ' active' : ''}" data-act="go" data-view="shorts"${cur(v === 'shorts')}><span class="ni">${ico('clapperboard', '')}</span><span class="grow ell">쇼츠</span></button>
+      <button class="nav-item${v === 'dm' ? ' active' : ''}" data-act="go" data-view="dm"${cur(v === 'dm')}><span class="ni">${ico('message-circle', '')}</span><span class="grow ell">DM</span>${state.counts.dm ? `<em class="nav-badge">${state.counts.dm}</em>` : ''}</button>
+      <button class="nav-item${v === 'friends' ? ' active' : ''}" data-act="go" data-view="friends"${cur(v === 'friends')}><span class="ni">${ico('users', '')}</span><span class="grow ell">친구</span>${state.counts.friendIn ? `<em class="nav-badge">${state.counts.friendIn}</em>` : ''}</button>
+      <button class="nav-item${v === 'profile' && state.me && state.profileId === state.me.id ? ' active' : ''}" data-act="go" data-view="profile" data-id="${state.me ? state.me.id : ''}"><span class="ni">${ico('user', '')}</span><span class="grow ell">내 프로필</span></button>
+      <button class="nav-item${v === 'search' ? ' active' : ''}" data-act="go" data-view="search"${cur(v === 'search')}><span class="ni">${ico('search', '')}</span><span class="grow ell">검색</span></button>
+      <button class="nav-item${v === 'saved' ? ' active' : ''}" data-act="go" data-view="saved"${cur(v === 'saved')}><span class="ni">${ico('bookmark', '')}</span><span class="grow ell">저장함</span></button>
+      <button class="nav-item" data-act="checkIn"><span class="ni">${ico('calendar-check', '')}</span><span class="grow ell">출석 체크</span></button>
+      <button class="nav-item" data-act="startTutorial"><span class="ni">${ico('compass', '')}</span><span class="grow ell">튜토리얼</span></button>
       <h3>채널</h3>
       ${sp ? sp.channels.map(c => {
         const ch = state.channels[c], on = v === 'channel' && state.channelId === c;
         return `<button class="nav-item${on ? ' active' : ''}" data-act="go" data-view="channel" data-id="${esc(c)}"${cur(on)}><span class="ni">#</span><span class="grow ell">${esc(ch.name)}</span></button>`;
       }).join('') : ''}
       ${isStaff() ? `<h3>관리</h3>
-      <button class="nav-item${v === 'admin' ? ' active' : ''}" data-act="go" data-view="admin"${cur(v === 'admin')}><span class="ni">🛡️</span><span class="grow ell">관리자 패널</span>${state.reportCount ? `<em class="nav-badge">${state.reportCount}</em>` : ''}</button>` : ''}
-      ${!isStandalone() ? '<button class="nav-item" data-act="installApp"><span class="ni">📲</span><span class="grow ell">앱 설치</span></button>' : ''}
+      <button class="nav-item${v === 'admin' ? ' active' : ''}" data-act="go" data-view="admin"${cur(v === 'admin')}><span class="ni">${ico('shield', '')}</span><span class="grow ell">관리자 패널</span>${state.reportCount ? `<em class="nav-badge">${state.reportCount}</em>` : ''}</button>` : ''}
+      ${!isStandalone() ? `<button class="nav-item" data-act="installApp"><span class="ni">${ico('download', '')}</span><span class="grow ell">앱 설치</span></button>` : ''}
       <div class="nav-legal"><button type="button" class="link-btn" data-act="showTerms">이용약관</button><button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button></div>
     </div>
     <div class="nav-foot">
@@ -1417,6 +1424,7 @@ function renderNav() {
       <button type="button" class="grow ell nav-me" data-act="profile" title="프로필 편집"><b>${esc(state.me ? state.me.name : '')}</b>${state.me ? roleBadge(state.me.role) : ''}<small>프로필 편집</small></button>
       <button type="button" class="logout-btn" data-act="logout" title="로그아웃">로그아웃</button>
     </div>`;
+  icons();
 }
 
 /* ================= 렌더: 메인 ================= */
@@ -1611,14 +1619,14 @@ function chatMount(key) {
 
 /* ---------- 광장 화면 ---------- */
 function plazaView(key) {
-  const tabs = [['rec', '추천'], ['hot', '🔥 인기'], ['friends', '친구']];
+  const tabs = [['rec', '추천'], ['hot', '인기'], ['friends', '친구']];
   return `<header class="x-top">
       <div class="x-top-row">
         <button type="button" class="x-av" data-act="avatarMenu" aria-label="메뉴">${avatarHTML(state.me.avatar, state.me.name)}</button>
-        <div class="x-logo"><i>⚡</i>De_piy</div>
+        <div class="x-logo"><i>D</i>De_piy</div>
         <div style="display:flex;gap:2px">
-          <button type="button" class="x-icon" data-act="go" data-view="search" aria-label="검색">🔍</button>
-          <button type="button" class="x-icon" data-act="go" data-view="friends" aria-label="친구">👥${state.counts.friendIn ? `<em class="nav-badge">${state.counts.friendIn}</em>` : ''}</button>
+          <button type="button" class="x-icon" data-act="go" data-view="search" aria-label="검색">${ico('search', '')}</button>
+          <button type="button" class="x-icon" data-act="go" data-view="friends" aria-label="친구">${ico('users', '')}${state.counts.friendIn ? `<em class="nav-badge">${state.counts.friendIn}</em>` : ''}</button>
         </div>
       </div>
       <nav class="x-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" class="x-tab${state.plazaTab === k ? ' active' : ''}" aria-selected="${state.plazaTab === k}" data-act="plazaTab" data-ptab="${k}">${l}</button>`).join('')}</nav>
@@ -1790,8 +1798,9 @@ function renderWidget() {
       ${list.length > shown.length ? `<li class="empty" style="padding:6px">외 ${list.length - shown.length}명</li>` : ''}
     </ul></section>
     <section><h3>트렌딩 Echo</h3><ul class="wlist">
-      ${state.trending.length ? state.trending.map(p => `<li class="trend"><b>📡 ${Number(p.echo_count) || 0}</b><div><p>${esc((p.body || '(사진/영상)').length > 44 ? p.body.slice(0, 44) + '…' : (p.body || '(사진/영상)'))}</p><small>${esc(p.author_name)}</small></div></li>`).join('') : '<li class="empty">아직 에코가 없어요</li>'}
+      ${state.trending.length ? state.trending.map(p => `<li class="trend"><b>${ico('radio', '')} ${Number(p.echo_count) || 0}</b><div><p>${esc((p.body || '(사진/영상)').length > 44 ? p.body.slice(0, 44) + '…' : (p.body || '(사진/영상)'))}</p><small>${esc(p.author_name)}</small></div></li>`).join('') : '<li class="empty">아직 에코가 없어요</li>'}
     </ul></section>`;
+  icons();
 }
 
 /* ================= 스파크 ================= */
