@@ -512,6 +512,7 @@ body.logged-out{overflow:hidden}
 .legal-body ol,.legal-body ul{margin:0 0 6px;padding-left:20px}
 .legal-body .meta{font-size:11.5px;color:var(--text-mute)}
 .admin-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.admin-tab svg{width:14px;height:14px;margin-right:5px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .admin-tab{padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;background:var(--glass);border:1px solid var(--line);color:var(--text-dim);cursor:pointer}
 .admin-tab.active{background:var(--orange-soft);border-color:var(--orange-line);color:var(--text)}
 .admin-card{padding:14px;margin-bottom:10px;border-radius:14px;background:var(--glass);border:1px solid var(--line)}
@@ -799,6 +800,75 @@ body.has-status .dp-app{padding-top:38px}
 .tut-try{margin-top:8px;padding:6px 10px;border-radius:10px;background:rgba(248,147,95,.12);border:1px dashed rgba(248,147,95,.4);font-size:12px;color:#ffb48a}
 .tut-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
 .tut-foot .tut-btns{display:flex;gap:6px;margin-left:auto}
+
+/* ===== v11: Animated Icons · C-UI · Twin UI · Minimal Gallery 반영 =====
+   아이콘 상태 모션 · 촉각 프레스 · 스프링 커브 · 표면 계층 정리 */
+:root{
+  --ease-spring:cubic-bezier(.22,1,.36,1);
+  --ease-soft:cubic-bezier(.4,0,.2,1);
+  --hair:rgba(255,255,255,.06);
+  --hair-hi:rgba(255,255,255,.11);
+}
+
+/* --- 표면 계층: 카드는 한 단계 조용하게, 경계는 머리카락 두께로 --- */
+.post:not(.xpost){background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.016));border-color:var(--hair);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.02)}
+.post:not(.xpost):hover{border-color:var(--hair-hi)}
+.composer{background:rgba(255,255,255,.028);border-color:var(--hair)}
+.person,.trend,.lounge-card,.admin-card,.controls,.pf-card,.side-col{border-color:var(--hair)}
+.dp-top{background:color-mix(in srgb,var(--bg-1) 86%,transparent);border-bottom-color:var(--hair)}
+.dp-top h1{letter-spacing:-.012em}
+.dp-top h1 svg{width:18px;height:18px;margin-right:8px;vertical-align:-3px;fill:none;stroke:var(--depiy-orange);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.act span,.cnt,.nav-badge,.pf-stats,.tp-head small,.wtime,.num{font-variant-numeric:tabular-nums}
+
+/* --- 아이콘: 선 굵기 1.8로 통일, 상태별 모션 --- */
+.ni svg,.x-icon svg,.cc-btn svg,.hud-btn svg,.send-btn svg,.tool-btn svg,.bnav-item svg,.tab svg{stroke-width:1.8}
+.btn svg,.acct-section summary svg,.lightbox-close svg,.sheet-head svg,.post-tool svg{width:16px;height:16px;vertical-align:-3px;margin-right:6px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.act svg{transition:fill 180ms var(--ease-soft),stroke 180ms var(--ease-soft),filter 220ms var(--ease-soft)}
+@keyframes icon-pop{0%{transform:scale(1)}30%{transform:scale(1.3)}62%{transform:scale(.94)}100%{transform:scale(1)}}
+@keyframes spark-flash{0%{filter:drop-shadow(0 0 0 transparent)}35%{filter:drop-shadow(0 0 7px var(--orange-glow))}100%{filter:drop-shadow(0 0 0 transparent)}}
+@keyframes echo-ping{0%{transform:scale(1);opacity:1}70%{transform:scale(3.1);opacity:.12}100%{transform:scale(1);opacity:1}}
+@keyframes bm-drop{0%{transform:translateY(-4px) scale(.92)}55%{transform:translateY(1px) scale(1.05)}100%{transform:none}}
+.act.pop svg{animation:icon-pop 480ms var(--ease-spring)}
+.act.spark.on svg{fill:var(--depiy-orange)}
+.act.spark.pop svg{animation:icon-pop 480ms var(--ease-spring),spark-flash 640ms var(--ease-soft)}
+.act.echo.pop svg circle{transform-box:fill-box;transform-origin:center;animation:echo-ping 540ms var(--ease-spring)}
+.act.echo.pop svg{animation:icon-pop 480ms var(--ease-spring)}
+.act.bm.on svg{fill:var(--depiy-orange)}
+.act.bm.pop svg{animation:bm-drop 460ms var(--ease-spring)}
+.act.thread.pop svg{animation:icon-pop 440ms var(--ease-spring)}
+
+/* --- 내비게이션 아이콘: 호버 리프트 · 활성 시 살짝 튀어오름 --- */
+.nav-item .ni svg{transition:transform 200ms var(--ease-spring)}
+.nav-item:hover .ni svg{transform:translateY(-1px)}
+@keyframes nav-in{0%{transform:scale(.8);opacity:.55}62%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+.nav-item.active .ni svg{animation:nav-in 320ms var(--ease-spring)}
+.bnav-item.active svg{animation:nav-in 320ms var(--ease-spring)}
+@keyframes tab-in{from{width:0;opacity:0}to{width:56px;opacity:1}}
+.x-tab.active::after{animation:tab-in 300ms var(--ease-spring)}
+@keyframes badge-in{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
+.nav-badge{animation:badge-in 300ms var(--ease-spring)}
+
+/* --- 촉각 프레스: 모든 조작 요소가 같은 감각을 쓰도록 --- */
+.btn,.act,.nav-item,.x-icon,.x-tab,.tab,.ctl,.tool-btn,.post-tool,.admin-tab,.bnav-item,.cc-btn,.send-btn,.fab,.space,.menu-btn,.dm-item,.link-btn,.nav-gear,.tut-skip,.lightbox-close{transition:transform 130ms var(--ease-soft),background-color 160ms var(--ease-soft),color 160ms var(--ease-soft),border-color 160ms var(--ease-soft),box-shadow 160ms var(--ease-soft)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px color-mix(in srgb,var(--depiy-orange) 20%,transparent)}
+.btn:active,.act:active,.nav-item:active,.x-icon:active,.x-tab:active,.tab:active,.ctl:active,.tool-btn:active,.post-tool:active,.admin-tab:active,.bnav-item:active,.cc-btn:active,.send-btn:active,.fab:active,.space:active,.menu-btn:active,.dm-item:active,.nav-gear:active,.tut-skip:active,.lightbox-close:active{transform:scale(.96);transition-duration:80ms}
+
+/* --- 모달 · 시트 진입 --- */
+@keyframes box-in{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+.acct-modal.show .acct-box{animation:box-in 280ms var(--ease-spring)}
+.sheet.show .sheet-box{animation:box-in 300ms var(--ease-spring)}
+.lightbox.show{animation:fade-in 180ms var(--ease-soft)}
+.lightbox.show img{animation:box-in 240ms var(--ease-spring)}
+.login-card{animation:box-in 380ms var(--ease-spring)}
+.toast.show{transition:opacity 200ms var(--ease-soft),transform 260ms var(--ease-spring)}
+.thread-panel{animation:box-in 220ms var(--ease-spring)}
+
+/* --- 장식 톤 다운: 네온 글로우는 얇게, 액센트는 오렌지 한 색만 --- */
+.act.on{background:color-mix(in srgb,var(--depiy-orange) 12%,transparent);border-color:color-mix(in srgb,var(--depiy-orange) 38%,transparent)}
+.space.active{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--depiy-orange) 45%,transparent)}
+.btn{font-weight:700;letter-spacing:-.01em}
+.live-pill{letter-spacing:.04em}
 </style>
 </head>
 <body class="logged-out">
@@ -918,13 +988,13 @@ body.has-status .dp-app{padding-top:38px}
     <h3 id="profileTitle">내 프로필 설정</h3>
     <div class="avatar-edit-wrap">
       <div id="profileAvatarPreview" class="avatar-preview-box"></div>
-      <button type="button" class="avatar-upload-btn" id="btnChangeAvatar" data-act="triggerAvatar">📷 사진 변경</button>
+      <button type="button" class="avatar-upload-btn" id="btnChangeAvatar" data-act="triggerAvatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>사진 변경</button>
       <input type="file" id="profileAvatarInput" accept="image/*" style="display:none">
     </div>
     <div class="banner-edit">
       <div id="profileBannerPreview" class="banner-preview"></div>
       <div class="banner-btns">
-        <button type="button" class="btn sm ghost" data-act="triggerBanner">🖼️ 배너 사진 변경</button>
+        <button type="button" class="btn sm ghost" data-act="triggerBanner"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>배너 사진 변경</button>
         <button type="button" class="btn sm ghost" data-act="clearBanner">배너 지우기</button>
         <input type="file" id="profileBannerInput" accept="image/*" style="display:none">
       </div>
@@ -953,9 +1023,9 @@ body.has-status .dp-app{padding-top:38px}
       <div class="field-row"><select id="profileStatus"><option value="online">🟢 온라인</option><option value="working">💻 작업 중</option><option value="away">🌙 자리비움</option><option value="rest">☕ 휴식</option></select><input id="profileStatusText" maxlength="30" placeholder="한 줄 상태 (30자)"></div>
     </label>
     <details class="acct-section">
-      <summary>🏆 칭호 도전 · 📅 출석</summary>
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/></svg>칭호 도전 · <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>출석</summary>
       <div id="titleProgress"><p class="field-hint">불러오는 중…</p></div>
-      <button type="button" class="btn sm" data-act="checkIn">📅 오늘 출석 체크</button>
+      <button type="button" class="btn sm" data-act="checkIn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>오늘 출석 체크</button>
     </details>
     <p class="field-hint" id="profileEmail"></p>
     <p class="field-hint" id="profileCooldownHint" style="color:var(--text-dim);margin-top:2px"></p>
@@ -965,7 +1035,7 @@ body.has-status .dp-app{padding-top:38px}
     </div>
 
     <details class="acct-section">
-      <summary>🔑 비밀번호 설정·변경</summary>
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 8.3-8.3M16 4l3 3M19 7l2-2"/></svg>비밀번호 설정·변경</summary>
       <label class="field"><span>새 비밀번호 (8자 이상)</span><input id="newPassword" type="password" autocomplete="new-password" maxlength="72" placeholder="새 비밀번호"></label>
       <button type="button" class="btn sm" data-act="changePassword">비밀번호 저장</button>
     </details>
@@ -975,7 +1045,7 @@ body.has-status .dp-app{padding-top:38px}
       <a href="mailto:depiy.hub@gmail.com">문의: depiy.hub@gmail.com</a>
     </div>
     <details class="acct-section danger">
-      <summary>⚠️ 계정 삭제</summary>
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>계정 삭제</summary>
       <p class="field-hint">계정, 프로필, 올린 글과 사진이 모두 삭제되고 되돌릴 수 없어요.</p>
       <label class="field"><span>확인을 위해 "삭제"라고 입력하세요</span><input id="deleteConfirmInput" autocomplete="off" placeholder="삭제"></label>
       <button type="button" class="btn sm danger" id="btnDeleteAccount" data-act="deleteAccount">계정 영구 삭제</button>
@@ -1016,7 +1086,7 @@ body.has-status .dp-app{padding-top:38px}
 <!-- 쇼츠 올리기 -->
 <div id="shortSheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="shortTitle">
   <div class="sheet-box short-up">
-    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeShortUpload">취소</button><h3 id="shortTitle">🎬 쇼츠 올리기</h3></div>
+    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeShortUpload">취소</button><h3 id="shortTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 6 3 11l-.9-2.4c-.3-.8.1-1.6.9-1.9L18.2 2l2 4z"/><path d="M6.2 5.3l3.1 3.9M12 3.5l3.1 3.9"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>쇼츠 올리기</h3></div>
     <label class="btn ghost" style="display:block;text-align:center;cursor:pointer">영상 선택<input type="file" id="shortFileInput" accept="video/mp4,video/webm,video/quicktime" hidden></label>
     <div id="shortPreview"></div>
     <label class="field"><span>설명 (150자, 선택) — #태그도 쓸 수 있어요</span><textarea id="shortCaption" maxlength="150" rows="2"></textarea></label>
@@ -1029,7 +1099,7 @@ body.has-status .dp-app{padding-top:38px}
 <!-- 관리자: 제재 시트 -->
 <div id="sanctionSheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="sanctionTitle">
   <div class="sheet-box">
-    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeSanction">닫기</button><h3 id="sanctionTitle">⚖️ 제재</h3></div>
+    <div class="sheet-head"><button type="button" class="btn sm ghost" data-act="closeSanction">닫기</button><h3 id="sanctionTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M4 7h16"/><path d="m4 7-2.5 6h5zM20 7l-2.5 6h5z"/></svg>제재</h3></div>
     <div id="sanActive"></div>
     <h4 class="san-h">새 제재</h4>
     <label class="field"><span>종류</span><select id="sanKind"></select></label>
@@ -1046,7 +1116,7 @@ body.has-status .dp-app{padding-top:38px}
 
 <!-- 라이트박스 모달 -->
 <div id="lightbox" class="lightbox">
-  <button class="lightbox-close" id="btnCloseLightbox" aria-label="닫기">✕</button>
+  <button class="lightbox-close" id="btnCloseLightbox" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   <img id="lightboxImg" src="" alt="확대 보기">
 </div>
 
@@ -1106,6 +1176,23 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const icons = () => { try { if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); } catch (_) {} };
 const ico = (name, fallback) => `<i data-lucide="${name}" aria-hidden="true">${fallback}</i>`;
+const popAct = el => { if (!el || reduced()) return; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); };    // 아이콘 상태 모션 리셋 후 재생
+
+// 화면 제목용 인라인 아이콘 (lucide 초기화 타이밍과 무관하게 항상 그려짐)
+const ICO = {
+  shield: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  user:   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  users:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  chat:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  clap:   '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/></svg>',
+  bm:     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  search: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  flag:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg>',
+  scale:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M4 7h16"/><path d="m4 7-2.5 6h5zM20 7l-2.5 6h5z"/></svg>',
+  tag:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h9z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>',
+  gear:   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  log:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>'
+};
 
 const SVG = {
   spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
@@ -1848,7 +1935,7 @@ async function toggleSpark(id, ev, btn) {
   if (!was) {
     const r = btn.getBoundingClientRect(); let x = ev.clientX, y = ev.clientY;
     if (!x && !y) { x = r.left + r.width / 2; y = r.top + r.height / 2; }
-    burst(x, y); btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+    burst(x, y); popAct(btn);
   }
   const { error } = was
     ? await sb.from('sparks').delete().eq('post_id', id).eq('user_id', state.me.id)
@@ -1915,6 +2002,7 @@ async function doEcho(id, dest) {
         x.echoes = Math.max(0, x.echoes - 1);
         refreshActions(x.id);
       });
+      popAct($(`[data-post="${id}"] .echo`));
 
       // 로컬 피드에서 내가 생성했던 해당 에코 글 제거
       for (const k in state.feeds) {
@@ -1948,7 +2036,7 @@ async function doEcho(id, dest) {
     const row = await fetchPostRow(data.id);
     if (row) addPostToFeed(toPost(row), true);
     const art = $(`[data-post="${id}"] .echo`);
-    if (art) { const r = art.getBoundingClientRect(); ripple(r.left + r.width / 2, r.top + r.height / 2); }
+    if (art) { const r = art.getBoundingClientRect(); ripple(r.left + r.width / 2, r.top + r.height / 2); popAct(art); }
     toast(`📡 ${feedLabel(dest)}에 에코했어요`);
     loadTrending();
   } catch (e) {
@@ -2000,11 +2088,11 @@ async function toggleThread(id) {
   if (state.openThreads.has(id)) {
     state.openThreads.delete(id);
     const art = $(`[data-post="${id}"]`); if (art) { const pn = $('.thread-panel', art); if (pn) pn.remove(); }
-    refreshActions(id); return;
+    refreshActions(id); popAct($(`[data-post="${id}"] .thread`)); return;
   }
   state.openThreads.add(id);
   const art = $(`[data-post="${id}"]`); if (art) art.insertAdjacentHTML('beforeend', panelHTML(id));
-  refreshActions(id);
+  refreshActions(id); popAct($(`[data-post="${id}"] .thread`));
   const inp = $('.thread-panel input', art || document); if (inp) inp.focus();
   const t = getThread(id);
   if (!t.loaded) {
@@ -3044,9 +3132,9 @@ function renderAdmin() {
   const m = $('#main');
   if (!isStaff()) { go('plaza'); return; }
   const tab = state.admin.tab;
-  const tabs = [['reports', '🚩 신고'], ['users', '👥 이용자'], ['sanctions', '⚖️ 제재'], ...(isAdminMe() ? [['channels', '# 채널'], ['titles', '🏷️ 칭호'], ['settings', '⚙️ 설정']] : []), ['logs', '📜 기록']];
+  const tabs = [['reports', ICO.flag + '신고'], ['users', ICO.users + '이용자'], ['sanctions', ICO.scale + '제재'], ...(isAdminMe() ? [['channels', '<span style="color:var(--text-mute)">#</span> 채널'], ['titles', ICO.tag + '칭호'], ['settings', ICO.gear + '설정']] : []), ['logs', ICO.log + '기록']];
   if (!tabs.some(t => t[0] === tab)) state.admin.tab = 'reports';
-  m.innerHTML = headHTML('🛡️ 관리자 패널', isAdminMe() ? '신고 처리 · 이용자 관리 · 채널 관리' : '신고 처리 · 이용자 관리') +
+  m.innerHTML = headHTML(ICO.shield + '관리자 패널', isAdminMe() ? '신고 처리 · 이용자 관리 · 채널 관리' : '신고 처리 · 이용자 관리') +
     `<div class="dp-scroll"><div class="col">
       <div class="admin-tabs">${tabs.map(([k, l]) => `<button type="button" class="admin-tab${state.admin.tab === k ? ' active' : ''}" data-adm="tab" data-adm-tab="${k}">${l}${k === 'reports' && state.reportCount ? `<em class="nav-badge">${state.reportCount}</em>` : ''}</button>`).join('')}</div>
       <div id="adminBody"><div class="empty">불러오는 중…</div></div>
@@ -3416,7 +3504,7 @@ function profileHTML(d, mutual) {
 
 async function renderProfile() {
   const id = state.profileId, m = $('#main');
-  m.innerHTML = headHTML('👤 프로필', '', `<button type="button" class="btn sm ghost" data-act="back">← 뒤로</button>`) +
+  m.innerHTML = headHTML(ICO.user + '프로필', '', `<button type="button" class="btn sm ghost" data-act="back">← 뒤로</button>`) +
     `<div class="dp-scroll"><div class="col" id="profileBody"><div class="empty">불러오는 중…</div></div></div>`;
   try {
     const { data, error } = await sb.rpc('profile_overview', { p_user: id });
@@ -3500,7 +3588,7 @@ async function reportUser(uid) {
 
 /* ================= 친구 목록 화면 ================= */
 function renderFriends() {
-  $('#main').innerHTML = headHTML('👥 친구', '친구 · 요청 · 차단 관리') +
+  $('#main').innerHTML = headHTML(ICO.users + '친구', '친구 · 요청 · 차단 관리') +
     `<div class="dp-scroll"><div class="col"><div class="admin-tabs" id="friendTabs"></div><div id="friendBody"><div class="empty">불러오는 중…</div></div></div></div>`;
   loadFriends();
 }
@@ -3572,7 +3660,7 @@ const loadDmThreadsSoon = debounce(() => run(loadDmThreads()), 500);
 
 function renderDM() {
   const d = state.dm;
-  $('#main').innerHTML = headHTML('💬 DM', '1:1 대화') +
+  $('#main').innerHTML = headHTML(ICO.chat + 'DM', '1:1 대화') +
     `<div class="dm-wrap${d.active ? ' chat-open' : ''}"><aside class="dm-list" id="dmList"></aside><section class="dm-chat" id="dmChat"></section></div>`;
   renderDmList(); renderDmChat();
   if (!d.loaded) run(loadDmThreads());
@@ -3811,7 +3899,7 @@ function stopShorts() {
 }
 function renderShorts() {
   stopShorts();
-  $('#main').innerHTML = headHTML('🎬 쇼츠', '영상만 모아 보기', `<button type="button" class="btn sm" data-act="openShortUpload">＋ 올리기</button>`) +
+  $('#main').innerHTML = headHTML(ICO.clap + '쇼츠', '영상만 모아 보기', `<button type="button" class="btn sm" data-act="openShortUpload">＋ 올리기</button>`) +
     `<div class="shorts-stage" id="shortsStage"><div class="shorts-wrap" id="shortsWrap"></div>
       <div class="wheel" id="shortsWheel" role="slider" tabindex="0" aria-label="쇼츠 넘기기 휠 (시계방향으로 돌리면 다음 쇼츠)">${wheelSVG()}<span class="wheel-count" id="wheelCount"></span></div>
       <div class="wheel-hint" id="wheelHint">↻ 시계방향으로 돌려 보세요</div></div>`;
@@ -4449,7 +4537,7 @@ const statusText = (s, t) => `${STATUS_LABEL[s] || STATUS_LABEL.online}${t ? ' �
 /* ================= 저장함 (북마크) ================= */
 async function toggleBookmark(id) {
   const p = findPost(id); if (!p || p.busy) return;
-  p.busy = true; const was = p.saved; p.saved = !was; refreshActions(id);
+  p.busy = true; const was = p.saved; p.saved = !was; refreshActions(id); popAct($(`[data-post="${id}"] .bm`));
   const { error } = was
     ? await sb.from('bookmarks').delete().eq('post_id', id).eq('user_id', state.me.id)
     : await sb.from('bookmarks').insert({ post_id: id });
@@ -4459,7 +4547,7 @@ async function toggleBookmark(id) {
   if (was && state.view === 'saved') { const f = getFeed('saved'); f.items = f.items.filter(x => x.id !== id); drawSaved(); }
 }
 async function renderSaved() {
-  $('#main').innerHTML = headHTML('🔖 저장함', '나중에 다시 볼 글·영상') + `<div class="dp-scroll"><div class="col" id="savedBody"><div class="empty">불러오는 중…</div></div></div>`;
+  $('#main').innerHTML = headHTML(ICO.bm + '저장함', '나중에 다시 볼 글·영상') + `<div class="dp-scroll"><div class="col" id="savedBody"><div class="empty">불러오는 중…</div></div></div>`;
   const f = getFeed('saved'); f.loading = true;
   try {
     const b = await sb.from('bookmarks').select('post_id,created_at').order('created_at', { ascending: false }).limit(50);
@@ -4485,7 +4573,7 @@ function drawSaved() {
 /* ================= 검색: 사용자 · 글(#태그) · 서버 ================= */
 function renderSearch() {
   const s = state.search;
-  $('#main').innerHTML = headHTML('🔍 검색', '사용자 · 글 · #태그 · 서버') +
+  $('#main').innerHTML = headHTML(ICO.search + '검색', '사용자 · 글 · #태그 · 서버') +
     `<div class="dp-scroll"><div class="col">
       <form class="admin-search" data-adm-form="search"><input id="searchQ" value="${esc(s.q)}" maxlength="40" placeholder="이름, @아이디, 글 내용, #태그" autocomplete="off"><button class="btn sm" type="submit">검색</button></form>
       <div class="admin-tabs">${[['users', '사용자'], ['posts', '글'], ['servers', '서버']].map(([k, l]) => `<button type="button" class="admin-tab${s.tab === k ? ' active' : ''}" data-act="searchTab" data-stab="${k}">${l}</button>`).join('')}</div>
