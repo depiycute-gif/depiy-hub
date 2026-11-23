@@ -1055,6 +1055,7 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
   [data-dp-tip]{position:relative}
   [data-dp-tip]:hover::after{content:attr(data-dp-tip);position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%) translateY(2px);padding:5px 9px;border-radius:8px;background:rgba(26,26,30,.97);color:#fff;font-size:11.5px;font-weight:600;line-height:1.2;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.4);opacity:0;animation:dp-tip .16s var(--dp-soft) forwards;pointer-events:none;z-index:60}
   @keyframes dp-tip{to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  .x-top-row [data-dp-tip]:hover::after,.dp-top [data-dp-tip]:hover::after{top:calc(100% + 7px);bottom:auto}
 }
 
 /* ---------- 433 체크박스 · 스위치 스프링 ---------- */
@@ -1063,6 +1064,11 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
 .consent-row input[type="checkbox"]:checked{background:var(--depiy-orange);border-color:var(--depiy-orange)}
 .consent-row input[type="checkbox"]::after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;border:solid var(--on-orange);border-width:0 2px 2px 0;transform:rotate(45deg) scale(.4);opacity:0;transition:opacity .14s,transform .22s var(--dp-spring)}
 .consent-row input[type="checkbox"]:checked::after{opacity:1;transform:rotate(45deg) scale(1)}
+
+/* ---------- 작성기 하단 줄 줄바꿈(모바일) ---------- */
+.composer-foot{flex-wrap:wrap;gap:8px 10px}
+.composer-foot .btn{white-space:nowrap;flex:none}
+.composer-tools{flex-wrap:wrap;row-gap:6px}
 
 /* ---------- 012 북마크 리본 ---------- */
 .act.bm{position:relative}
@@ -5319,8 +5325,8 @@ boot();
     if (!isMain) return;
     const main = $('#main'); if (!main) return;
     const top = sc.scrollTop, prev = sc._dpTop || 0; sc._dpTop = top;
-    if (top < 60) main.classList.remove('dp-head-sunk');
-    else if (top > prev + 10) sinkHeader();
+    if (top < 80) main.classList.remove('dp-head-sunk');
+    else if (top > 130 && top > prev + 10) sinkHeader();
     else if (top < prev - 14) main.classList.remove('dp-head-sunk');
     updateBackTop(sc);
   }, true);
@@ -5470,7 +5476,7 @@ boot();
   function peopleList() {
     const seen = new Map();
     $$('.cm-head .name-link b, .post-head b, .msg .meta b, .wuser b, .nav-me b').forEach(b => {
-      const n = (b.textContent || '').trim();
+      const n = (b.textContent || '').replace(/\s*(관리자|운영진)\s*(\(나\))?\s*$/, '').trim();
       if (n && n.length <= 16 && !seen.has(n)) seen.set(n, 1);
     });
     return [...seen.keys()].slice(0, 8);
@@ -5691,7 +5697,7 @@ boot();
       const main = $('#main');
       if (main) {
         const sc = mainScroller();
-        if (sc && sc.scrollTop < 60) main.classList.remove('dp-head-sunk');
+        if (sc && sc.scrollTop < 80) main.classList.remove('dp-head-sunk');
         updateBackTop(sc);
       }
     });
