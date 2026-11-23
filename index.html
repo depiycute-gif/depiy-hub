@@ -898,6 +898,8 @@ body.has-status .dp-app{padding-top:38px}
 ::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-new(root){z-index:2}
 ::view-transition-old(root){z-index:1}
+.spacebar .dp-theme-btn{width:40px;height:40px;margin-top:2px}
+.spacebar .dp-theme-btn svg{width:18px;height:18px}
 .dp-theme-btn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--text-dim);background:none;border:0;cursor:pointer;flex:none;transition:background .16s var(--dp-soft),color .16s var(--dp-soft),transform .16s var(--dp-soft)}
 .dp-theme-btn:hover{background:var(--glass-hi);color:var(--text)}
 .dp-theme-btn:active{transform:scale(.9)}
@@ -5139,8 +5141,11 @@ boot();
   function injectTheme() {
     const row = $('.x-top-row > div:last-child');
     if (row && !$('.dp-theme-btn', row)) row.insertBefore(themeBtn(), row.firstChild);
-    const foot = $('.nav-foot');
-    if (foot && !$('.dp-theme-btn', foot)) foot.insertBefore(themeBtn(), $('.logout-btn', foot));
+    const rail = $('.spacebar');
+    if (rail && !$('.dp-theme-btn', rail)) {
+      const me = $('.me-av', rail);
+      rail.insertBefore(themeBtn(), me || null);
+    }
     if (!document.querySelector('.dp-theme-fab')) {
       const fab = themeBtn();
       fab.classList.add('dp-theme-fab');
