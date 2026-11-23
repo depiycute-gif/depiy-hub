@@ -5653,6 +5653,7 @@ boot();
   function injectTips() {
     $$('.x-icon, .cc-btn, .menu-btn, .short-mute, .dp-theme-btn, .post-tool').forEach(el => {
       if (el.dataset.dpTip) return;
+      if (el.closest('.spacebar')) return;                     // 좁은 레일 안에서는 툴팁이 잘려 보인다
       if (getComputedStyle(el).position !== 'static') return;
       const label = el.getAttribute('aria-label') || el.getAttribute('title');
       if (!label) return;
