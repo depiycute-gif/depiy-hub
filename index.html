@@ -5554,6 +5554,7 @@ boot();
       if ($('.dp-emoji-btn', tools)) return;
       const b = D.createElement('button');
       b.type = 'button'; b.className = 'tool-btn dp-emoji-btn';
+      b.setAttribute('aria-label', '이모지');
       b.innerHTML = ICON.emoji + '<span>이모지</span>';
       tools.appendChild(b);
     });
