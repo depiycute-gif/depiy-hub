@@ -5101,7 +5101,9 @@ boot();
     if (meta) meta.setAttribute('content', t === 'light' ? '#F4F2EE' : '#F8935F');
     $$('.dp-theme-btn').forEach(b => {
       b.innerHTML = t === 'light' ? ICON.moon : ICON.sun;
-      b.setAttribute('aria-label', t === 'light' ? '어두운 화면으로 바꾸기' : '밝은 화면으로 바꾸기');
+      const tip = t === 'light' ? '어두운 화면으로 바꾸기' : '밝은 화면으로 바꾸기';
+      b.setAttribute('aria-label', tip);
+      if (b.dataset.dpTip) b.dataset.dpTip = tip;
     });
   }
   function toggleTheme(e) {
@@ -5317,9 +5319,9 @@ boot();
     if (!isMain) return;
     const main = $('#main'); if (!main) return;
     const top = sc.scrollTop, prev = sc._dpTop || 0; sc._dpTop = top;
-    if (top < 48) main.classList.remove('dp-head-sunk');
-    else if (top > prev + 6) sinkHeader();
-    else if (top < prev - 8) main.classList.remove('dp-head-sunk');
+    if (top < 60) main.classList.remove('dp-head-sunk');
+    else if (top > prev + 10) sinkHeader();
+    else if (top < prev - 14) main.classList.remove('dp-head-sunk');
     updateBackTop(sc);
   }, true);
 
@@ -5424,7 +5426,7 @@ boot();
   }
 
   /* ================= 477 이모지 · 268/451 멘션 피커 ================= */
-  const EMOJI = Array.from('⚡📡💬🔖✨🔥💛🧡🤍🙌👏🎉😂😂🥹😮🤔😴🙃😎🥳😭😤🤝👀💡📌📷🎬🎧🎮🏆🚀🌙☀️🌈🍊☕🍜🍰🐣🐧🦊🌱🪐🧭🎈⭐');
+  const EMOJI = [...new Set(Array.from('⚡📡💬🔖✨🔥💛🧡🤍🙌👏🎉😂🥹😮🤔😴🙃😎🥳😭😤🤝👀💡📌📷🎬🎧🎮🏆🚀🌙🌞🌈🍊☕🍜🍰🐣🐧🦊🌱🪐🧭🎈⭐👍💬'))];
   let pop = null, popFor = null, mention = null, mentionIdx = 0;
 
   function closePop() {
@@ -5503,7 +5505,7 @@ boot();
   function detectMention(el) {
     const caret = el.selectionStart ?? el.value.length;
     const before = el.value.slice(0, caret);
-    const m = /(^|\s)@([^\s@]{0,14})$/.exec(before);
+    const m = /(^|\s|[^\w가-힣])@([^\s@]{0,14})$/u.exec(before);
     if (!m) { if (mention) closePop(); return; }
     const from = caret - m[2].length - 1;
     openMention(el, from, m[2]);
@@ -5562,7 +5564,8 @@ boot();
   /* 467 글자 수 제한 */
   function syncCounters() {
     $$('.composer textarea[maxlength]').forEach(ta => {
-      const foot = ta.closest('.composer').querySelector('.composer-foot');
+      const form = ta.closest('.composer'); if (!form) return;
+      const foot = form.querySelector('.composer-foot');
       if (!foot) return;
       let c = $('.dp-count', foot);
       if (!c) {
@@ -5637,8 +5640,9 @@ boot();
 
   /* ================= 437 툴팁 ================= */
   function injectTips() {
-    $$('.x-icon, .cc-btn, .menu-btn, .lightbox-close, .short-mute, .dp-theme-btn, .post-tool').forEach(el => {
+    $$('.x-icon, .cc-btn, .menu-btn, .short-mute, .dp-theme-btn, .post-tool').forEach(el => {
       if (el.dataset.dpTip) return;
+      if (getComputedStyle(el).position !== 'static') return;
       const label = el.getAttribute('aria-label') || el.getAttribute('title');
       if (!label) return;
       el.dataset.dpTip = label.replace(/\s+/g, ' ').trim();
@@ -5687,7 +5691,7 @@ boot();
       const main = $('#main');
       if (main) {
         const sc = mainScroller();
-        if (!sc || sc.scrollTop < 48) main.classList.remove('dp-head-sunk');
+        if (sc && sc.scrollTop < 60) main.classList.remove('dp-head-sunk');
         updateBackTop(sc);
       }
     });
@@ -5701,6 +5705,8 @@ boot();
   W.addEventListener('popstate', refreshAll);
 
   setTheme(html.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  try { initToast(); } catch (_) {}
+  try { initLightbox(); } catch (_) {}
   refreshAll();
   setTimeout(refreshAll, 400);
 })();
