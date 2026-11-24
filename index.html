@@ -1329,9 +1329,9 @@ html[data-theme="light"] #loginGate .login-tabs.dp-pilled .dp-pill{background:#f
 #loginGate .dp-caps.on{display:block}
 
 /* 036 비밀번호 강도 */
-#loginGate .dp-strength{margin:8px 2px 2px}
-#loginGate .dp-strength-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-#loginGate .dp-strength-bars i{height:4px;border-radius:3px;background:var(--dp-field-line);overflow:hidden;position:relative}
+#loginGate .dp-strength{margin:9px 2px 4px}
+#loginGate .dp-strength-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+#loginGate .dp-strength-bars i{height:3px;border-radius:2px;background:color-mix(in srgb,var(--text) 11%,transparent);overflow:hidden;position:relative}
 #loginGate .dp-strength-bars i::after{
   content:"";position:absolute;inset:0;background:var(--dp-lv,var(--depiy-orange));
   transform:scaleX(0);transform-origin:0 50%;
@@ -1569,7 +1569,12 @@ html[data-theme="light"] #loginGate .btn.gate-btn{box-shadow:0 8px 20px -14px rg
 @media (max-width:900px){
   #loginGate{align-items:flex-start;justify-content:center;padding:16px}
   #loginGate .dp-gate-art{display:none}
+  #loginGate .dp-beam{display:none}
   #loginGate .login-card{margin:auto;max-width:430px;padding:24px 20px 18px;border-radius:20px}
+}
+@media (max-width:560px){
+  #loginGate .gate-links{flex-direction:column;align-items:flex-start;gap:1px}
+  #loginGate .dp-strength-rules{gap:4px}
 }@media (max-width:420px){
   #loginGate{padding:10px}
   #loginGate .login-card{padding:22px 16px 16px;border-radius:18px}
@@ -6879,11 +6884,10 @@ boot();
     const sync = () => {
       const active = tabs && $('.login-tab.active', tabs);
       if (tabs) $$('.login-tab', tabs).forEach(b => b.setAttribute('aria-selected', String(!!active && b === active)));
-      const key = active && active.dataset.tab;
+      const shown = $$('form.gate-form', g).find(f => !f.hidden);
+      const formKey = shown && shown.dataset.form;
+      const key = (formKey && TAB_DESC[formKey]) ? formKey : (active && active.dataset.tab);
       if (desc && key && TAB_DESC[key]) desc.textContent = TAB_DESC[key];
-      const formKey = $$('form.gate-form', g).find(f => !f.hidden);
-      const fk = formKey && formKey.dataset.form;
-      if (desc && fk && !key && TAB_DESC[fk]) desc.textContent = TAB_DESC[fk];
     };
     if (tabs) new MutationObserver(sync).observe(tabs, { subtree: true, attributes: true, attributeFilter: ['class'] });
     $$('form.gate-form', g).forEach(f => new MutationObserver(sync).observe(f, { attributes: true, attributeFilter: ['hidden'] }));
