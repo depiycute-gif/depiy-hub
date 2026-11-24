@@ -1136,7 +1136,8 @@ html[data-theme="light"]{
 #loginGate{
   display:flex;
   align-items:stretch;
-  justify-content:flex-start;
+  justify-content:center;
+  gap:clamp(24px,5vw,80px);
   padding:0;
   overflow:auto;
   background:var(--bg-0);
@@ -1161,13 +1162,13 @@ html[data-theme="light"]{
 }
 @keyframes dp-aurora{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6%,4%,0) scale(1.12)}}
 #loginGate .dp-beam{
-  position:absolute;left:var(--x,30%);top:-40%;width:1px;height:52%;
-  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--depiy-orange) 85%,transparent),transparent);
+  position:absolute;left:var(--x,30%);top:-40%;width:1px;height:46%;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--depiy-orange) 52%,transparent),transparent);
   opacity:0;animation:dp-beam-fall var(--t,9s) linear infinite;animation-delay:var(--d,0s);
 }
 #loginGate .dp-beam::after{
-  content:"";position:absolute;left:-1.5px;bottom:8%;width:4px;height:4px;border-radius:50%;
-  background:var(--depiy-orange);box-shadow:0 0 10px 2px color-mix(in srgb,var(--depiy-orange) 70%,transparent);
+  content:"";position:absolute;left:-1px;bottom:10%;width:3px;height:3px;border-radius:50%;
+  background:color-mix(in srgb,var(--depiy-orange) 85%,transparent);box-shadow:0 0 8px 1px color-mix(in srgb,var(--depiy-orange) 45%,transparent);
 }
 @keyframes dp-beam-fall{
   0%{opacity:0;transform:translateY(0)}
@@ -1179,8 +1180,8 @@ html[data-theme="light"]{
 /* 왼쪽 소개 패널 */
 #loginGate .dp-gate-art{
   position:relative;z-index:1;
-  flex:1 1 46%;max-width:640px;
-  padding:clamp(28px,4.2vw,60px);
+  flex:0 1 620px;max-width:620px;
+  padding:clamp(28px,4.2vw,56px);
   display:flex;flex-direction:column;justify-content:space-between;gap:30px;
   border-right:1px solid var(--dp-hair);
 }
@@ -1197,10 +1198,10 @@ html[data-theme="light"]{
   color:var(--depiy-orange);
 }
 #loginGate .dp-art-h{
-  margin:0 0 16px;font-size:clamp(27px,3.1vw,40px);line-height:1.16;letter-spacing:-.04em;font-weight:900;
-  color:var(--text);
+  margin:0 0 16px;font-size:clamp(27px,3.1vw,40px);line-height:1.2;letter-spacing:-.04em;font-weight:900;
+  color:var(--text);word-break:keep-all;
 }
-#loginGate .dp-art-sub{margin:0 0 24px;font-size:13.5px;line-height:1.65;color:var(--text-dim);max-width:360px}
+#loginGate .dp-art-sub{margin:0 0 24px;font-size:13.5px;line-height:1.7;color:var(--text-dim);max-width:370px;word-break:keep-all}
 #loginGate .dp-art-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 #loginGate .dp-art-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-dim)}
 #loginGate .dp-art-list svg{
@@ -1217,7 +1218,8 @@ html[data-theme="light"]{
    ===================================================================== */
 #loginGate .login-card{
   position:relative;z-index:1;
-  margin:auto;
+  align-self:center;
+  margin:0;
   width:100%;max-width:432px;
   padding:28px 26px 22px;
   border-radius:24px;
@@ -1240,7 +1242,7 @@ html[data-theme="light"]{
 }
 #loginGate .dp-gate-titles{min-width:0}
 #loginGate .login-title{margin:0;font-size:19.5px;font-weight:850;letter-spacing:-.035em;line-height:1.2}
-#loginGate .login-desc{margin:3px 0 0;font-size:12.5px;line-height:1.5;color:var(--text-dim)}
+#loginGate .login-desc{margin:3px 0 0;font-size:12.5px;line-height:1.55;color:var(--text-dim);word-break:keep-all}
 
 /* 알약 탭 (039) */
 #loginGate .login-tabs{
@@ -1429,12 +1431,12 @@ html[data-theme="light"] #loginGate .login-tabs.dp-pilled .dp-pill{background:#f
   transition:color .16s var(--dp-soft);
 }
 #loginGate .link-btn:hover:not(:disabled){color:var(--depiy-orange)}
-#loginGate .login-footer{margin-top:2px;padding-top:12px;border-top:1px solid var(--dp-hair);font-size:10.5px;line-height:1.65;color:var(--text-mute);text-align:center}
+#loginGate .login-footer{margin-top:2px;padding-top:12px;border-top:1px solid var(--dp-hair);font-size:10.5px;line-height:1.7;color:var(--text-mute);text-align:center;word-break:keep-all}
 #loginGate .login-footer .link-btn{font-size:10.5px}
 
 /* 072 접히는 인라인 알림 */
 #loginGate .gate-msg{
-  position:relative;margin:0;padding:11px 13px 11px 36px;border-radius:12px;
+  position:relative;margin:0;padding:11px 13px 11px 36px;border-radius:12px;word-break:keep-all;
   background:var(--dp-danger-soft);
   box-shadow:inset 0 0 0 1px color-mix(in srgb,#ff6b6b 32%,transparent);
   color:#ffc0c0;font-size:12px;line-height:1.55;text-align:left;width:100%;
@@ -1468,7 +1470,7 @@ html[data-theme="light"] #loginGate .login-tabs.dp-pilled .dp-pill{background:#f
 }
 #loginGate .dp-magic-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #loginGate .dp-magic-txt b{display:block;font-size:12.5px;font-weight:800;margin-bottom:3px}
-#loginGate .dp-magic-txt p{margin:0;font-size:11.5px;line-height:1.6;color:var(--text-dim)}
+#loginGate .dp-magic-txt p{margin:0;font-size:11.5px;line-height:1.65;color:var(--text-dim);word-break:keep-all}
 #loginGate .dp-magic-txt strong{color:var(--text);font-weight:750}
 #loginGate .dp-magic-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
 #loginGate .dp-magic-meta span{
@@ -1568,8 +1570,7 @@ html[data-theme="light"] #loginGate .btn.gate-btn{box-shadow:0 8px 20px -14px rg
   #loginGate{align-items:flex-start;justify-content:center;padding:16px}
   #loginGate .dp-gate-art{display:none}
   #loginGate .login-card{margin:auto;max-width:430px;padding:24px 20px 18px;border-radius:20px}
-}
-@media (max-width:420px){
+}@media (max-width:420px){
   #loginGate{padding:10px}
   #loginGate .login-card{padding:22px 16px 16px;border-radius:18px}
   #loginGate .dp-gate-head{gap:10px}
@@ -6569,6 +6570,8 @@ boot();
     $$('.field', g).forEach(f => {
       const input = f.querySelector('input');
       if (!input) return;
+      const labelText = (f.querySelector('span') || {}).textContent || '';
+      if (labelText && !input.getAttribute('aria-label')) input.setAttribute('aria-label', labelText.trim());
       if (input.type === 'password') {
         f.classList.add('dp-has-eye');
         if (!f.querySelector('.dp-eye')) {
