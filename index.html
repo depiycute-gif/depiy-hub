@@ -2359,7 +2359,7 @@ html[data-theme="light"] #loginGate .u402-github{
   </button>
 </nav>
 
-<script id="dp-v14-early">window.__dpCallback=(location.hash||"")+(location.search||"");</script>
+<script id="dp-v14-early">window.__dpCallback={h:location.hash||"",q:location.search||""};</script>
 
 <script>
 (() => {
@@ -7491,10 +7491,12 @@ boot();
 
   /* ---------------- OAuth 콜백 오류를 게이트 인라인 알림으로 ---------------- */
   (function reportCallbackError() {
-    const raw = W.__dpCallback || '';
-    if (!raw) return;
-    let q;
-    try { q = new URLSearchParams(raw); } catch (_) { return; }
+    const raw = W.__dpCallback || {};
+    const pick = s => { const t = String(s || '').replace(/^[#?]/, ''); return t ? new URLSearchParams(t) : null; };
+    const has = q => !!(q && (q.get('error') || q.get('error_code') || q.get('error_description')));
+    const qh = pick(raw.h), qs = pick(raw.q);
+    const q = has(qh) ? qh : (has(qs) ? qs : null);
+    if (!q) return;
     const code = q.get('error_code') || q.get('error') || '';
     const desc = String(q.get('error_description') || '').replace(/\+/g, ' ').trim();
     if (!code && !desc) return;
@@ -7502,7 +7504,7 @@ boot();
     if (/access_denied|cancel/i.test(code + ' ' + desc)) text = '로그인을 취소했어요. 다시 시도해 주세요.';
     else if (/provider is not enabled|unsupported provider/i.test(desc)) text = '아직 설정이 끝나지 않은 로그인 방법이에요. 이메일로 들어와 주세요.';
     else if (/email/i.test(desc) && /confirm|verif/i.test(desc)) text = '이메일 인증이 끝나지 않았어요. 메일함을 확인해 주세요.';
-    else if (desc) text = desc.slice(0, 160);
+    else if (desc) text = '로그인을 마무리하지 못했어요. (' + desc.slice(0, 120) + ')';
     else return;
     /* 본문 스크립트의 setTimeout(0) 안내보다 뒤에 남도록 한 틱 더 늦춘다 */
     setTimeout(() => { say(text); }, 90);
