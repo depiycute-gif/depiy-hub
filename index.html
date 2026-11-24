@@ -1674,7 +1674,7 @@ html[data-theme="light"] .admin-tabs .dp-pill2{background:#fff;box-shadow:0 1px 
   box-shadow:0 0 0 3px var(--dp-ring);
   outline:none;
 }
-.field select,.field-row select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-mute) 50%),linear-gradient(135deg,var(--text-mute) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+.field select,.field-row select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%238A8593' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:right 14px center;background-size:12px 12px;background-repeat:no-repeat;padding-right:36px}
 .field select option,.field-row select option{background:#1c1c20;color:var(--text)}
 html[data-theme="light"] .field select option,html[data-theme="light"] .field-row select option{background:#fff;color:#17161C}
 
@@ -1742,7 +1742,9 @@ html[data-theme="light"] .field select option,html[data-theme="light"] .field-ro
 /* 채널 메시지는 카드가 아니라 줄이다 (.post 그라데이션 덮어쓰기) */
 .post.chat-msg{background:none;box-shadow:none;border:0;border-radius:8px;transform:none;backdrop-filter:none}
 .post.chat-msg:hover{background:color-mix(in srgb,var(--text) 4.5%,transparent);transform:none;box-shadow:none}
-.post.chat-msg::after{display:none}.chat-msg .cm-av{box-shadow:0 0 0 1px var(--hair)}
+.post.chat-msg::after{display:none}
+html[data-theme="light"] .post.chat-msg{background:transparent;box-shadow:none}
+html[data-theme="light"] .post.chat-msg:hover{background:rgba(23,22,28,.045);box-shadow:none}.chat-msg .cm-av{box-shadow:0 0 0 1px var(--hair)}
 .chat-composer{background:var(--glass-hi);border-color:var(--hair);transition:border-color .2s,box-shadow .2s}
 .chat-composer:focus-within{border-color:color-mix(in srgb,var(--depiy-orange) 40%,transparent);box-shadow:0 0 0 3px var(--dp-ring)}
 .chat-day{color:var(--text-mute)}
@@ -1834,7 +1836,7 @@ html[data-theme="light"] .field input,
 html[data-theme="light"] .field textarea,
 html[data-theme="light"] .field select,
 html[data-theme="light"] .field-row input,
-html[data-theme="light"] .field-row select{background:#fff;color:var(--text)}
+html[data-theme="light"] .field-row select{background-color:#fff;color:var(--text)}
 html[data-theme="light"] .field input::placeholder,
 html[data-theme="light"] .field textarea::placeholder{color:#9c97a3}
 html[data-theme="light"] .btn.ghost{background:rgba(23,22,28,.06);color:var(--text);box-shadow:inset 0 0 0 1px rgba(23,22,28,.1)}
@@ -1856,7 +1858,7 @@ html[data-theme="light"] .status-banner{background:#f6c453;color:#3b2a00}
 html[data-theme="light"] .pf-av{border-color:#fff}
 html[data-theme="light"] .pf-mutual .mini-av,html[data-theme="light"] .stack .mini-av{border-color:#fff}
 html[data-theme="light"] .admin-tabs .admin-tab.active{color:var(--text)}
-html[data-theme="light"] .field select{background-image:linear-gradient(45deg,transparent 50%,#6c6773 50%),linear-gradient(135deg,#6c6773 50%,transparent 50%)}
+html[data-theme="light"] .field select{background-color:#fff}
 html[data-theme="light"] .short .thread-panel{background:rgba(255,255,255,.97);color:#17161C;border-color:rgba(23,22,28,.1)}
 html[data-theme="light"] .short .thread-panel .meta,.html[data-theme="light"] .short .thread-panel .bub p{color:#17161C}
 html[data-theme="light"] .short .thread-panel .send input{background:#fff}
