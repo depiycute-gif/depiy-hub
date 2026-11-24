@@ -1956,12 +1956,12 @@ html[data-theme="light"] #loginGate .u402-github{
 #loginGate .u402-ss{grid-area:1/1}
 #loginGate .u402-lb{display:grid;place-items:center;min-width:0}
 #loginGate .u402-tx{
-  transition:opacity .2s,transform .45s var(--ux-spring),filter .3s;
+  transition:opacity .2s,transform .45s var(--ux-spring);
 }
 #loginGate .u402-ss{
   display:flex;align-items:center;gap:8px;
-  opacity:0;transform:translateY(9px);filter:blur(2px);
-  transition:opacity .2s,transform .45s var(--ux-spring),filter .3s;
+  opacity:0;transform:translateY(9px);
+  transition:opacity .2s,transform .45s var(--ux-spring);
 }
 #loginGate .u402-ss i{position:relative;width:16px;height:16px;flex:none}
 #loginGate .u402-ss i::before{
@@ -1981,13 +1981,14 @@ html[data-theme="light"] #loginGate .u402-github{
 @keyframes u402-spin{to{rotate:360deg}}
 
 #loginGate .u402-b.is-busy .u402-tx,
-#loginGate .u402-b.is-ok .u402-tx{opacity:0;transform:translateY(-9px);filter:blur(2px)}
-/* 유휴 상태에서는 상태표시를 페인트 트리에서 완전히 뺀다 — 스피너 애니메이션이 남긴
-   레이어가 버튼 위에 잔상으로 남는 문제(Chrome 합성) 방지. 나타날 때는 아래 키프레임이 맡는다. */
+#loginGate .u402-b.is-ok .u402-tx{opacity:0;transform:translateY(-9px)}
+/* 상태표시(.u402-ss)는 누른 동안에만 DOM에 있고(JS가 붙였다 뗀다), 유휴 상태에서는
+   페인트 대상에서 빠진다 — 스피너 애니메이션이 남긴 레이어가 버튼 위에 잔상으로
+   남는 문제(Chrome 합성) 방지. 나타날 때는 아래 키프레임이 맡는다. */
 #loginGate .u402-b:not(.is-busy):not(.is-ok) .u402-ss{display:none}
 #loginGate .u402-b.is-busy .u402-ss{animation:u402-ss-in .45s var(--ux-spring) both}
 #loginGate .u402-b.is-ok .u402-ss{animation:none}
-@keyframes u402-ss-in{from{opacity:0;transform:translateY(9px);filter:blur(2px)}}
+@keyframes u402-ss-in{from{opacity:0;transform:translateY(9px)}}
 #loginGate .u402-b.is-busy .u402-ss,
 #loginGate .u402-b.is-ok .u402-ss{opacity:1;transform:none;filter:none}
 #loginGate .u402-b.is-ok .u402-ss i::before{opacity:0;transform:scale(.4)}
@@ -7306,15 +7307,31 @@ boot();
   const btns = $$('.u402-b', root);
   if (!st || !btns.length) return;
 
-  /* ---------------- 상태 표시(스피너 → 체크)를 402처럼 버튼마다 붙인다 ---------------- */
-  btns.forEach(b => {
-    if ($('.u402-ss', b)) return;
-    const s = D.createElement('span');
-    s.className = 'u402-ss'; s.setAttribute('aria-hidden', 'true');
-    s.innerHTML = '<i><svg viewBox="0 0 18 18"><path d="M4 9.4l3.2 3.1L14 5.6"/></svg></i>' +
-      '<em><span>연결 중…</span><span>연결됐어요</span></em>';
-    ($('.u402-lb', b) || b).appendChild(s);
-  });
+  /* ---------------- 상태 표시(스피너 → 체크) ----------------
+     스피너는 누른 버튼에만 살아 있게 한다. 애니메이션 레이어가 유휴 상태에 남아
+     버튼 위에 잔상으로 그려지는 문제를 막으려고, 누를 때 붙이고 풀 때 뗀다. */
+  const SS_HTML = '<i><svg viewBox="0 0 18 18"><path d="M4 9.4l3.2 3.1L14 5.6"/></svg></i>' +
+    '<em><span>연결 중…</span><span>연결됐어요</span></em>';
+  function ssOn(b) {
+    const lb = $('.u402-lb', b) || b;
+    let s = $('.u402-ss', lb);
+    if (!s) {
+      s = D.createElement('span');
+      s.className = 'u402-ss'; s.setAttribute('aria-hidden', 'true');
+      s.innerHTML = SS_HTML;
+      lb.appendChild(s);
+    }
+    return s;
+  }
+  function ssOff() {
+    let had = false;
+    btns.forEach(b => {
+      const s = $('.u402-ss', b);
+      if (s) { s.remove(); had = true; }
+    });
+    /* 뗐는데도 합성 레이어가 남는 브라우저를 위해 한 프레임 강제 재래스터 */
+    if (had && st) { st.style.opacity = '0.999'; requestAnimationFrame(() => { st.style.opacity = ''; }); }
+  }
 
   /* ---------------- 인라인 알림 (게이트의 072 알림 그대로) ---------------- */
   function say(text, ok) {
@@ -7342,6 +7359,7 @@ boot();
     });
     btn.classList.add('is-pick', 'is-busy');
     btn.setAttribute('aria-busy', 'true');
+    ssOn(btn);
     if (live) live.textContent = (LABEL[btn.dataset.soc] || '') + ' 로그인 창을 여는 중이에요';
     busyBtn = btn;
   }
@@ -7354,6 +7372,7 @@ boot();
       btn.removeAttribute('aria-busy');
       if (refocus && !reduce()) { try { btn.focus({ preventScroll: true }); } catch (_) { btn.focus(); } }
     }
+    ssOff();
     st.classList.remove('is-pick');
     btns.forEach(o => {
       o.classList.remove('is-gone');
