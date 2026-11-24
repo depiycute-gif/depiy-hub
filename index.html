@@ -1094,6 +1094,779 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
   .dp-ptr.spin svg{animation:none}
 }
 </style>
+<style id="dp-v13">/* =====================================================================
+   v13 — Lucian Labs UX/UI 480종을 드피 허브 전 화면에 다시 깐다
+   · 1순위: 로그인 게이트(403·404·405·406·062·064·025·036·226·264·438·447)
+   · 2순위: 광장·쇼츠·DM·채널·프로필·친구·저장함·검색·관리자·설정
+   · 원칙: 시그니처 오렌지 한 색, 머리카락 경계, 스프링 하나, 다크/라이트 동등
+   ===================================================================== */
+
+:root{
+  --dp-spring:cubic-bezier(.22,1,.36,1);
+  --dp-soft:cubic-bezier(.4,0,.2,1);
+  --dp-field-bg:#141418;
+  --dp-field-bg-2:#17171c;
+  --dp-field-line:rgba(255,255,255,.11);
+  --dp-field-line-hi:rgba(255,255,255,.2);
+  --dp-card:#111114;
+  --dp-card-2:#191920;
+  --dp-hair:rgba(255,255,255,.075);
+  --dp-hair-hi:rgba(255,255,255,.14);
+  --dp-ring:color-mix(in srgb,var(--depiy-orange) 24%,transparent);
+  --dp-shadow-lg:0 30px 80px -34px rgba(0,0,0,.85);
+  --dp-ok-soft:color-mix(in srgb,#5fd38d 14%,transparent);
+  --dp-danger-soft:color-mix(in srgb,#ff6b6b 13%,transparent);
+}
+html[data-theme="light"]{
+  --dp-field-bg:#FFFFFF;
+  --dp-field-bg-2:#F6F3EE;
+  --dp-field-line:rgba(23,22,28,.16);
+  --dp-field-line-hi:rgba(23,22,28,.3);
+  --dp-card:#FFFFFF;
+  --dp-card-2:#F3F0EA;
+  --dp-hair:rgba(23,22,28,.1);
+  --dp-hair-hi:rgba(23,22,28,.2);
+  --dp-ring:color-mix(in srgb,var(--depiy-orange) 20%,transparent);
+  --dp-shadow-lg:0 30px 70px -40px rgba(23,22,28,.4);
+}
+
+/* =====================================================================
+   A. 로그인 게이트 · 구조 (226 격자 빛줄기 + 319 저채도 오로라)
+   ===================================================================== */
+#loginGate{
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-start;
+  padding:0;
+  overflow:auto;
+  background:var(--bg-0);
+  -webkit-overflow-scrolling:touch;
+}
+#loginGate .dp-gate-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#loginGate .dp-gate-grid{
+  position:absolute;inset:-2px;
+  background-image:linear-gradient(var(--dp-hair) 1px,transparent 1px),linear-gradient(90deg,var(--dp-hair) 1px,transparent 1px);
+  background-size:46px 46px;
+  opacity:.75;
+  -webkit-mask-image:radial-gradient(96% 82% at 24% 24%,#000 6%,transparent 70%);
+  mask-image:radial-gradient(96% 82% at 24% 24%,#000 6%,transparent 70%);
+}
+#loginGate .dp-gate-aurora{
+  position:absolute;left:-16%;top:-24%;width:78%;height:86%;border-radius:50%;
+  background:
+    radial-gradient(closest-side,color-mix(in srgb,var(--depiy-orange) 26%,transparent),transparent 72%),
+    radial-gradient(closest-side at 70% 60%,color-mix(in srgb,#5ea0ff 12%,transparent),transparent 70%);
+  filter:blur(26px);opacity:.75;
+  animation:dp-aurora 20s var(--dp-soft) infinite alternate;
+}
+@keyframes dp-aurora{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6%,4%,0) scale(1.12)}}
+#loginGate .dp-beam{
+  position:absolute;left:var(--x,30%);top:-40%;width:1px;height:52%;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--depiy-orange) 85%,transparent),transparent);
+  opacity:0;animation:dp-beam-fall var(--t,9s) linear infinite;animation-delay:var(--d,0s);
+}
+#loginGate .dp-beam::after{
+  content:"";position:absolute;left:-1.5px;bottom:8%;width:4px;height:4px;border-radius:50%;
+  background:var(--depiy-orange);box-shadow:0 0 10px 2px color-mix(in srgb,var(--depiy-orange) 70%,transparent);
+}
+@keyframes dp-beam-fall{
+  0%{opacity:0;transform:translateY(0)}
+  14%{opacity:.9}
+  72%{opacity:.55}
+  100%{opacity:0;transform:translateY(150vh)}
+}
+
+/* 왼쪽 소개 패널 */
+#loginGate .dp-gate-art{
+  position:relative;z-index:1;
+  flex:1 1 46%;max-width:640px;
+  padding:clamp(28px,4.2vw,60px);
+  display:flex;flex-direction:column;justify-content:space-between;gap:30px;
+  border-right:1px solid var(--dp-hair);
+}
+#loginGate .dp-art-brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:15px;letter-spacing:-.02em}
+#loginGate .dp-art-mark{
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  background:var(--depiy-orange);color:var(--on-orange);font-size:15px;font-weight:900;
+  box-shadow:0 8px 20px -10px var(--orange-glow);
+}
+#loginGate .dp-art-word{color:var(--text-dim)}
+#loginGate .dp-art-copy{max-width:440px}
+#loginGate .dp-art-kicker{
+  margin:0 0 14px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--depiy-orange);
+}
+#loginGate .dp-art-h{
+  margin:0 0 16px;font-size:clamp(27px,3.1vw,40px);line-height:1.16;letter-spacing:-.04em;font-weight:900;
+  color:var(--text);
+}
+#loginGate .dp-art-sub{margin:0 0 24px;font-size:13.5px;line-height:1.65;color:var(--text-dim);max-width:360px}
+#loginGate .dp-art-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+#loginGate .dp-art-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-dim)}
+#loginGate .dp-art-list svg{
+  width:26px;height:26px;flex:none;padding:5px;border-radius:8px;
+  fill:none;stroke:var(--depiy-orange);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+  background:color-mix(in srgb,var(--depiy-orange) 10%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--depiy-orange) 22%,transparent);
+}
+#loginGate .dp-art-foot{display:flex;align-items:center;gap:8px;margin:0;font-size:11.5px;color:var(--text-mute)}
+#loginGate .dp-art-foot i{width:6px;height:6px;border-radius:50%;background:var(--depiy-orange);box-shadow:0 0 0 3px color-mix(in srgb,var(--depiy-orange) 16%,transparent)}
+
+/* =====================================================================
+   B. 로그인 카드 (403 이메일 로그인 폼)
+   ===================================================================== */
+#loginGate .login-card{
+  position:relative;z-index:1;
+  margin:auto;
+  width:100%;max-width:432px;
+  padding:28px 26px 22px;
+  border-radius:24px;
+  background:var(--dp-card);
+  border:1px solid var(--dp-hair);
+  box-shadow:var(--dp-shadow-lg);
+  display:flex;flex-direction:column;align-items:stretch;gap:14px;
+  text-align:left;
+  transition:transform .35s var(--dp-spring),opacity .3s var(--dp-soft);
+}
+#loginGate .login-card.dp-shake{animation:dp-shake .5s cubic-bezier(.36,.07,.19,.97)}
+@keyframes dp-shake{15%{transform:translateX(-8px)}32%{transform:translateX(7px)}48%{transform:translateX(-5px)}64%{transform:translateX(3px)}80%{transform:translateX(-2px)}}
+#loginGate .dp-gate-head{display:flex;align-items:center;gap:12px;margin-bottom:2px}
+#loginGate .login-brand{
+  width:46px;height:46px;margin:0;flex:none;border-radius:14px;
+  display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--depiy-orange),#e07c43 78%);
+  color:var(--on-orange);font-size:20px;font-weight:900;
+  box-shadow:0 12px 26px -12px var(--orange-glow),inset 0 1px 0 rgba(255,255,255,.35);
+}
+#loginGate .dp-gate-titles{min-width:0}
+#loginGate .login-title{margin:0;font-size:19.5px;font-weight:850;letter-spacing:-.035em;line-height:1.2}
+#loginGate .login-desc{margin:3px 0 0;font-size:12.5px;line-height:1.5;color:var(--text-dim)}
+
+/* 알약 탭 (039) */
+#loginGate .login-tabs{
+  margin:0;padding:4px;gap:2px;border-radius:999px;
+  background:var(--dp-card-2);
+  border:1px solid var(--dp-hair);
+}
+#loginGate .login-tab{
+  padding:9px 8px;border-radius:999px;font-size:12.5px;font-weight:750;
+  color:var(--text-dim);letter-spacing:-.01em;
+  transition:color .2s var(--dp-soft),transform .2s var(--dp-spring);
+}
+#loginGate .login-tab:hover:not(.active){color:var(--text)}
+#loginGate .login-tab:active{transform:scale(.97)}
+#loginGate .login-tab.active{background:transparent;box-shadow:none;color:var(--text)}
+#loginGate .login-tabs.dp-pilled .dp-pill{
+  top:4px;bottom:4px;border-radius:999px;
+  background:var(--dp-card);
+  box-shadow:0 1px 2px rgba(0,0,0,.35),inset 0 0 0 1px var(--dp-hair);
+}
+html[data-theme="light"] #loginGate .login-tabs.dp-pilled .dp-pill{background:#fff;box-shadow:0 1px 3px rgba(23,22,28,.14),inset 0 0 0 1px var(--dp-hair)}
+
+/* 폼 */
+#loginGate .gate-form{gap:10px;margin:0}
+#loginGate .gate-form[hidden]{display:none}
+
+/* 025 테두리로 떠오르는 라벨 */
+#loginGate .field{position:relative;display:block;margin:0 0 2px;gap:0;font-size:12px}
+#loginGate .field>span:first-child{
+  position:absolute;top:-7px;left:11px;z-index:2;
+  padding:0 6px;border-radius:5px;
+  font-size:10.5px;font-weight:750;letter-spacing:.005em;line-height:1.35;
+  color:var(--text-mute);background:var(--dp-card);
+  transition:color .2s var(--dp-soft),transform .3s var(--dp-spring);
+  pointer-events:none;
+}
+#loginGate .field>input,
+#loginGate .field>textarea{
+  width:100%;height:50px;padding:13px 14px 11px;
+  border-radius:13px;
+  background:var(--dp-field-bg);
+  border:1px solid var(--dp-field-line);
+  color:var(--text);font-size:14.5px;font-weight:600;letter-spacing:-.01em;
+  outline:none;
+  transition:border-color .18s var(--dp-soft),box-shadow .22s var(--dp-soft),background .18s var(--dp-soft);
+}
+#loginGate .field>input::placeholder{color:var(--text-mute);font-weight:500;opacity:.85}
+#loginGate .field:hover>input{border-color:var(--dp-field-line-hi)}
+#loginGate .field:focus-within>span:first-child{color:var(--depiy-orange)}
+#loginGate .field:focus-within>input{
+  border-color:color-mix(in srgb,var(--depiy-orange) 62%,transparent);
+  box-shadow:0 0 0 4px var(--dp-ring);
+  background:var(--dp-field-bg);
+}
+#loginGate .field>input:-webkit-autofill{
+  -webkit-box-shadow:0 0 0 40px var(--dp-field-bg) inset;
+  -webkit-text-fill-color:var(--text);
+  caret-color:var(--text);
+}
+#loginGate .field.dp-bad>input{border-color:color-mix(in srgb,#ff6b6b 62%,transparent);box-shadow:0 0 0 4px var(--dp-danger-soft)}
+#loginGate .field.dp-bad>span:first-child{color:#ff8f8f}
+#loginGate .field.dp-ok>input{border-color:color-mix(in srgb,#5fd38d 55%,transparent)}
+#loginGate .field-status{font-size:11px;margin:5px 2px 0}
+
+/* 비밀번호 보기 토글 (403) */
+#loginGate .dp-eye{
+  position:absolute;right:6px;top:4px;
+  width:42px;height:42px;border-radius:10px;
+  display:grid;place-items:center;color:var(--text-mute);
+  border:0;background:none;cursor:pointer;z-index:3;
+  transition:color .18s var(--dp-soft),background .18s var(--dp-soft),transform .18s var(--dp-spring);
+}
+#loginGate .dp-eye:hover{color:var(--text);background:var(--dp-card-2)}
+#loginGate .dp-eye:active{transform:scale(.92)}
+#loginGate .dp-eye svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+#loginGate .dp-eye .lid{transform-origin:12px 12px;transform:scaleY(.12);transition:transform .42s var(--dp-spring)}
+#loginGate .dp-eye .lash{opacity:1;transform-origin:12px 12px;transition:opacity .2s,transform .38s var(--dp-spring)}
+#loginGate .dp-eye[aria-pressed="true"] .lid{transform:none}
+#loginGate .dp-eye[aria-pressed="true"] .lash{opacity:0;transform:translateY(-3px)}
+#loginGate .field.dp-has-eye>input{padding-right:52px}
+#loginGate .dp-caps{
+  display:none;margin:5px 2px 0;font-size:11px;font-weight:700;color:var(--warn);
+}
+#loginGate .dp-caps.on{display:block}
+
+/* 036 비밀번호 강도 */
+#loginGate .dp-strength{margin:8px 2px 2px}
+#loginGate .dp-strength-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+#loginGate .dp-strength-bars i{height:4px;border-radius:3px;background:var(--dp-field-line);overflow:hidden;position:relative}
+#loginGate .dp-strength-bars i::after{
+  content:"";position:absolute;inset:0;background:var(--dp-lv,var(--depiy-orange));
+  transform:scaleX(0);transform-origin:0 50%;
+  transition:transform .42s var(--dp-soft),background-color .3s;
+}
+#loginGate .dp-strength-bars i.on::after{transform:none}
+#loginGate .dp-strength-bars i:nth-child(2)::after{transition-delay:.04s}
+#loginGate .dp-strength-bars i:nth-child(3)::after{transition-delay:.08s}
+#loginGate .dp-strength-bars i:nth-child(4)::after{transition-delay:.12s}
+#loginGate .dp-strength-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px}
+#loginGate .dp-strength-rules{display:flex;flex-wrap:wrap;gap:5px}
+#loginGate .dp-rule{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2.5px 7px;border-radius:999px;font-size:10.5px;font-weight:650;
+  color:var(--text-mute);background:var(--dp-field-bg-2);
+  box-shadow:inset 0 0 0 1px var(--dp-hair);
+  transition:color .25s,background .25s,box-shadow .25s;
+}
+#loginGate .dp-rule::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5;transition:opacity .25s}
+#loginGate .dp-rule.ok{color:var(--ok);background:var(--dp-ok-soft);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ok) 32%,transparent)}
+#loginGate .dp-rule.ok::before{opacity:1}
+#loginGate .dp-strength-lv{font-size:10.5px;font-weight:800;color:var(--dp-lv,var(--text-mute));flex:none}
+
+/* 264 이메일 오타 교정 */
+#loginGate .dp-typo{
+  display:none;align-items:center;gap:7px;width:100%;margin:7px 0 0;padding:8px 11px;
+  border-radius:10px;border:0;text-align:left;cursor:pointer;font-size:11.5px;font-weight:650;
+  color:var(--text);background:color-mix(in srgb,#e8c25a 12%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,#e8c25a 30%,transparent);
+}
+#loginGate .dp-typo.on{display:flex;animation:dp-typo-in .35s var(--dp-spring)}
+@keyframes dp-typo-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+#loginGate .dp-typo svg{width:15px;height:15px;flex:none;fill:none;stroke:#e8c25a;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#loginGate .dp-typo b{color:#e8c25a;font-weight:850}
+
+/* 약관 동의 (433) */
+#loginGate .consent-row{display:flex;align-items:flex-start;gap:9px;font-size:11.5px;line-height:1.55;color:var(--text-dim);margin:2px 0}
+#loginGate .consent-row input[type="checkbox"],
+#loginGate .acct-box .consent-row input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:19px;height:19px;margin:0;flex:none;position:relative;cursor:pointer;
+  border-radius:6px;background:var(--dp-field-bg);
+  box-shadow:inset 0 0 0 1.5px var(--dp-field-line);
+  transition:background .22s var(--dp-soft),box-shadow .22s var(--dp-soft),transform .25s var(--dp-spring);
+}
+#loginGate .consent-row input[type="checkbox"]::after,
+#loginGate .acct-box .consent-row input[type="checkbox"]::after{
+  content:"";position:absolute;left:5px;top:5.5px;width:9px;height:5px;
+  border-left:1.9px solid var(--on-orange);border-bottom:1.9px solid var(--on-orange);
+  transform:rotate(-45deg) scale(.2);opacity:0;
+  transition:transform .28s var(--dp-spring),opacity .15s;
+}
+#loginGate .consent-row input[type="checkbox"]:checked,
+#loginGate .acct-box .consent-row input[type="checkbox"]:checked{
+  background:var(--depiy-orange);box-shadow:inset 0 0 0 1.5px var(--depiy-orange);
+}
+#loginGate .consent-row input[type="checkbox"]:checked::after,
+#loginGate .acct-box .consent-row input[type="checkbox"]:checked::after{opacity:1;transform:rotate(-45deg) scale(1)}
+#loginGate .consent-row input[type="checkbox"]:active{transform:scale(.9)}
+#loginGate .consent-row .link-btn{font-size:11.5px;color:var(--depiy-orange);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--depiy-orange) 45%,transparent);padding:0 1px}
+#loginGate .consent-row label{font-size:11.5px;color:var(--text-dim);cursor:pointer}
+
+/* 438 로딩→완료 버튼 */
+#loginGate .gate-btn{
+  position:relative;overflow:hidden;
+  width:100%;height:50px;margin-top:4px;
+  display:grid;place-items:center;
+  border-radius:13px;font-size:14.5px;font-weight:800;letter-spacing:-.01em;
+  transition:width .45s var(--dp-spring),border-radius .4s var(--dp-spring),background .3s,color .3s,transform .2s var(--dp-spring),box-shadow .3s;
+}
+#loginGate .gate-btn>*{grid-area:1/1}
+#loginGate .gate-btn .dp-spin{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid currentColor;border-right-color:transparent;
+  opacity:0;transform:scale(.4);
+  transition:opacity .2s,transform .3s var(--dp-spring);
+}
+#loginGate .gate-btn .dp-ok{
+  width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;
+  opacity:0;transform:scale(.4);
+  transition:opacity .2s,transform .35s var(--dp-spring);
+}
+#loginGate .gate-btn .dp-ok path{stroke-dasharray:22;stroke-dashoffset:22;transition:stroke-dashoffset .35s var(--dp-soft) .1s}
+#loginGate .gate-btn.is-busy,#loginGate .gate-btn.is-ok{width:50px;align-self:center;border-radius:50%;pointer-events:none}
+#loginGate .gate-btn.is-busy>span,#loginGate .gate-btn.is-ok>span{opacity:0;transform:scale(.7);transition:opacity .15s,transform .3s var(--dp-spring)}
+#loginGate .gate-btn.is-busy .dp-spin{opacity:1;transform:none;animation:dp-spin .7s linear infinite}
+#loginGate .gate-btn.is-ok{background:var(--ok);color:#0b2417;box-shadow:0 10px 26px -12px rgba(95,211,141,.7)}
+#loginGate .gate-btn.is-ok .dp-ok{opacity:1;transform:none}
+#loginGate .gate-btn.is-ok .dp-ok path{stroke-dashoffset:0}
+@keyframes dp-spin{to{transform:rotate(360deg)}}
+#loginGate .btn:hover{box-shadow:0 10px 26px -14px var(--orange-glow)}
+
+/* 링크 줄 · 푸터 */
+#loginGate .gate-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;margin-top:2px}
+#loginGate .link-btn{
+  font-size:11.5px;color:var(--text-mute);text-decoration:none;padding:3px 0;
+  transition:color .16s var(--dp-soft);
+}
+#loginGate .link-btn:hover:not(:disabled){color:var(--depiy-orange)}
+#loginGate .login-footer{margin-top:2px;padding-top:12px;border-top:1px solid var(--dp-hair);font-size:10.5px;line-height:1.65;color:var(--text-mute);text-align:center}
+#loginGate .login-footer .link-btn{font-size:10.5px}
+
+/* 072 접히는 인라인 알림 */
+#loginGate .gate-msg{
+  position:relative;margin:0;padding:11px 13px 11px 36px;border-radius:12px;
+  background:var(--dp-danger-soft);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,#ff6b6b 32%,transparent);
+  color:#ffc0c0;font-size:12px;line-height:1.55;text-align:left;width:100%;
+  animation:dp-msg-in .4s var(--dp-spring);
+}
+#loginGate .gate-msg::before{
+  content:"";position:absolute;left:13px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;
+  background:no-repeat center/8px 8px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 3v3.4M6 8.6v.2' stroke='%23ff9f9f' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  box-shadow:inset 0 0 0 1.5px color-mix(in srgb,#ff6b6b 60%,transparent);
+}
+@keyframes dp-msg-in{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+#loginGate .gate-msg.ok{
+  background:color-mix(in srgb,var(--depiy-orange) 12%,transparent);
+  box-shadow:inset 0 0 0 1px var(--orange-line);
+  color:var(--text);
+}
+#loginGate .gate-msg.ok::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.4l2.3 2.3L9.6 4' fill='none' stroke='%23F8935F' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");box-shadow:inset 0 0 0 1.5px var(--orange-line)}
+
+/* 매직 링크 안내 카드 (064) */
+#loginGate .dp-magic-card{
+  display:flex;gap:11px;padding:12px 13px;margin-bottom:4px;
+  border-radius:14px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--depiy-orange) 12%,transparent),color-mix(in srgb,var(--depiy-orange) 4%,transparent));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--depiy-orange) 24%,transparent);
+}
+#loginGate .dp-magic-ico{
+  width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--depiy-orange) 16%,transparent);color:var(--depiy-orange);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--depiy-orange) 30%,transparent);
+}
+#loginGate .dp-magic-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#loginGate .dp-magic-txt b{display:block;font-size:12.5px;font-weight:800;margin-bottom:3px}
+#loginGate .dp-magic-txt p{margin:0;font-size:11.5px;line-height:1.6;color:var(--text-dim)}
+#loginGate .dp-magic-txt strong{color:var(--text);font-weight:750}
+#loginGate .dp-magic-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+#loginGate .dp-magic-meta span{
+  font-size:10px;font-weight:650;color:var(--text-dim);
+  padding:2px 7px;border-radius:999px;background:var(--dp-card-2);
+  box-shadow:inset 0 0 0 1px var(--dp-hair);
+}
+
+/* 인증 안내 문장 */
+#loginGate .gate-sent{
+  margin:0;padding:10px 12px;border-radius:11px;
+  background:var(--dp-field-bg-2);
+  box-shadow:inset 0 0 0 1px var(--dp-hair);
+  font-size:11.5px;line-height:1.6;color:var(--text-dim);word-break:break-all;
+}
+
+/* 406 인증 코드 8칸 */
+#loginGate .dp-otp-field{position:relative;display:block;margin:6px 0 0;padding:0 0 56px}
+#loginGate .dp-otp-field>span:first-child{
+  position:static;display:block;background:none;padding:0;margin:0 0 7px;
+  font-size:10.5px;color:var(--text-mute);pointer-events:none;
+}
+#loginGate .dp-otp-cells{
+  position:absolute;left:0;right:0;bottom:0;height:56px;
+  display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;
+  pointer-events:none;z-index:1;
+}
+#loginGate .dp-otp-cell{
+  display:grid;place-items:center;
+  border-radius:11px;
+  background:var(--dp-field-bg);
+  box-shadow:inset 0 0 0 1px var(--dp-field-line);
+  font-size:19px;font-weight:750;font-variant-numeric:tabular-nums;color:var(--text);
+  transition:box-shadow .2s var(--dp-soft),background .25s,transform .35s var(--dp-spring);
+}
+#loginGate .dp-otp-cell.fill{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--depiy-orange) 45%,transparent)}
+#loginGate .dp-otp-cell.cur{box-shadow:inset 0 0 0 1.6px var(--depiy-orange),0 0 0 4px var(--dp-ring)}
+#loginGate .dp-otp-cell.pop{animation:dp-otp-pop .4s var(--dp-spring)}
+@keyframes dp-otp-pop{from{transform:translateY(6px) scale(.86);opacity:.4}to{transform:none;opacity:1}}
+#loginGate #gateCode{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  width:100%;height:56px;padding:0;margin:0;
+  opacity:0;border:0;background:transparent;box-shadow:none;
+  color:transparent;caret-color:transparent;letter-spacing:0;
+}
+#loginGate #gateCode::selection{background:transparent}
+#loginGate #gateCode:focus-visible{outline:none}
+#loginGate .dp-otp-field:focus-within .dp-otp-cell.cur{background:var(--dp-field-bg)}
+#loginGate .dp-otp-field.dp-bad .dp-otp-cell{box-shadow:inset 0 0 0 1.4px color-mix(in srgb,#ff6b6b 60%,transparent)}
+#loginGate .dp-otp-field.dp-bad{animation:dp-shake .45s cubic-bezier(.36,.07,.19,.97)}
+#loginGate .dp-otp-field:focus-within .dp-otp-cells .dp-otp-cell.empty-n{background:var(--dp-field-bg)}
+#loginGate .dp-otp-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+#loginGate .dp-otp-count{font-size:10.5px;color:var(--text-mute);font-variant-numeric:tabular-nums}
+#loginGate .dp-otp-paste{
+  font-size:10.5px;font-weight:750;color:var(--text-dim);
+  padding:4px 10px;border-radius:999px;border:0;cursor:pointer;
+  background:var(--dp-field-bg-2);box-shadow:inset 0 0 0 1px var(--dp-hair);
+  transition:color .16s,background .16s,transform .16s;
+}
+#loginGate .dp-otp-paste:hover{color:var(--depiy-orange);background:color-mix(in srgb,var(--depiy-orange) 10%,transparent)}
+#loginGate .dp-otp-paste:active{transform:scale(.94)}
+
+/* 테마 전환 버튼 (447 · 게이트) */
+.dp-theme-fab{
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--dp-hair);
+  color:var(--text-dim);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 6px 18px -10px rgba(0,0,0,.7);
+}
+html[data-theme="light"] .dp-theme-fab{background:rgba(255,255,255,.8)}
+.dp-theme-fab:hover{color:var(--text);background:var(--glass-hi)}
+
+/* 게이트 라이트 테마 */
+html[data-theme="light"] #loginGate{
+  background:
+    radial-gradient(900px 560px at 24% 16%,color-mix(in srgb,var(--depiy-orange) 13%,transparent),transparent 62%),
+    #F2EFE9;
+}
+html[data-theme="light"] #loginGate .dp-gate-grid{
+  background-image:linear-gradient(rgba(23,22,28,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(23,22,28,.06) 1px,transparent 1px);
+}
+html[data-theme="light"] #loginGate .dp-gate-aurora{opacity:.55}
+html[data-theme="light"] #loginGate .login-card{
+  background:#fff;border-color:rgba(23,22,28,.1);
+  box-shadow:0 2px 4px rgba(23,22,28,.04),0 30px 70px -34px rgba(23,22,28,.34);
+}
+html[data-theme="light"] #loginGate .field>span:first-child{background:#fff}
+html[data-theme="light"] #loginGate .gate-msg{color:#a52a2a}
+html[data-theme="light"] #loginGate .gate-msg.ok{color:var(--text)}
+html[data-theme="light"] #loginGate .dp-typo{color:#6b4f0b;background:rgba(232,194,90,.16)}
+html[data-theme="light"] #loginGate .dp-eye:hover{background:rgba(23,22,28,.05)}
+html[data-theme="light"] #loginGate .btn.gate-btn{box-shadow:0 8px 20px -14px rgba(248,147,95,.9)}
+
+/* 게이트 모바일 · 좁은 화면 */
+@media (max-width:900px){
+  #loginGate{align-items:flex-start;justify-content:center;padding:16px}
+  #loginGate .dp-gate-art{display:none}
+  #loginGate .login-card{margin:auto;max-width:430px;padding:24px 20px 18px;border-radius:20px}
+}
+@media (max-width:420px){
+  #loginGate{padding:10px}
+  #loginGate .login-card{padding:22px 16px 16px;border-radius:18px}
+  #loginGate .dp-gate-head{gap:10px}
+  #loginGate .login-brand{width:42px;height:42px;border-radius:12px;font-size:18px}
+  #loginGate .login-title{font-size:18px}
+  #loginGate .login-desc{font-size:12px}
+  #loginGate .dp-otp-cells{gap:4px;height:50px}
+  #loginGate .dp-otp-cell{height:50px;font-size:17px;border-radius:9px}
+  #loginGate .dp-otp-field{padding-bottom:50px}
+  #loginGate #gateCode{height:50px}
+  #loginGate .login-footer{font-size:10px}
+}
+@media (max-height:700px) and (min-width:901px){
+  #loginGate .dp-gate-art{padding:28px 32px}
+  #loginGate .dp-art-h{font-size:26px}
+  #loginGate .dp-art-list{gap:7px}
+}
+
+/* =====================================================================
+   C. 전 화면 공통 · 촉각 (006 리플 · 351 프레스 · 228 커서 빛)
+   ===================================================================== */
+.btn,.act,.send-btn,.cc-send,.admin-tab,.dm-item,.x-tab,.post-tool,.tool-btn,.link-btn,.dp-otp-paste,.pf-actions .btn,.acct-section summary{cursor:pointer}
+.btn,.act,.send-btn,.cc-send,.admin-tab,.dm-item,.x-tab,.post-tool,.tool-btn{position:relative;overflow:hidden}
+.dp-rip{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.16;transform:scale(0);animation:dp-rip .6s var(--dp-soft) forwards;z-index:0}
+@keyframes dp-rip{to{transform:scale(2.6);opacity:0}}
+.btn>*,.act>*,.send-btn>*,.cc-send>*{position:relative;z-index:1}
+
+/* 포스트 카드: 커서를 따라 은은하게 도는 경계광 + 살짝 뜨는 호버 */
+.post:not(.xpost){position:relative;transition:transform .28s var(--dp-spring),border-color .2s var(--dp-soft),box-shadow .3s var(--dp-soft)}
+@media (hover:hover){
+  .post:not(.xpost):hover{transform:translateY(-1px);box-shadow:0 8px 24px -18px rgba(0,0,0,.8)}
+  .post:not(.xpost)::after{
+    content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;
+    background:radial-gradient(220px 140px at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--depiy-orange) 16%,transparent),transparent 70%);
+    opacity:0;transition:opacity .3s var(--dp-soft);
+  }
+  .post:not(.xpost):hover::after{opacity:1}
+  .person,.trend,.admin-card,.lounge-card,.pf-card,.dm-item{transition:transform .26s var(--dp-spring),border-color .2s,background .2s}
+  .person:hover,.admin-card:hover{transform:translateY(-1px)}
+}
+.person,.trend,.admin-card,.lounge-card{position:relative}
+
+/* 스파크·에코·북마크 클릭 입자 (006) */
+.dp-burst{position:fixed;z-index:120;width:5px;height:5px;border-radius:50%;pointer-events:none;background:var(--depiy-orange);box-shadow:0 0 8px color-mix(in srgb,var(--depiy-orange) 70%,transparent)}
+
+/* 빈 상태 (440 · 092 · 088) */
+.empty{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:44px 18px;color:var(--text-mute);font-size:13.5px;line-height:1.6;
+  animation:dp-fade-in .4s var(--dp-soft);
+}
+.empty .dp-empty-ico{
+  width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+  background:var(--glass);box-shadow:inset 0 0 0 1px var(--hair);
+  color:var(--text-mute);margin-bottom:2px;
+}
+.empty .dp-empty-ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.empty small{font-size:11.5px;color:var(--text-mute);opacity:.8;line-height:1.6}
+@keyframes dp-fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* 탭 인디케이터 (416) — 관리자·친구·검색 탭 */
+.admin-tabs{position:relative;padding:3px;border-radius:999px;background:var(--dp-field-bg-2);box-shadow:inset 0 0 0 1px var(--hair);gap:2px;margin-bottom:14px}
+.admin-tabs .dp-pill2{
+  position:absolute;left:0;top:3px;bottom:3px;border-radius:999px;z-index:0;
+  background:var(--dp-card);box-shadow:0 1px 2px rgba(0,0,0,.35),inset 0 0 0 1px var(--hair);
+  opacity:0;transition:transform .34s var(--dp-spring),width .34s var(--dp-spring),opacity .2s;
+  pointer-events:none;
+}
+.admin-tabs .admin-tab{position:relative;z-index:1;background:none;border:0;box-shadow:none;color:var(--text-dim);padding:7px 13px}
+.admin-tabs .admin-tab:hover{color:var(--text);background:none}
+.admin-tabs .admin-tab.active{background:none;border:0;color:var(--text);box-shadow:none}
+html[data-theme="light"] .admin-tabs .dp-pill2{background:#fff;box-shadow:0 1px 3px rgba(23,22,28,.14),inset 0 0 0 1px var(--hair)}
+
+/* 아코디언 (424 · 023) */
+.acct-section{border-radius:13px;background:var(--glass);border-color:var(--hair);transition:background .2s,border-color .2s}
+.acct-section summary{position:relative;display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding-right:24px;border-radius:8px;transition:color .16s}
+.acct-section summary::after{
+  content:"";position:absolute;right:6px;top:50%;width:7px;height:7px;margin-top:-5px;
+  border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;
+  transform:rotate(45deg);opacity:.55;transition:transform .32s var(--dp-spring),opacity .2s;
+}
+.acct-section[open] summary::after{transform:rotate(-135deg);margin-top:-1px}
+.acct-section[open]{background:var(--glass-hi)}
+.acct-section[open]>*:not(summary){animation:dp-drop .3s var(--dp-spring)}
+@keyframes dp-drop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+/* 입력칸 공통 (434) */
+.field input,.field textarea,.field select,.admin-search input,.send input,.dm-send input,.field-row input,.field-row select{
+  transition:border-color .18s var(--dp-soft),box-shadow .2s var(--dp-soft),background .18s;
+}
+.field input:hover,.field textarea:hover,.admin-search input:hover,.send input:hover,.dm-send input:hover{border-color:var(--dp-field-line-hi)}
+.field input:focus,.field textarea:focus,.admin-search input:focus,.send input:focus,.dm-send input:focus{
+  border-color:color-mix(in srgb,var(--depiy-orange) 55%,transparent);
+  box-shadow:0 0 0 3px var(--dp-ring);
+  outline:none;
+}
+.field select,.field-row select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-mute) 50%),linear-gradient(135deg,var(--text-mute) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+.field select option,.field-row select option{background:#1c1c20;color:var(--text)}
+html[data-theme="light"] .field select option,html[data-theme="light"] .field-row select option{background:#fff;color:#17161C}
+
+/* 버튼 세부 */
+.btn{box-shadow:0 0 0 0 transparent}
+.btn:not(.ghost):not(.danger){background:linear-gradient(180deg,color-mix(in srgb,var(--depiy-orange) 100%,#fff 6%),var(--depiy-orange))}
+.btn.ghost{background:var(--glass-hi);color:var(--text);box-shadow:inset 0 0 0 1px var(--hair)}
+.btn.ghost:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
+.btn.sm{padding:6px 13px;font-size:12px;border-radius:999px}
+.btn:focus-visible,.act:focus-visible,.admin-tab:focus-visible,.dm-item:focus-visible{outline:2px solid var(--depiy-orange);outline-offset:2px}
+
+/* 칩 · 배지 톤 정리 */
+.badge-admin,.badge-mod{box-shadow:inset 0 0 0 1px currentColor;background:transparent}
+.nav-badge{box-shadow:0 2px 6px -2px rgba(255,93,93,.6)}
+
+/* 게이트 부가 상태 */
+#loginGate .gate-btn.ready{box-shadow:0 0 0 4px var(--dp-ring),0 10px 26px -16px var(--orange-glow)}
+#loginGate .field>input.is-fix{animation:dp-fix .6s var(--dp-soft)}
+@keyframes dp-fix{30%{background:var(--dp-ok-soft);border-color:color-mix(in srgb,#5fd38d 55%,transparent)}}
+#loginGate .dp-otp-field.dp-ok .dp-otp-cell{box-shadow:inset 0 0 0 1.4px color-mix(in srgb,#5fd38d 55%,transparent)}
+.dp-copied{background:var(--dp-ok-soft)!important;color:var(--ok)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,#5fd38d 35%,transparent)!important;animation:dp-copied .5s var(--dp-spring)}
+@keyframes dp-copied{from{transform:scale(.94)}to{transform:none}}
+
+/* 화면 진입 · 로그인 직후 */
+.dp-view-in{animation:dp-view .4s var(--dp-soft)}
+@keyframes dp-view{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+#app.dp-welcome{animation:dp-welcome .7s var(--dp-spring)}
+@keyframes dp-welcome{from{opacity:0;transform:scale(.992)}60%{opacity:1}to{opacity:1;transform:none}}
+
+/* =====================================================================
+   D. 광장 · 피드
+   ===================================================================== */
+.x-tab{transition:color .18s var(--dp-soft)}
+.x-tab:hover{background:transparent;color:var(--text)}
+.x-tab.active::after{height:3px;border-radius:3px;background:linear-gradient(90deg,color-mix(in srgb,var(--depiy-orange) 55%,transparent),var(--depiy-orange))}
+.xp-body{letter-spacing:-.005em}
+.xp-more{color:var(--depiy-orange);font-weight:650}
+.x-prompt{transition:background .18s var(--dp-soft)}
+.post-media-single img{transition:transform .45s var(--dp-spring),filter .3s}
+.post-media-single img:hover{transform:scale(1.015)}
+.act{letter-spacing:-.01em}
+.act.on{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--depiy-orange) 30%,transparent)}
+.act.spark.on{background:color-mix(in srgb,var(--depiy-orange) 14%,transparent)}
+.act.bm.on{background:color-mix(in srgb,var(--depiy-orange) 12%,transparent)}
+.act.bm.on svg{fill:var(--depiy-orange)}
+.thread-panel{border-top-color:var(--hair)}
+
+/* =====================================================================
+   E. DM · 채널 (078 · 005)
+   ===================================================================== */
+.dm-item{border-bottom-color:var(--hair);transition:background .18s var(--dp-soft)}
+.dm-item.active{background:color-mix(in srgb,var(--depiy-orange) 9%,transparent);box-shadow:inset 2px 0 0 var(--depiy-orange)}
+.dm-item .av{background:var(--dp-card-2)}
+.dm-bub{border-radius:16px 16px 16px 5px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.dm-msg.mine .dm-bub{border-radius:16px 16px 5px 16px}
+.dm-msg.mine .dm-bub{background:linear-gradient(180deg,color-mix(in srgb,var(--depiy-orange) 16%,transparent),color-mix(in srgb,var(--depiy-orange) 11%,transparent))}
+.dm-msg:last-child{animation:dp-bub .34s var(--dp-spring)}
+@keyframes dp-bub{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+.dm-send input::placeholder,.chat-composer textarea::placeholder{color:var(--text-mute)}
+.dm-send .send-btn,.cc-send{box-shadow:0 6px 16px -10px var(--orange-glow)}
+.send-btn svg,.cc-send svg{transition:transform .3s var(--dp-spring)}
+.send-btn:hover svg,.cc-send:hover svg{transform:translate(1px,-1px)}
+.chat-msg{transition:background .14s var(--dp-soft)}
+.chat-msg:hover{background:color-mix(in srgb,var(--text) 4%,transparent)}
+.chat-msg .cm-av{box-shadow:0 0 0 1px var(--hair)}
+.chat-composer{background:var(--glass-hi);border-color:var(--hair);transition:border-color .2s,box-shadow .2s}
+.chat-composer:focus-within{border-color:color-mix(in srgb,var(--depiy-orange) 40%,transparent);box-shadow:0 0 0 3px var(--dp-ring)}
+.chat-day{color:var(--text-mute)}
+.chat-new-pill,.jump{box-shadow:0 8px 22px -10px var(--orange-glow)}
+.cm-gutter{transition:opacity .15s}
+
+/* =====================================================================
+   F. 쇼츠 (쇼츠는 화면이 어두운 게 맞다 — 가시성만 보완)
+   ===================================================================== */
+.shorts-stage{background:#000}
+.shorts-wrap{background:#000}
+.short-rail .act{background:rgba(0,0,0,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);box-shadow:0 6px 18px -10px rgba(0,0,0,.8)}
+.short-rail .act:hover{background:rgba(0,0,0,.6)}
+.short-rail .act.on{background:color-mix(in srgb,var(--depiy-orange) 26%,rgba(0,0,0,.5));border-color:var(--orange-line)}
+.short-mute{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
+.short-info{text-shadow:0 1px 10px rgba(0,0,0,.8)}
+.short-info p{font-size:13.5px}
+.shorts-empty{gap:12px;color:#c9c9d2}
+.shorts-empty .dp-empty-ico{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);color:#c9c9d2}
+.shorts-loading{font-size:11.5px;letter-spacing:.02em}
+.wheel-count{background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.14)}
+.wheel-hint{background:rgba(10,10,12,.7);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
+
+/* =====================================================================
+   G. 프로필 · 친구 · 저장함 · 검색 · 관리자 · 튜토리얼
+   ===================================================================== */
+.pf-card{border-color:var(--hair);box-shadow:0 1px 0 rgba(255,255,255,.02) inset}
+.pf-banner{background:linear-gradient(135deg,color-mix(in srgb,var(--depiy-orange) 62%,transparent),color-mix(in srgb,#5ea0ff 34%,transparent))}
+.pf-av{border-color:var(--bg-1);box-shadow:0 0 0 1px var(--hair)}
+.pf-stats{display:flex;gap:6px 18px;padding:12px 0 0;border-top:1px solid var(--hair);margin-top:14px}
+.pf-stats span{display:inline-flex;align-items:baseline;gap:5px}
+.pf-actions .btn{min-height:34px}
+.pf-mutual .mini-av{border-color:var(--bg-1)}
+.person{padding:12px 14px;border-radius:13px;background:var(--glass);border:1px solid var(--hair);margin-bottom:8px;transition:background .18s,border-color .18s,transform .26s var(--dp-spring)}
+.person:hover{background:var(--glass-hi);border-color:var(--dp-hair-hi)}
+.person .av{width:40px;height:40px;border-radius:50%;background:var(--dp-card-2);display:grid;place-items:center;overflow:hidden;flex:none;font-weight:700}
+.person .sub{display:block;font-size:11.5px;color:var(--text-mute);margin-top:2px}
+.admin-tab{transition:color .16s,background .16s,transform .2s var(--dp-spring)}
+.admin-tabs .admin-tab:active{transform:scale(.97)}
+.admin-card{background:var(--glass);border-color:var(--hair);transition:background .18s,border-color .18s}
+.admin-card:hover{background:var(--glass-hi)}
+.admin-card-head b{font-size:13.5px;letter-spacing:-.01em}
+.admin-search input{border-color:var(--dp-field-line)}
+.admin-actions .btn{white-space:nowrap}
+.admin-quote{border-left:2px solid var(--depiy-orange);background:var(--glass)}
+.san-row{border-top-color:var(--hair)}
+.tut-card{border-radius:18px;border-color:color-mix(in srgb,var(--depiy-orange) 42%,transparent)}
+.tut-step{background:color-mix(in srgb,var(--depiy-orange) 16%,transparent)}
+.tut-bar{background:var(--dp-field-line)}
+.tut-foot .btn{min-height:32px}
+.tut-try{color:color-mix(in srgb,var(--depiy-orange) 78%,#fff);border-color:color-mix(in srgb,var(--depiy-orange) 38%,transparent)}
+#titleProgress .tp-bar{background:var(--dp-field-line)}
+#titleProgress .tp-bar i{background:linear-gradient(90deg,color-mix(in srgb,var(--depiy-orange) 60%,transparent),var(--depiy-orange))}
+
+/* 설정 모달 */
+.acct-box{background:var(--bg-1);border-radius:20px}
+.acct-box h3{font-size:15.5px;letter-spacing:-.02em}
+.acct-section{margin:10px 0 4px}
+.modal-row{gap:8px}
+.modal-row .btn{min-height:38px}
+
+/* =====================================================================
+   H. 라이트 테마 마무리 — v12가 비워 둔 화면까지
+   ===================================================================== */
+html[data-theme="light"] .x-top{background:color-mix(in srgb,var(--bg-0) 92%,transparent)}
+html[data-theme="light"] .x-prompt:hover,
+html[data-theme="light"] .xpost:hover{background:rgba(23,22,28,.03)}
+html[data-theme="light"] .acct-modal{background:rgba(23,22,28,.42)}
+html[data-theme="light"] .acct-box{background:#fff;border-color:var(--hair);box-shadow:0 24px 60px -24px rgba(23,22,28,.4)}
+html[data-theme="light"] .sheet{background:rgba(23,22,28,.36)}
+html[data-theme="light"] .sheet-box{background:#fff;border-color:var(--hair);box-shadow:0 24px 60px -30px rgba(23,22,28,.4)}
+html[data-theme="light"] .tut-card{background:#fff;border-color:var(--orange-line);box-shadow:0 18px 48px -20px rgba(23,22,28,.35)}
+html[data-theme="light"] .tut-spot{box-shadow:0 0 0 9999px rgba(23,22,28,.5),0 0 26px rgba(248,147,95,.45)}
+html[data-theme="light"] .echo-menu{background:#fff;border-color:var(--hair);box-shadow:0 18px 50px -20px rgba(23,22,28,.35)}
+html[data-theme="light"] .toast{background:rgba(255,255,255,.97);color:var(--text);border-color:var(--orange-line);box-shadow:0 14px 34px -18px rgba(23,22,28,.4)}
+html[data-theme="light"] .admin-quote{background:rgba(23,22,28,.035)}
+html[data-theme="light"] .avatar-preview-box{background:#f1eee8}
+html[data-theme="light"] .avatar-upload-btn{background:rgba(23,22,28,.06);color:var(--text);border-color:var(--hair)}
+html[data-theme="light"] .logout-btn{background:rgba(23,22,28,.06);color:var(--text-dim)}
+html[data-theme="light"] .acct-item{background:rgba(23,22,28,.03);border-color:var(--hair)}
+html[data-theme="light"] .acct-av{background:rgba(23,22,28,.06)}
+html[data-theme="light"] .composer-media-grid{background:rgba(23,22,28,.04)}
+html[data-theme="light"] .chat-composer{background:#fff}
+html[data-theme="light"] .dm-send input,
+html[data-theme="light"] .send input,
+html[data-theme="light"] .admin-search input,
+html[data-theme="light"] .field input,
+html[data-theme="light"] .field textarea,
+html[data-theme="light"] .field select,
+html[data-theme="light"] .field-row input,
+html[data-theme="light"] .field-row select{background:#fff;color:var(--text)}
+html[data-theme="light"] .field input::placeholder,
+html[data-theme="light"] .field textarea::placeholder{color:#9c97a3}
+html[data-theme="light"] .btn.ghost{background:rgba(23,22,28,.06);color:var(--text);box-shadow:inset 0 0 0 1px rgba(23,22,28,.1)}
+html[data-theme="light"] .btn.ghost:hover{background:rgba(23,22,28,.1)}
+html[data-theme="light"] .menu-btn{background:rgba(23,22,28,.06)}
+html[data-theme="light"] .space{background:rgba(23,22,28,.05)}
+html[data-theme="light"] .space.add{border-color:rgba(23,22,28,.16);background:none}
+html[data-theme="light"] .nav-item.active{background:rgba(248,147,95,.16)}
+html[data-theme="light"] .nav-item:hover{background:rgba(23,22,28,.05)}
+html[data-theme="light"] .dm-item:hover{background:rgba(23,22,28,.04)}
+html[data-theme="light"] .dm-item.active{background:rgba(248,147,95,.14)}
+html[data-theme="light"] .dm-bub{background:#F1EEE8;color:var(--text)}
+html[data-theme="light"] .dm-msg.mine .dm-bub{background:rgba(248,147,95,.2);border-color:rgba(248,147,95,.4)}
+html[data-theme="light"] .msg .bub p{background:#F1EEE8}
+html[data-theme="light"] .msg.mine .bub p{background:rgba(248,147,95,.2)}
+html[data-theme="light"] .chat-msg:hover{background:rgba(23,22,28,.035)}
+html[data-theme="light"] .chat-msg .post-tools{background:#fff}
+html[data-theme="light"] .status-banner{background:#f6c453;color:#3b2a00}
+html[data-theme="light"] .pf-av{border-color:#fff}
+html[data-theme="light"] .pf-mutual .mini-av,html[data-theme="light"] .stack .mini-av{border-color:#fff}
+html[data-theme="light"] .admin-tabs .admin-tab.active{color:var(--text)}
+html[data-theme="light"] .field select{background-image:linear-gradient(45deg,transparent 50%,#6c6773 50%),linear-gradient(135deg,#6c6773 50%,transparent 50%)}
+html[data-theme="light"] .short .thread-panel{background:rgba(255,255,255,.97);color:#17161C;border-color:rgba(23,22,28,.1)}
+html[data-theme="light"] .short .thread-panel .meta,.html[data-theme="light"] .short .thread-panel .bub p{color:#17161C}
+html[data-theme="light"] .short .thread-panel .send input{background:#fff}
+html[data-theme="light"] .lightbox{background:rgba(10,10,12,.92)}
+html[data-theme="light"] .tut-bar{background:rgba(23,22,28,.1)}
+html[data-theme="light"] .tut-try{color:#b25e2e;background:rgba(248,147,95,.1)}
+html[data-theme="light"] .pf-banner{background:linear-gradient(135deg,rgba(248,147,95,.7),rgba(94,160,255,.45))}
+@media (max-width:767px){
+  html[data-theme="light"] .nav{background:rgba(251,250,247,.98);box-shadow:8px 0 32px rgba(23,22,28,.16)}
+  html[data-theme="light"] body.drawer-open .scrim{background:rgba(23,22,28,.4)}
+}
+
+/* =====================================================================
+   I. 모션 최소화 · 인쇄
+   ===================================================================== */
+@media (prefers-reduced-motion:reduce){
+  #loginGate .dp-gate-aurora,#loginGate .dp-beam{animation:none}
+  #loginGate .dp-beam{opacity:.35}
+  .dp-rip{display:none}
+  .dm-msg:last-child,.empty,.acct-section[open]>*:not(summary){animation:none}
+}
+</style>
 </head>
 <body class="logged-out">
 <div id="statusBanner" class="status-banner" hidden role="status"></div>
@@ -1111,22 +1884,49 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
 
 <!-- 로그인 게이트 (Supabase Auth · 이메일/비번/매직링크) -->
 <div id="loginGate" class="login-gate" style="display:flex">
+  <div class="dp-gate-bg" aria-hidden="true">
+    <div class="dp-gate-grid"></div>
+    <div class="dp-gate-aurora"></div>
+    <i class="dp-beam" style="--x:19%;--d:0s;--t:8.5s"></i>
+    <i class="dp-beam" style="--x:46%;--d:-3.2s;--t:11s"></i>
+    <i class="dp-beam" style="--x:71%;--d:-6.4s;--t:9.5s"></i>
+  </div>
+
+  <aside class="dp-gate-art" aria-hidden="true">
+    <div class="dp-art-brand"><span class="dp-art-mark">D</span><span class="dp-art-word">De_piy Hub</span></div>
+    <div class="dp-art-copy">
+      <p class="dp-art-kicker">커뮤니티 · 한 곳에서</p>
+      <h1 class="dp-art-h">말이 흐르고,<br>사람이 모이는 곳.</h1>
+      <p class="dp-art-sub">광장 · 쇼츠 · 서버 · DM · 라이브 스레드를 한 화면에서 이어 씁니다.</p>
+      <ul class="dp-art-list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></svg>스파크와 에코로 반응하기</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="m10 9 5 3-5 3z"/></svg>쇼츠는 십자 바퀴로 넘기기</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 12a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-3.8A8.5 8.5 0 1 1 20.5 12z"/></svg>서버 채널과 1:1 DM 이어 쓰기</li>
+      </ul>
+    </div>
+    <p class="dp-art-foot"><i></i>드피 허브 커뮤니티</p>
+  </aside>
+
   <div class="login-card">
-    <div class="login-brand">D</div>
-    <h2 class="login-title">De_piy Hub</h2>
-    <p class="login-desc" id="gateDesc">드피 허브 커뮤니티에 오신 것을 환영합니다.</p>
-    
-    <div class="login-tabs" id="gateTabs">
-      <button type="button" class="login-tab active" data-tab="login">로그인</button>
-      <button type="button" class="login-tab" data-tab="signup">회원가입</button>
-      <button type="button" class="login-tab" data-tab="magic">매직 링크</button>
+    <div class="dp-gate-head">
+      <span class="login-brand" aria-hidden="true">D</span>
+      <div class="dp-gate-titles">
+        <h2 class="login-title">De_piy Hub</h2>
+        <p class="login-desc" id="gateDesc">드피 허브 커뮤니티에 오신 것을 환영합니다.</p>
+      </div>
+    </div>
+
+    <div class="login-tabs" id="gateTabs" role="tablist" aria-label="로그인 방법">
+      <button type="button" class="login-tab active" data-tab="login" role="tab" aria-selected="true">로그인</button>
+      <button type="button" class="login-tab" data-tab="signup" role="tab" aria-selected="false">회원가입</button>
+      <button type="button" class="login-tab" data-tab="magic" role="tab" aria-selected="false">매직 링크</button>
     </div>
 
     <!-- 로그인 폼 (이메일 + 비밀번호) -->
     <form id="loginForm" class="gate-form" data-form="login" novalidate>
       <label class="field"><span>이메일</span><input id="loginEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
-      <label class="field"><span>비밀번호</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="비밀번호" required></label>
-      <button class="btn gate-btn" type="submit" id="btnLogin">로그인</button>
+      <label class="field"><span>비밀번호</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="비밀번호 입력" required></label>
+      <button class="btn gate-btn" type="submit" id="btnLogin"><span>로그인</span><i class="dp-spin" aria-hidden="true"></i><svg class="dp-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.4 4.5L19 7.5"/></svg></button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="signup">계정이 없으신가요? 회원가입</button>
         <button type="button" class="link-btn" data-act="switchTab" data-to="magic">비밀번호 없이 매직 링크로 받기</button>
@@ -1137,7 +1937,7 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
     <!-- 회원가입 폼 (이메일 + 비밀번호 + 닉네임 + 아이디) -->
     <form id="signupForm" class="gate-form" data-form="signup" hidden novalidate>
       <label class="field"><span>이메일</span><input id="signupEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
-      <label class="field"><span>비밀번호</span><input id="signupPassword" type="password" autocomplete="new-password" placeholder="8자 이상 비밀번호" minlength="8" maxlength="72" required></label>
+      <label class="field"><span>비밀번호 (8자 이상)</span><input id="signupPassword" type="password" autocomplete="new-password" placeholder="8자 이상 비밀번호" minlength="8" maxlength="72" required></label>
       <label class="field">
         <span>닉네임 (2~12자)</span>
         <input id="signupNickname" type="text" autocomplete="off" placeholder="한글(완성형)·영문·숫자·_.- 허용" maxlength="12" required>
@@ -1153,7 +1953,7 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
         <input type="checkbox" id="signupConsent">
         <span><label for="signupConsent">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="signupConsent">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="signupConsent">에 동의합니다.</label></span>
       </div>
-      <button class="btn gate-btn" type="submit" id="btnSignup">가입하고 입장</button>
+      <button class="btn gate-btn" type="submit" id="btnSignup"><span>가입하고 입장</span><i class="dp-spin" aria-hidden="true"></i><svg class="dp-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.4 4.5L19 7.5"/></svg></button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="login">이미 계정이 있으신가요? 로그인</button>
       </div>
@@ -1161,13 +1961,21 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
 
     <!-- 매직 링크 폼 (비밀번호 없는 로그인) -->
     <form id="magicForm" class="gate-form" data-form="magic" hidden novalidate>
+      <div class="dp-magic-card">
+        <span class="dp-magic-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></span>
+        <div class="dp-magic-txt">
+          <b>비밀번호 없이 입장</b>
+          <p>가입한 이메일로 <strong>8자리 인증 코드</strong>와 <strong>입장 링크</strong>를 함께 보내드려요. 링크를 누르거나 코드를 입력하면 바로 들어와요.</p>
+          <div class="dp-magic-meta"><span>보통 10초 안에 도착</span><span>재발송은 1분에 1번</span></div>
+        </div>
+      </div>
       <label class="field"><span>이메일</span><input id="gateEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
       <label class="field" id="magicInviteWrap" hidden><span>초대 코드 (지금은 초대받은 분만 가입할 수 있어요)</span><input id="magicInvite" maxlength="20" autocomplete="off" placeholder="초대 코드"></label>
       <div class="consent-row">
         <input type="checkbox" id="magicConsent">
         <span><label for="magicConsent">만 14세 이상이며</label> <button type="button" class="link-btn" data-act="showTerms">이용약관</button><label for="magicConsent">과</label> <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button><label for="magicConsent">에 동의합니다.</label></span>
       </div>
-      <button class="btn gate-btn" type="submit" id="btnSendCode">인증 메일 받기</button>
+      <button class="btn gate-btn" type="submit" id="btnSendCode"><span>인증 메일 받기</span><i class="dp-spin" aria-hidden="true"></i><svg class="dp-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.4 4.5L19 7.5"/></svg></button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="login">비밀번호로 로그인하기</button>
       </div>
@@ -1177,7 +1985,7 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
     <form id="resetForm" class="gate-form" data-form="reset" hidden novalidate>
       <p class="gate-sent">가입한 이메일을 입력하면 비밀번호 재설정 링크를 보내드려요.</p>
       <label class="field"><span>이메일</span><input id="resetEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required></label>
-      <button class="btn gate-btn" type="submit" id="btnReset">재설정 메일 받기</button>
+      <button class="btn gate-btn" type="submit" id="btnReset"><span>재설정 메일 받기</span><i class="dp-spin" aria-hidden="true"></i><svg class="dp-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.4 4.5L19 7.5"/></svg></button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="switchTab" data-to="login">← 로그인으로 돌아가기</button>
       </div>
@@ -1187,21 +1995,29 @@ html[data-theme="light"] .dp-emoji-pop button:hover{background:rgba(23,22,28,.06
     <form id="recoveryForm" class="gate-form" data-form="recovery" hidden novalidate>
       <label class="field"><span>새 비밀번호 (8자 이상)</span><input id="recoveryPassword" type="password" autocomplete="new-password" maxlength="72" placeholder="새 비밀번호"></label>
       <label class="field"><span>새 비밀번호 확인</span><input id="recoveryPassword2" type="password" autocomplete="new-password" maxlength="72" placeholder="한 번 더 입력"></label>
-      <button class="btn gate-btn" type="submit" id="btnRecovery">비밀번호 저장하고 입장</button>
+      <button class="btn gate-btn" type="submit" id="btnRecovery"><span>비밀번호 저장하고 입장</span><i class="dp-spin" aria-hidden="true"></i><svg class="dp-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.4 4.5L19 7.5"/></svg></button>
     </form>
 
     <!-- 코드/링크 인증 대기 폼 -->
     <form id="codeForm" class="gate-form" data-form="code" hidden novalidate>
       <p class="gate-sent" id="gateSent"></p>
-      <label class="field"><span>인증 코드 (숫자 입력)</span><input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="12" placeholder="메일로 받은 숫자 인증 코드 입력"></label>
-      <button class="btn gate-btn" type="submit" id="btnVerify">코드로 입장</button>
+      <label class="field dp-otp-field" for="gateCode">
+        <span>인증 코드</span>
+        <span class="dp-otp-cells" aria-hidden="true"></span>
+        <input id="gateCode" inputmode="numeric" autocomplete="one-time-code" maxlength="12" placeholder="" aria-describedby="dpOtpHint">
+      </label>
+      <div class="dp-otp-foot">
+        <span class="dp-otp-count" id="dpOtpHint">메일의 8자리 숫자를 입력하세요</span>
+        <button type="button" class="dp-otp-paste" data-dp-act="otpPaste">붙여넣기</button>
+      </div>
+      <button class="btn gate-btn" type="submit" id="btnVerify"><span>코드로 입장</span><i class="dp-spin" aria-hidden="true"></i><svg class="dp-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.4 4.5L19 7.5"/></svg></button>
       <div class="gate-links">
         <button type="button" class="link-btn" data-act="resendCode" id="btnResend">메일 다시 받기</button>
         <button type="button" class="link-btn" data-act="switchTab" data-to="login">로그인 화면으로 돌아가기</button>
       </div>
     </form>
 
-    <p id="gateMsg" class="gate-msg" hidden></p>
+    <p id="gateMsg" class="gate-msg" hidden role="alert"></p>
     <div class="login-footer">이메일은 로그인에만 쓰이고 다른 사용자에게 보이지 않아요.<br><button type="button" class="link-btn" data-act="showTerms">이용약관</button> · <button type="button" class="link-btn" data-act="showPrivacy">개인정보처리방침</button> · <a href="mailto:depiy.hub@gmail.com" style="text-decoration:underline;text-underline-offset:3px;color:inherit">문의</a></div>
   </div>
 </div>
@@ -5728,6 +6544,559 @@ boot();
   try { initLightbox(); } catch (_) {}
   refreshAll();
   setTimeout(refreshAll, 400);
+})();
+</script>
+<script id="dp-v13-js">/* =====================================================================
+   v13 — Lucian Labs 카탈로그에서 고른 동작을 실제 화면에 붙인다.
+   Supabase 로직은 건드리지 않고, DOM 위에 얹기만 한다.
+   ===================================================================== */
+(() => {
+  'use strict';
+  const D = document, W = window, html = D.documentElement;
+  const $  = (s, r = D) => r.querySelector(s);
+  const $$ = (s, r = D) => Array.prototype.slice.call(r.querySelectorAll(s));
+  const reduce = () => !!(W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const api = () => W.__dp || {};
+  const say = m => { const t = api().toast; if (t) { try { t(m); } catch (_) {} } };
+  const digits = v => String(v == null ? '' : v).replace(/\D/g, '');
+  const gate = () => $('#loginGate');
+
+  /* ================= 403 · 게이트 필드: 비밀번호 보기 · CapsLock ================= */
+  const EYE = '<svg viewBox="0 0 24 24" aria-hidden="true"><g class="lid"><path d="M2.5 12S6.2 5.6 12 5.6 21.5 12 21.5 12 17.8 18.4 12 18.4 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g><g class="lash"><path d="M3.4 12.4c2.1 2.7 4.9 4 8.6 4s6.5-1.3 8.6-4M6.4 15.4l-1 1.8M12 16.4V18.4M17.6 15.4l1 1.8"/></g></svg>';
+
+  function initGateFields() {
+    const g = gate(); if (!g) return;
+    $$('.field', g).forEach(f => {
+      const input = f.querySelector('input');
+      if (!input) return;
+      if (input.type === 'password') {
+        f.classList.add('dp-has-eye');
+        if (!f.querySelector('.dp-eye')) {
+          const eye = D.createElement('button');
+          eye.type = 'button';
+          eye.className = 'dp-eye';
+          eye.setAttribute('aria-label', '비밀번호 보기');
+          eye.setAttribute('aria-pressed', 'false');
+          eye.innerHTML = EYE;
+          f.appendChild(eye);
+        }
+        if (!f.querySelector('.dp-caps')) {
+          const caps = D.createElement('span');
+          caps.className = 'dp-caps';
+          caps.textContent = 'Caps Lock이 켜져 있어요';
+          f.appendChild(caps);
+        }
+      }
+    });
+    if (g.dataset.dpFields) return;
+    g.dataset.dpFields = '1';
+    g.addEventListener('click', e => {
+      const eye = e.target.closest('.dp-eye');
+      if (!eye) return;
+      e.preventDefault();
+      const f = eye.closest('.field'), input = f && f.querySelector('input');
+      if (!input) return;
+      const show = eye.getAttribute('aria-pressed') !== 'true';
+      eye.setAttribute('aria-pressed', String(show));
+      eye.setAttribute('aria-label', show ? '비밀번호 숨기기' : '비밀번호 보기');
+      input.type = show ? 'text' : 'password';
+      try { input.focus({ preventScroll: true }); } catch (_) { input.focus(); }
+    });
+    g.addEventListener('keyup', e => {
+      const input = e.target;
+      if (!input || input.type !== 'password') return;
+      const f = input.closest('.field'), caps = f && f.querySelector('.dp-caps');
+      if (!caps) return;
+      let on = false;
+      try { on = !!(e.getModifierState && e.getModifierState('CapsLock')); } catch (_) {}
+      caps.classList.toggle('on', on);
+    });
+    g.addEventListener('blur', e => {
+      const caps = e.target && e.target.closest && e.target.closest('.field');
+      const c = caps && caps.querySelector('.dp-caps');
+      if (c) c.classList.remove('on');
+    }, true);
+  }
+
+  /* ================= 036 · 회원가입 비밀번호 강도 ================= */
+  function initStrength() {
+    ['#signupPassword', '#recoveryPassword'].forEach(sel => {
+      const input = $(sel); if (!input) return;
+      const field = input.closest('.field'); if (!field) return;
+      if (field.dataset.dpStr) return;
+      field.dataset.dpStr = '1';
+      const box = D.createElement('div');
+      box.className = 'dp-strength';
+      box.innerHTML =
+        '<div class="dp-strength-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>' +
+        '<div class="dp-strength-row"><div class="dp-strength-rules">' +
+        '<span class="dp-rule" data-r="len">8자 이상</span>' +
+        '<span class="dp-rule" data-r="alpha">영문</span>' +
+        '<span class="dp-rule" data-r="num">숫자</span>' +
+        '<span class="dp-rule" data-r="sym">기호</span>' +
+        '</div><span class="dp-strength-lv" aria-live="polite"></span></div>';
+      field.insertAdjacentElement('afterend', box);
+      const bars = $$('i', box), rules = $$('.dp-rule', box), lv = $('.dp-strength-lv', box);
+      const COLORS = ['', '#ff6b6b', '#e8c25a', '#F8935F', '#5fd38d'];
+      const WORDS = ['', '너무 짧아요', '약해요', '괜찮아요', '좋아요'];
+      const update = () => {
+        const v = input.value || '';
+        const ok = {
+          len: v.length >= 8,
+          alpha: /[A-Za-z]/.test(v),
+          num: /\d/.test(v),
+          sym: /[^A-Za-z0-9]/.test(v)
+        };
+        let n = 0;
+        rules.forEach(r => { const on = !!ok[r.dataset.r]; r.classList.toggle('ok', on); if (on) n++; });
+        const level = v.length === 0 ? 0 : Math.max(1, Math.min(4, n === 4 ? 4 : n === 3 ? 3 : n === 2 ? 2 : 1));
+        bars.forEach((b, i) => b.classList.toggle('on', i < level));
+        box.style.setProperty('--dp-lv', COLORS[level] || 'var(--text-mute)');
+        lv.textContent = v.length === 0 ? '' : WORDS[level];
+      };
+      input.addEventListener('input', update);
+      update();
+    });
+  }
+
+  /* ================= 264 · 이메일 오타를 짚어 주는 입력 ================= */
+  const DOMAINS = ['gmail.com', 'naver.com', 'kakao.com', 'icloud.com', 'outlook.com', 'hanmail.net', 'daum.net', 'yahoo.com', 'hotmail.com', 'nate.com'];
+  function distance(a, b) {
+    const d = [];
+    for (let i = 0; i <= a.length; i++) d[i] = [i];
+    for (let j = 0; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+    return d[a.length][b.length];
+  }
+  function suggestEmail(v) {
+    const s = String(v || '').trim();
+    const at = s.lastIndexOf('@');
+    if (at < 1) return '';
+    const local = s.slice(0, at), dom = s.slice(at + 1).toLowerCase();
+    if (!dom || DOMAINS.indexOf(dom) >= 0) return '';
+    let best = '', bd = 99;
+    DOMAINS.forEach(dd => { const x = distance(dom, dd); if (x < bd) { bd = x; best = dd; } });
+    if (bd > 1) return '';
+    return local + '@' + best;
+  }
+  function initTypo() {
+    ['#loginEmail', '#signupEmail', '#gateEmail', '#resetEmail'].forEach(sel => {
+      const input = $(sel); if (!input) return;
+      const field = input.closest('.field'); if (!field) return;
+      if (field.dataset.dpTypo) return;
+      field.dataset.dpTypo = '1';
+      const tip = D.createElement('button');
+      tip.type = 'button';
+      tip.className = 'dp-typo';
+      tip.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5v.01M12 11.5v4.5"/><circle cx="12" cy="12" r="9"/></svg><span></span>';
+      field.insertAdjacentElement('afterend', tip);
+      const label = $('span', tip);
+      const check = () => {
+        const fix = suggestEmail(input.value);
+        if (fix && fix !== input.value.trim()) {
+          label.innerHTML = '<b>' + fix.replace(/[<>&]/g, '') + '</b> 로 고칠까요?';
+          tip.dataset.fix = fix;
+          tip.classList.add('on');
+        } else {
+          tip.classList.remove('on');
+          tip.dataset.fix = '';
+        }
+      };
+      input.addEventListener('input', check);
+      input.addEventListener('blur', check);
+      tip.addEventListener('click', () => {
+        const fix = tip.dataset.fix; if (!fix) return;
+        input.value = fix;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.classList.add('is-fix');
+        setTimeout(() => input.classList.remove('is-fix'), 600);
+        tip.classList.remove('on');
+        try { input.focus({ preventScroll: true }); } catch (_) {}
+      });
+    });
+  }
+
+  /* ================= 406 · 인증 코드 8칸 + 붙여넣기 ================= */
+  function initOtp() {
+    const input = $('#gateCode');
+    const cells = $('#loginGate .dp-otp-cells');
+    if (!input || !cells) return;
+    const field = input.closest('.field');
+    const count = $('#dpOtpHint');
+    let prev = 0;
+
+    const paint = () => {
+      const v = digits(input.value).slice(0, 12);
+      const n = Math.max(8, v.length);
+      if (cells.children.length !== n) {
+        cells.textContent = '';
+        for (let i = 0; i < n; i++) {
+          const c = D.createElement('i');
+          c.className = 'dp-otp-cell';
+          cells.appendChild(c);
+        }
+      }
+      const focused = D.activeElement === input;
+      const cur = focused && v.length < n ? v.length : -1;
+      Array.prototype.forEach.call(cells.children, (c, i) => {
+        const ch = v[i] || '';
+        if (c.textContent !== ch) c.textContent = ch;
+        c.classList.toggle('fill', !!ch);
+        c.classList.toggle('cur', i === cur);
+      });
+      if (v.length > prev) {
+        const c = cells.children[v.length - 1];
+        if (c) {
+          c.classList.remove('pop');
+          void c.offsetWidth;
+          c.classList.add('pop');
+          setTimeout(() => c.classList.remove('pop'), 420);
+        }
+      }
+      prev = v.length;
+      if (count) {
+        count.textContent = v.length === 0 ? '메일의 8자리 숫자를 입력하세요'
+          : v.length < 8 ? v.length + ' / 8'
+          : '8자리 입력 완료 · 아래 버튼을 눌러 주세요';
+      }
+      const btn = $('#btnVerify');
+      if (btn) btn.classList.toggle('ready', v.length >= 8);
+      if (field) field.classList.toggle('dp-ok', v.length >= 8);
+    };
+
+    input.addEventListener('input', () => {
+      const cleaned = digits(input.value).slice(0, 12);
+      if (cleaned !== input.value) input.value = cleaned;
+      paint();
+    });
+    input.addEventListener('focus', paint);
+    input.addEventListener('blur', () => setTimeout(paint, 60));
+    input.addEventListener('paste', () => setTimeout(() => {
+      const cleaned = digits(input.value).slice(0, 12);
+      if (cleaned !== input.value) input.value = cleaned;
+      paint();
+    }, 0));
+    document.addEventListener('click', e => {
+      const b = e.target.closest('[data-dp-act="otpPaste"]');
+      if (!b) return;
+      e.preventDefault();
+      const put = txt => {
+        const cleaned = digits(txt).slice(0, 12);
+        if (!cleaned) { say('클립보드에 숫자 코드가 없어요'); return; }
+        input.value = cleaned;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        try { input.focus({ preventScroll: true }); } catch (_) {}
+        paint();
+      };
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(put).catch(() => {
+          say('코드를 입력칸에 길게 눌러 붙여넣어 주세요');
+          try { input.focus({ preventScroll: true }); } catch (_) {}
+        });
+      } else {
+        say('코드를 입력칸에 길게 눌러 붙여넣어 주세요');
+        try { input.focus({ preventScroll: true }); } catch (_) {}
+      }
+    });
+    paint();
+  }
+
+  /* ================= 438 · 로딩→완료 버튼 · 오류 흔들림 ================= */
+  function clearBusy() {
+    $$('#loginGate .gate-btn.is-busy').forEach(b => b.classList.remove('is-busy'));
+  }
+  function shakeCard() {
+    const card = $('#loginGate .login-card');
+    if (!card || reduce()) return;
+    card.classList.remove('dp-shake');
+    void card.offsetWidth;
+    card.classList.add('dp-shake');
+    setTimeout(() => card.classList.remove('dp-shake'), 560);
+  }
+  function initGateFeedback() {
+    const g = gate(); if (!g) return;
+    $$('form.gate-form', g).forEach(f => {
+      f.addEventListener('submit', () => {
+        const b = f.querySelector('.gate-btn');
+        if (!b) return;
+        b.classList.remove('is-ok');
+        b.classList.add('is-busy');
+        clearTimeout(b._dpT);
+        b._dpT = setTimeout(() => b.classList.remove('is-busy'), 15000);
+      }, true);
+    });
+    const msg = $('#gateMsg');
+    if (msg) {
+      new MutationObserver(() => {
+        clearBusy();
+        const t = (msg.textContent || '').trim();
+        if (!msg.hidden && t && !msg.classList.contains('ok')) {
+          shakeCard();
+          const otp = $('#loginGate .dp-otp-field');
+          if (otp && !$('#codeForm').hidden) {
+            otp.classList.remove('dp-bad');
+            void otp.offsetWidth;
+            otp.classList.add('dp-bad');
+            setTimeout(() => otp.classList.remove('dp-bad'), 900);
+          }
+        }
+      }).observe(msg, { attributes: true, childList: true, characterData: true, subtree: true });
+    }
+    /* 로그인 성공 → 카드가 체크로 바뀌고 앱이 부드럽게 들어온다 */
+    let wasOut = D.body.classList.contains('logged-out');
+    new MutationObserver(() => {
+      const out = D.body.classList.contains('logged-out');
+      if (wasOut && !out) {
+        $$('#loginGate .gate-btn').forEach(b => { if (b.classList.contains('is-busy')) { b.classList.remove('is-busy'); b.classList.add('is-ok'); } });
+        const app = $('#app');
+        if (app && !reduce()) {
+          app.classList.remove('dp-welcome'); void app.offsetWidth; app.classList.add('dp-welcome');
+          setTimeout(() => app.classList.remove('dp-welcome'), 700);
+        }
+      }
+      wasOut = out;
+    }).observe(D.body, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  /* ================= 게이트 탭: 안내문 · aria · 탭 숨김 처리 ================= */
+  const TAB_DESC = {
+    login: '다시 오신 걸 환영해요. 이메일과 비밀번호로 들어와요.',
+    signup: '새 계정을 만들어요. 닉네임과 사용자 ID는 나중에 바꿀 수 있어요.',
+    magic: '비밀번호 없이, 메일로 온 링크나 코드로 들어와요.',
+    code: '메일로 보낸 8자리 코드를 입력해 주세요.',
+    reset: '가입한 이메일로 재설정 링크를 보내드려요.',
+    recovery: '새 비밀번호를 정해 주세요. 8자 이상이면 돼요.'
+  };
+  function initGateTabs() {
+    const g = gate(); if (!g) return;
+    const tabs = $('#gateTabs'), desc = $('#gateDesc');
+    const sync = () => {
+      const active = tabs && $('.login-tab.active', tabs);
+      if (tabs) $$('.login-tab', tabs).forEach(b => b.setAttribute('aria-selected', String(!!active && b === active)));
+      const key = active && active.dataset.tab;
+      if (desc && key && TAB_DESC[key]) desc.textContent = TAB_DESC[key];
+      const formKey = $$('form.gate-form', g).find(f => !f.hidden);
+      const fk = formKey && formKey.dataset.form;
+      if (desc && fk && !key && TAB_DESC[fk]) desc.textContent = TAB_DESC[fk];
+    };
+    if (tabs) new MutationObserver(sync).observe(tabs, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    $$('form.gate-form', g).forEach(f => new MutationObserver(sync).observe(f, { attributes: true, attributeFilter: ['hidden'] }));
+    sync();
+  }
+
+  /* ================= 006 · 누르는 자리에서 번지는 리플 ================= */
+  const RIPPLE_SEL = '.btn,.act,.send-btn,.cc-send,.admin-tab,.dm-item,.x-tab,.post-tool,.tool-btn';
+  function initRipple() {
+    D.addEventListener('pointerdown', e => {
+      if (reduce()) return;
+      const b = e.target.closest(RIPPLE_SEL);
+      if (!b || b.disabled) return;
+      const r = b.getBoundingClientRect();
+      if (!r.width) return;
+      const size = Math.max(r.width, r.height) * 1.15;
+      const s = D.createElement('i');
+      s.className = 'dp-rip';
+      s.style.width = s.style.height = size + 'px';
+      s.style.left = (e.clientX - r.left - size / 2) + 'px';
+      s.style.top = (e.clientY - r.top - size / 2) + 'px';
+      b.appendChild(s);
+      setTimeout(() => { if (s.parentNode) s.remove(); }, 640);
+    }, { passive: true });
+  }
+
+  /* ================= 스파크를 누르면 작은 입자가 흩어진다 ================= */
+  function initBurst() {
+    if (!D.body || !W.Element || !Element.prototype.animate) return;
+    D.addEventListener('click', e => {
+      if (reduce()) return;
+      const sp = e.target.closest('.act.spark');
+      if (!sp) return;
+      const icon = sp.querySelector('svg');
+      if (!icon) return;
+      const r = icon.getBoundingClientRect();
+      if (!r.width) return;
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      for (let i = 0; i < 6; i++) {
+        const p = D.createElement('i');
+        p.className = 'dp-burst';
+        p.style.left = cx + 'px';
+        p.style.top = cy + 'px';
+        D.body.appendChild(p);
+        const a = (Math.PI * 2 / 6) * i + Math.random() * 0.5;
+        const d = 15 + Math.random() * 16;
+        const anim = p.animate([
+          { transform: 'translate(-50%,-50%) scale(1)', opacity: 0.95 },
+          { transform: 'translate(calc(-50% + ' + (Math.cos(a) * d).toFixed(1) + 'px),calc(-50% + ' + (Math.sin(a) * d).toFixed(1) + 'px)) scale(.2)', opacity: 0 }
+        ], { duration: 520 + Math.random() * 200, easing: 'cubic-bezier(.22,1,.36,1)' });
+        anim.onfinish = () => { if (p.parentNode) p.remove(); };
+        setTimeout(() => { if (p.parentNode) p.remove(); }, 900);
+      }
+    });
+  }
+
+  /* ================= 228 · 카드를 따라 도는 커서 빛 ================= */
+  function initGlare() {
+    if (reduce()) return;
+    let raf = 0, last = null;
+    D.addEventListener('pointermove', e => {
+      const card = e.target.closest('.post:not(.xpost)');
+      last = card ? { card: card, x: e.clientX, y: e.clientY } : null;
+      if (!card || raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        if (!last) return;
+        const r = last.card.getBoundingClientRect();
+        last.card.style.setProperty('--mx', Math.round(last.x - r.left) + 'px');
+        last.card.style.setProperty('--my', Math.round(last.y - r.top) + 'px');
+      });
+    }, { passive: true });
+  }
+
+  /* ================= 440 · 첫 화면 빈 상태 정돈 ================= */
+  const EMPTY_ICON = {
+    load: '<svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>',
+    search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
+    bookmark: '<svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4.4L6 21z"/></svg>',
+    users: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17.5 20a5.5 5.5 0 0 0-2.2-4.4"/></svg>',
+    chat: '<svg viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-3.8A8.5 8.5 0 1 1 20.5 12z"/></svg>',
+    box: '<svg viewBox="0 0 24 24"><path d="M3.5 8.2 12 4l8.5 4.2v7.6L12 20l-8.5-4.2z"/><path d="M3.5 8.2 12 12.4l8.5-4.2M12 12.4V20"/></svg>'
+  };
+  function emptyKey(t) {
+    if (/불러오는|로딩|중…|중\.\.\./.test(t)) return 'load';
+    if (/검색/.test(t)) return 'search';
+    if (/저장|북마크/.test(t)) return 'bookmark';
+    if (/친구|차단|요청/.test(t)) return 'users';
+    if (/메시지|대화/.test(t)) return 'chat';
+    return 'box';
+  }
+  function decorateEmpty(root) {
+    $$('.empty', root).forEach(el => {
+      if (el.dataset.dpIco) return;
+      el.dataset.dpIco = '1';
+      const span = D.createElement('span');
+      span.className = 'dp-empty-ico';
+      span.setAttribute('aria-hidden', 'true');
+      span.innerHTML = EMPTY_ICON[emptyKey(el.textContent || '')];
+      el.insertBefore(span, el.firstChild);
+    });
+    $$('.shorts-empty', root).forEach(el => {
+      if (el.dataset.dpIco) return;
+      el.dataset.dpIco = '1';
+      const span = D.createElement('span');
+      span.className = 'dp-empty-ico';
+      span.setAttribute('aria-hidden', 'true');
+      span.innerHTML = EMPTY_ICON.box;
+      el.insertBefore(span, el.firstChild);
+    });
+  }
+
+  /* ================= 416 · 관리자·친구·검색 탭 인디케이터 ================= */
+  function syncPills() {
+    $$('.admin-tabs').forEach(nav => {
+      if (nav.hidden) return;
+      let pill = $('.dp-pill2', nav);
+      if (!pill) {
+        pill = D.createElement('i');
+        pill.className = 'dp-pill2';
+        nav.insertBefore(pill, nav.firstChild);
+      }
+      const tabs = $$('.admin-tab', nav);
+      const act = tabs.find(t => t.classList.contains('active'));
+      if (!act || !tabs.length) { pill.style.opacity = '0'; return; }
+      const first = tabs[0];
+      if (tabs.some(t => t.offsetTop !== first.offsetTop)) { pill.style.opacity = '0'; return; }
+      const nr = nav.getBoundingClientRect(), ar = act.getBoundingClientRect();
+      if (!ar.width) { pill.style.opacity = '0'; return; }
+      if (!pill._init) pill.style.transition = 'none';
+      pill.style.width = ar.width + 'px';
+      pill.style.transform = 'translateX(' + (ar.left - nr.left) + 'px)';
+      pill.style.opacity = '1';
+      if (!pill._init) requestAnimationFrame(() => { pill.style.transition = ''; pill._init = 1; });
+    });
+  }
+
+  /* ================= 049 · 화면이 바뀔 때 한 번만 떠오르기 ================= */
+  function initViewIn() {
+    const main = $('#main'); if (!main) return;
+    let firstSeen = null;
+    const run = () => {
+      const first = main.firstElementChild;
+      if (!first || first === firstSeen) return;
+      firstSeen = first;
+      if (reduce()) return;
+      first.classList.remove('dp-view-in');
+      void first.offsetWidth;
+      first.classList.add('dp-view-in');
+      setTimeout(() => first.classList.remove('dp-view-in'), 420);
+    };
+    new MutationObserver(run).observe(main, { childList: true });
+    run();
+  }
+
+  /* ================= 008 · 복사 버튼이 체크로 바뀐다 ================= */
+  function initCopy() {
+    D.addEventListener('click', e => {
+      const b = e.target.closest('[data-act="srvCopyInvite"]');
+      if (!b) return;
+      const old = b.textContent;
+      b.classList.add('dp-copied');
+      b.textContent = '복사됨';
+      setTimeout(() => { b.classList.remove('dp-copied'); b.textContent = old; }, 1400);
+    }, true);
+  }
+
+  /* ================= 219 · 테마 버튼이 게이트에서도 보이도록 ================= */
+  function initGateTheme() {
+    const g = gate(); if (!g) return;
+    const put = () => {
+      const fab = $('.dp-theme-fab');
+      if (!fab) return;
+      const card = $('#loginGate .login-card');
+      if (!card) return;
+      if (fab.parentNode !== D.body) D.body.appendChild(fab);
+    };
+    put();
+    setTimeout(put, 500);
+    setTimeout(put, 1500);
+  }
+
+  /* ================= 공통: 다시 그려질 때마다 붙이기 ================= */
+  let pending = false;
+  function refreshAll() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => {
+      pending = false;
+      try { initGateFields(); } catch (_) {}
+      try { decorateEmpty(D); } catch (_) {}
+      try { syncPills(); } catch (_) {}
+    });
+  }
+  const mo = new MutationObserver(refreshAll);
+  ['#main', '#nav', '#loginGate', '#widget'].forEach(sel => {
+    const el = $(sel);
+    if (el) mo.observe(el, { childList: true, subtree: true });
+  });
+  W.addEventListener('resize', () => { try { syncPills(); } catch (_) {} });
+
+  try { initGateFields(); } catch (_) {}
+  try { initStrength(); } catch (_) {}
+  try { initTypo(); } catch (_) {}
+  try { initOtp(); } catch (_) {}
+  try { initGateFeedback(); } catch (_) {}
+  try { initGateTabs(); } catch (_) {}
+  try { initRipple(); } catch (_) {}
+  try { initBurst(); } catch (_) {}
+  try { initGlare(); } catch (_) {}
+  try { initViewIn(); } catch (_) {}
+  try { initCopy(); } catch (_) {}
+  try { initGateTheme(); } catch (_) {}
+  refreshAll();
+  setTimeout(refreshAll, 500);
+  setTimeout(refreshAll, 1600);
 })();
 </script>
 </body>
