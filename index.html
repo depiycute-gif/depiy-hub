@@ -39,6 +39,7 @@
   --warn:#e8c25a;
   --danger:#ff6b6b;
   --on-orange:#1a1209;
+  --tabbar-h:64px;                 /* 모바일 하단 탭바 높이(아래 @media에서 safe-area 더함) */
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -280,8 +281,9 @@ input,textarea{font:inherit;color:inherit}
 }
 @media (max-width:767px){
   .dp-app{grid-template-columns:minmax(0,1fr);width:100vw;overflow-x:hidden}
+  :root{--tabbar-h:calc(64px + env(safe-area-inset-bottom, 0px))}
   .spacebar,.nav{
-    position:fixed;top:0;bottom:0;z-index:70;
+    position:fixed;top:0;bottom:var(--tabbar-h);z-index:70;
     transition:transform .28s cubic-bezier(0.16,1,0.3,1),visibility .28s;
   }
   .spacebar{
@@ -432,7 +434,7 @@ input,textarea{font:inherit;color:inherit}
 @media (max-width:767px){
   .bottom-nav{
     display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:95;
-    height:64px;background:rgba(18,18,22,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+    height:var(--tabbar-h);background:rgba(18,18,22,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
     border-top:1px solid var(--line);padding:4px 0 env(safe-area-inset-bottom, 0);box-shadow:0 -6px 24px rgba(0,0,0,.5);
   }
   .bnav-item{
@@ -564,6 +566,10 @@ body.logged-out{overflow:hidden}
 .pf-mutual .stack .name-link:first-child{margin-left:0}
 .pf-mutual .mini-av{width:26px;height:26px;border-radius:50%;border:2px solid var(--bg-1);background:var(--glass-hi);display:grid;place-items:center;font-size:11px}
 .pf-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pf-actions .pf-logout{margin-left:auto;color:var(--text-dim)}
+.pf-actions .pf-logout:hover{background:color-mix(in srgb,var(--danger) 14%,var(--glass-hi));color:var(--danger);box-shadow:none}
+.pf-actions .pf-logout svg{transition:transform 200ms var(--ease-spring)}
+.pf-actions .pf-logout:hover svg{transform:translateX(2px)}
 .pf-sub{font-size:13px;color:var(--text-mute);margin:6px 2px 10px}
 .banner-edit{margin:0 0 12px}
 .banner-preview{height:84px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,rgba(248,147,95,.55),rgba(94,160,255,.35));border:1px solid var(--line)}
@@ -605,7 +611,7 @@ body.logged-out{overflow:hidden}
   .dm-wrap.chat-open .dm-list{display:none}
   .dm-wrap.chat-open .dm-chat{display:flex}
   .dm-back{display:inline-flex}
-  .dm-wrap{padding-bottom:64px}
+  .dm-wrap{padding-bottom:var(--tabbar-h)}
 }
 /* 쇼츠 */
 .shorts-wrap{flex:1;min-height:0;overflow-y:auto;scroll-snap-type:y mandatory;background:#000;scrollbar-width:none;overscroll-behavior:contain}
@@ -626,7 +632,7 @@ body.logged-out{overflow:hidden}
 .short .echo-src{display:none}
 .shorts-empty{height:100%;display:grid;place-items:center;color:#aaa;text-align:center;padding:20px}
 .shorts-loading{height:64px;display:grid;place-items:center;color:#888;font-size:12px}
-@media (max-width:767px){ .short-info{bottom:84px} .short-rail{bottom:84px} .short .thread-panel{bottom:64px} }
+@media (max-width:767px){ .short-info{bottom:calc(var(--tabbar-h) + 20px)} .short-rail{bottom:calc(var(--tabbar-h) + 20px)} .short .thread-panel{bottom:var(--tabbar-h)} }
 
 .panel-close{display:none}
 .short .panel-close{display:grid;place-items:center;position:sticky;top:4px;margin:4px 8px 0 auto;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);border:0;color:#fff;cursor:pointer;z-index:2;float:right}
@@ -726,7 +732,7 @@ body.logged-out{overflow:hidden}
 .cc-send{background:var(--depiy-orange);color:var(--on-orange)}
 .cc-send:hover{background:var(--depiy-orange);color:var(--on-orange);filter:brightness(1.08)}
 .cc-send:disabled{opacity:.45}
-@media (max-width:767px){ .chat-wrap{padding-bottom:64px} .chat-new-pill{bottom:140px} .chat-msg .post-tools{opacity:0} }
+@media (max-width:767px){ .chat-wrap{padding-bottom:var(--tabbar-h)} .chat-new-pill{bottom:calc(var(--tabbar-h) + 76px)} .chat-msg .post-tools{opacity:0} }
 
 /* 쇼츠: 업로드 + 휠 */
 .shorts-stage{position:relative;flex:1;min-height:0;display:flex;overflow:hidden}
@@ -744,9 +750,9 @@ body.logged-out{overflow:hidden}
 .short-rail{bottom:150px}
 .short-info{right:128px}
 @media (max-width:767px){
-  .wheel{bottom:calc(64px - 112px)}
-  .wheel-hint{bottom:calc(64px + 36px)}
-  .short-rail{bottom:calc(64px + 130px)}
+  .wheel{bottom:calc(var(--tabbar-h) - 112px)}
+  .wheel-hint{bottom:calc(var(--tabbar-h) + 36px)}
+  .short-rail{bottom:calc(var(--tabbar-h) + 130px)}
 }
 .shorts-stage.no-wheel .wheel,.shorts-stage.no-wheel .wheel-hint{display:none}
 .short-up video{width:100%;max-height:36vh;border-radius:12px;background:#000;margin:8px 0}
@@ -2403,6 +2409,7 @@ const ICO = {
   search: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   flag:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg>',
   pen:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+  logout: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>',
   scale:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M4 7h16"/><path d="m4 7-2.5 6h5zM20 7l-2.5 6h5z"/></svg>',
   tag:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h9z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>',
   gear:   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
@@ -4683,7 +4690,7 @@ function profileHTML(d, mutual) {
   const bannerOk = d.banner_url && mediaOk(d.banner_url);
   let actions = '';
   if (isMe) {
-    actions = `<button type="button" class="btn sm" data-act="profile">${ICO.pen}프로필 편집</button><button type="button" class="btn sm ghost" data-act="go" data-view="friends">${ICO.users}친구 관리</button>`;
+    actions = `<button type="button" class="btn sm" data-act="profile">${ICO.pen}프로필 편집</button><button type="button" class="btn sm ghost" data-act="go" data-view="friends">${ICO.users}친구 관리</button><button type="button" class="btn sm ghost pf-logout" data-act="logout" title="로그아웃">${ICO.logout}로그아웃</button>`;
   } else if (d.blocked_me) {
     actions = `<span class="field-hint" style="margin:0">이 사용자와는 상호작용할 수 없어요.</span>`;
   } else {

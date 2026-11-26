@@ -2,7 +2,7 @@
  * - 앱 설치(PWA)와 "오프라인이에요" 안내용이에요. 글·DM 같은 데이터는 캐시하지 않아요.
  * - 화면(HTML)은 항상 네트워크를 먼저 시도해서, 새 버전을 올리면 바로 반영돼요.
  * - 캐시 이름(VERSION)을 바꾸면 예전 캐시는 자동으로 지워져요. */
-const VERSION = 'depiy-v15';
+const VERSION = 'depiy-v16';
 const CORE = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
