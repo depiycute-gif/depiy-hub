@@ -2,6 +2,9 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' data: blob: https:; media-src 'self' blob: https://*.supabase.co; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script id="dp-v15-guard">/* v15: 클릭재킹 방지(프레임에 끼워 넣으면 벗어나거나 숨긴다). GitHub Pages는 X-Frame-Options 헤더를 못 내려서 클라이언트에서 막아요. */(function(){try{if(window.top===window.self)return;window.top.location.replace(window.self.location.href);}catch(e){try{document.documentElement.style.display='none';}catch(_){}}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>De_piy Hub · 드피 허브</title>
 <meta name="theme-color" content="#F8935F">
@@ -14,8 +17,8 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js" integrity="sha384-hJnF5AwidE18GSWTAGHv3ByzzvfNZ1Tcx5y1UUV3WkauuMCEzBJBMSwSt/PUPXnM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o" crossorigin="anonymous"></script>
 <style>
 :root{
   --depiy-orange:#F8935F;
@@ -6488,7 +6491,7 @@ boot();
     pop = D.createElement('div');
     pop.className = 'dp-pop dp-mention-pop';
     pop.innerHTML = '<div class="dp-pop-h">멘션할 사람</div>' + names.map((n, i) =>
-      `<button type="button" tabindex="-1" class="${i === keep ? 'dp-cur' : ''}"><span class="dp-mi">${n[0]}</span>${n}</button>`).join('');
+      `<button type="button" tabindex="-1" class="${i === keep ? 'dp-cur' : ''}"><span class="dp-mi">${esc(n[0])}</span>${esc(n)}</button>`).join('');
     body.appendChild(pop);
     const r = el.getBoundingClientRect();
     place(pop, { left: r.left + 12, top: r.top + Math.min(r.height, 40) + 26, bottom: r.top + 40 });
