@@ -7459,10 +7459,9 @@ boot();
        (카카오: GoTrue 가 account_email 스코프를 늘 붙이는데 이 앱은 그 동의항목 권한이 없어 KOE205) */
     const BRIDGE = name === 'naver' ? NAVER_FN : (name === 'kakao' ? KAKAO_FN : '');
     if (BRIDGE) {
+      /* 배포 전(404)일 때만 여기서 막는다. 게이트웨이가 CORS 헤더를 주지 않아
+         fetch 로는 302 를 읽을 수 없으므로, 판단이 안 되면 그냥 넘어간다. */
       const r = await probe(BRIDGE);
-      if (r.ok === null) {
-        release(true); say(LABEL[name] + ' 로그인 서버에 닿지 못했어요. 네트워크를 확인한 뒤 다시 시도해 주세요.'); return;
-      }
       if (r.status === 404) {
         release(true); say(LABEL[name] + ' 로그인은 아직 준비 중이에요. GitHub·Google 또는 이메일로 들어와 주세요.'); return;
       }
