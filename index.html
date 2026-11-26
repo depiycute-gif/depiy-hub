@@ -7306,7 +7306,7 @@ boot();
   /* 본문 스크립트와 같은 값(공개 publishable). __dp.sb 가 없을 때만 쓰인다. */
   const SB_URL = 'https://uycuonzrmylzeaqsnfwh.supabase.co';
   const SB_KEY = 'sb_publishable_Pp8vGe_VL2miA35n_RAtBw_4LS30ho4';
-  const NAVER_FN = SB_URL + '/functions/v1/naver-oauth';
+  const NAVER_FN = SB_URL + '/functions/v1/naver-auth';
   const SOCIAL_FORMS = ['login', 'signup', 'magic'];
   const LABEL = { kakao: '카카오', naver: '네이버', github: 'GitHub', google: 'Google' };
 
@@ -7455,7 +7455,7 @@ boot();
     const redirectTo = W.location.origin + W.location.pathname;
 
     if (name === 'naver') {
-      /* Supabase 기본 provider가 아니라 Edge Function(naver-oauth)으로 넘긴다. 배포 전(404)이면 안내만. */
+      /* Supabase 기본 provider가 아니라 Edge Function(naver-auth)으로 넘긴다. 배포 전(404)이면 안내만. */
       const r = await probe(NAVER_FN);
       if (r.ok === null) {
         release(true); say('네이버 로그인 서버에 닿지 못했어요. 네트워크를 확인한 뒤 다시 시도해 주세요.'); return;
@@ -7463,7 +7463,7 @@ boot();
       if (r.status === 404) {
         release(true); say('네이버 로그인은 아직 준비 중이에요. 카카오·GitHub·Google 또는 이메일로 들어와 주세요.'); return;
       }
-      const to = NAVER_FN + '?redirect_to=' + encodeURIComponent(redirectTo);
+      const to = NAVER_FN + '?action=login&redirect_to=' + encodeURIComponent(redirectTo);
       try { W.location.assign(to); } catch (_) { release(true); say('네이버 로그인으로 넘어가지 못했어요. 잠시 후 다시 시도해 주세요.'); }
       return;
     }
@@ -7519,6 +7519,65 @@ boot();
     /* 본문 스크립트의 setTimeout(0) 안내보다 뒤에 남도록 한 틱 더 늦춘다 */
     setTimeout(() => { say(text); }, 90);
   })();
+})();
+</script>
+<script id="dp-v17-js">/* =====================================================================
+   v17 — 네이버 로그인 브리지(naver-auth)의 결과를 앱 세션으로 바꾼다.
+   네이버 → Edge Function naver-auth → (매직링크 hashed_token) → 여기서 verifyOtp → SIGNED_IN.
+   실패는 ?naver_error 로 돌아오고, 게이트 안내 문구로 그대로 보여 준다.
+   ===================================================================== */
+(() => {
+  'use strict';
+  const D = document, W = window;
+  const $ = (s, r = D) => r.querySelector(s);
+  function say(text, ok) {
+    const el = $('#gateMsg');
+    if (!el) return;
+    el.hidden = !text;
+    el.textContent = text || '';
+    el.classList.toggle('ok', !!(text && ok));
+  }
+  let q;
+  try { q = new URLSearchParams(W.location.search || ''); } catch (_) { return; }
+  const hash = String(q.get('naver_token_hash') || '');
+  const nerr = String(q.get('naver_error') || '');
+  if (!hash && !nerr) return;
+
+  function clean() {
+    try {
+      const u = new URL(W.location.href);
+      ['naver_token_hash', 'naver_type', 'naver_error', 'naver_error_desc'].forEach(k => u.searchParams.delete(k));
+      W.history.replaceState(null, '', u.pathname + (u.search || '') + (u.hash || ''));
+    } catch (_) {}
+  }
+
+  if (nerr) {
+    const desc = String(q.get('naver_error_desc') || '');
+    const all = nerr + ' ' + desc;
+    let text;
+    if (/cancel|access_denied|denied/i.test(all)) text = '네이버 로그인을 취소했어요. 다시 시도해 주세요.';
+    else if (/state|expired/i.test(all)) text = '네이버 로그인 요청이 만료됐어요. 다시 시도해 주세요.';
+    else if (/config|server|client/i.test(all)) text = '네이버 로그인 설정을 확인하고 있어요. 이메일로 먼저 들어와 주세요.';
+    else text = '네이버 로그인을 마무리하지 못했어요.' + (desc ? ' (' + desc.slice(0, 100) + ')' : ' 잠시 후 다시 시도해 주세요.');
+    clean();
+    setTimeout(() => { say(text); }, 60);
+    return;
+  }
+
+  const sb = (W.__dp && W.__dp.sb) || null;
+  if (!sb || !sb.auth || !sb.auth.verifyOtp) {
+    clean();
+    setTimeout(() => { say('로그인을 마무리하지 못했어요. 페이지를 새로고침한 뒤 다시 시도해 주세요.'); }, 60);
+    return;
+  }
+  clean();
+  setTimeout(() => { say('네이버 로그인 확인 중…'); }, 60);
+  sb.auth.verifyOtp({ token_hash: hash, type: 'magiclink' }).then(({ error }) => {
+    if (error) say('네이버 로그인을 마무리하지 못했어요. (' + String(error.message || '').slice(0, 100) + ')');
+    else say('');
+  }).catch(e => {
+    say('네이버 로그인을 마무리하지 못했어요. (' + String((e && e.message) || e).slice(0, 100) + ')');
+  });
 })();
 </script>
 </body>
