@@ -7307,6 +7307,7 @@ boot();
   const SB_URL = 'https://uycuonzrmylzeaqsnfwh.supabase.co';
   const SB_KEY = 'sb_publishable_Pp8vGe_VL2miA35n_RAtBw_4LS30ho4';
   const NAVER_FN = SB_URL + '/functions/v1/naver-auth';
+  const KAKAO_FN = SB_URL + '/functions/v1/kakao-auth';
   const SOCIAL_FORMS = ['login', 'signup', 'magic'];
   const LABEL = { kakao: '카카오', naver: '네이버', github: 'GitHub', google: 'Google' };
 
@@ -7454,17 +7455,19 @@ boot();
 
     const redirectTo = W.location.origin + W.location.pathname;
 
-    if (name === 'naver') {
-      /* Supabase 기본 provider가 아니라 Edge Function(naver-auth)으로 넘긴다. 배포 전(404)이면 안내만. */
-      const r = await probe(NAVER_FN);
+    /* 카카오·네이버는 Supabase 기본 공급자 대신 우리 Edge Function 브리지로 넘긴다.
+       (카카오: GoTrue 가 account_email 스코프를 늘 붙이는데 이 앱은 그 동의항목 권한이 없어 KOE205) */
+    const BRIDGE = name === 'naver' ? NAVER_FN : (name === 'kakao' ? KAKAO_FN : '');
+    if (BRIDGE) {
+      const r = await probe(BRIDGE);
       if (r.ok === null) {
-        release(true); say('네이버 로그인 서버에 닿지 못했어요. 네트워크를 확인한 뒤 다시 시도해 주세요.'); return;
+        release(true); say(LABEL[name] + ' 로그인 서버에 닿지 못했어요. 네트워크를 확인한 뒤 다시 시도해 주세요.'); return;
       }
       if (r.status === 404) {
-        release(true); say('네이버 로그인은 아직 준비 중이에요. 카카오·GitHub·Google 또는 이메일로 들어와 주세요.'); return;
+        release(true); say(LABEL[name] + ' 로그인은 아직 준비 중이에요. GitHub·Google 또는 이메일로 들어와 주세요.'); return;
       }
-      const to = NAVER_FN + '?action=login&redirect_to=' + encodeURIComponent(redirectTo);
-      try { W.location.assign(to); } catch (_) { release(true); say('네이버 로그인으로 넘어가지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+      const to = BRIDGE + '?action=login&redirect_to=' + encodeURIComponent(redirectTo);
+      try { W.location.assign(to); } catch (_) { release(true); say(LABEL[name] + ' 로그인으로 넘어가지 못했어요. 잠시 후 다시 시도해 주세요.'); }
       return;
     }
 
@@ -7522,9 +7525,10 @@ boot();
 })();
 </script>
 <script id="dp-v17-js">/* =====================================================================
-   v17 — 네이버 로그인 브리지(naver-auth)의 결과를 앱 세션으로 바꾼다.
-   네이버 → Edge Function naver-auth → (매직링크 hashed_token) → 여기서 verifyOtp → SIGNED_IN.
-   실패는 ?naver_error 로 돌아오고, 게이트 안내 문구로 그대로 보여 준다.
+   v17 — 카카오·네이버 로그인은 Supabase 기본 공급자 대신 Edge Function 브리지를 쓴다.
+   (카카오: GoTrue 가 항상 account_email 스코프를 붙이는데 이 앱은 그 권한이 없어 KOE205)
+   브리지가 돌려준 매직링크 토큰을 여기서 verifyOtp 로 세션으로 바꾼다.
+   실패는 ?naver_error / ?kakao_error 로 돌아오고, 게이트 안내 문구로 보여 준다.
    ===================================================================== */
 (() => {
   'use strict';
@@ -7539,26 +7543,33 @@ boot();
   }
   let q;
   try { q = new URLSearchParams(W.location.search || ''); } catch (_) { return; }
-  const hash = String(q.get('naver_token_hash') || '');
-  const nerr = String(q.get('naver_error') || '');
-  if (!hash && !nerr) return;
+
+  const PROVIDERS = [{ key: 'naver', label: '네이버' }, { key: 'kakao', label: '카카오' }];
+  let cur = null, tokenHash = '', errCode = '';
+  for (const p of PROVIDERS) {
+    const h = String(q.get(p.key + '_token_hash') || '');
+    const e = String(q.get(p.key + '_error') || '');
+    if (h || e) { cur = p; tokenHash = h; errCode = e; break; }
+  }
+  if (!cur) return;
 
   function clean() {
     try {
       const u = new URL(W.location.href);
-      ['naver_token_hash', 'naver_type', 'naver_error', 'naver_error_desc'].forEach(k => u.searchParams.delete(k));
+      ['naver_token_hash', 'naver_type', 'naver_error', 'naver_error_desc',
+       'kakao_token_hash', 'kakao_type', 'kakao_error', 'kakao_error_desc'].forEach(k => u.searchParams.delete(k));
       W.history.replaceState(null, '', u.pathname + (u.search || '') + (u.hash || ''));
     } catch (_) {}
   }
 
-  if (nerr) {
-    const desc = String(q.get('naver_error_desc') || '');
-    const all = nerr + ' ' + desc;
+  if (errCode) {
+    const desc = String(q.get(cur.key + '_error_desc') || '');
+    const all = errCode + ' ' + desc;
     let text;
-    if (/cancel|access_denied|denied/i.test(all)) text = '네이버 로그인을 취소했어요. 다시 시도해 주세요.';
-    else if (/state|expired/i.test(all)) text = '네이버 로그인 요청이 만료됐어요. 다시 시도해 주세요.';
-    else if (/config|server|client/i.test(all)) text = '네이버 로그인 설정을 확인하고 있어요. 이메일로 먼저 들어와 주세요.';
-    else text = '네이버 로그인을 마무리하지 못했어요.' + (desc ? ' (' + desc.slice(0, 100) + ')' : ' 잠시 후 다시 시도해 주세요.');
+    if (/cancel|access_denied|denied/i.test(all)) text = cur.label + ' 로그인을 취소했어요. 다시 시도해 주세요.';
+    else if (/state|expired/i.test(all)) text = cur.label + ' 로그인 요청이 만료됐어요. 다시 시도해 주세요.';
+    else if (/config|server|client/i.test(all)) text = cur.label + ' 로그인 설정을 확인하고 있어요. 이메일로 먼저 들어와 주세요.';
+    else text = cur.label + ' 로그인을 마무리하지 못했어요.' + (desc ? ' (' + desc.slice(0, 100) + ')' : ' 잠시 후 다시 시도해 주세요.');
     clean();
     setTimeout(() => { say(text); }, 60);
     return;
@@ -7571,12 +7582,12 @@ boot();
     return;
   }
   clean();
-  setTimeout(() => { say('네이버 로그인 확인 중…'); }, 60);
-  sb.auth.verifyOtp({ token_hash: hash, type: 'magiclink' }).then(({ error }) => {
-    if (error) say('네이버 로그인을 마무리하지 못했어요. (' + String(error.message || '').slice(0, 100) + ')');
+  setTimeout(() => { say(cur.label + ' 로그인 확인 중…'); }, 60);
+  sb.auth.verifyOtp({ token_hash: tokenHash, type: 'magiclink' }).then(({ error }) => {
+    if (error) say(cur.label + ' 로그인을 마무리하지 못했어요. (' + String(error.message || '').slice(0, 100) + ')');
     else say('');
   }).catch(e => {
-    say('네이버 로그인을 마무리하지 못했어요. (' + String((e && e.message) || e).slice(0, 100) + ')');
+    say(cur.label + ' 로그인을 마무리하지 못했어요. (' + String((e && e.message) || e).slice(0, 100) + ')');
   });
 })();
 </script>
